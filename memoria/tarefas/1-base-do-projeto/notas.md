@@ -37,3 +37,7 @@ O Vitest 5 (Vite 8) imprime um aviso ao carregar o `vitest.config.ts`: sintaxe E
 ## 2026-10-15 – decisão
 
 O desenvolvedor respondeu na conversa as quatro dúvidas acima, todas pela opção recomendada: (1) o desenvolvedor cria o `.env.example`; (2) ESLint 9.39.5 mantido, e o primeiro critério passa a admitir o aviso `npm warn deprecated eslint@9.39.5`; a decisão 0037, gravada na etapa 03, registra que a linha 9 já não tem suporte; (3) o resumo "5 high severity vulnerabilities" das dependências de desenvolvimento é aceito e vai para o relatório como conhecido e sem correção; (4) `"type": "module"` no `package.json`. Nenhuma delas acrescenta arquivo, dependência ou regra ao plano, que segue `em_execucao`.
+
+## 2026-10-15 – descoberta
+
+Verificações da etapa 02: um teste temporário, apagado em seguida, com `import "server-only"` passou pelo alias do `vitest.config.ts`. O `npm run dev` serviu `/` com status 200, `<html lang="pt-BR">`, título e `<h1>` "Glow – Estética Automotiva", e o `AGENTS.md` ficou igual (mesmo hash antes e depois), confirmando o `agentRules: false`. `git check-ignore -v` mostra `.env.local` ignorado por `.env*` e `.env.example` liberado por `!.env.example`. Nenhum arquivo apagado em relação à `main`; continuam 112 `README.md`. O `next build` local gera `/` e `/_not-found`. Clone limpo em pasta temporária de caminho curto (o caminho longo da pasta do agente faz o `git clone` falhar com "Filename too long" no Windows): `npm ci` só com os dois avisos aceitos e `npm run check` aprovado, sem nenhum aviso.
