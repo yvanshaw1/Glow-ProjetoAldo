@@ -15,7 +15,7 @@ export default defineConfig({
   test: {
     include: ["tests/**/*.test.ts"],
     environment: "node",
-    // No business rule or schema exists yet; remove when the first test lands.
+    // TODO(#4): remove once the first rules or schema test exists.
     passWithNoTests: true,
   },
 });
