@@ -24,7 +24,12 @@
       "Bash(gh pr merge:*)",
       "Bash(git push --force:*)",
       "Bash(git push -f:*)",
-      "Bash(git commit --amend:*)"
+      "Bash(git commit --amend:*)",
+      "Bash(docker compose config:*)",
+      "Bash(docker inspect:*)",
+      "Bash(docker container inspect:*)",
+      "Bash(docker exec:*)",
+      "Bash(docker compose exec:*)"
     ],
     "ask": [
       "Bash(npm install:*)",
