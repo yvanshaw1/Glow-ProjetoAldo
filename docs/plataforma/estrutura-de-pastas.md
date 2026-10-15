@@ -55,7 +55,7 @@ App/
 │   ├── rules/                       espelha src/server/rules
 │   └── validation/                  espelha src/shared/validation
 └── raiz: package.json (engines: Node 24) · package-lock.json · next.config.ts · tsconfig.json ·
-    eslint.config.mjs · prettier.config.mjs · vitest.config.ts · postcss.config.mjs ·
+    eslint.config.mjs · prettier.config.mjs · .prettierignore · vitest.config.ts ·
     components.json · .env.example · .gitignore · .gitattributes (eol=lf)
 ```
 

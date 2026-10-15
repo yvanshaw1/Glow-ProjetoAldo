@@ -47,4 +47,4 @@ Os nomes revelam o propósito e seguem o glossário de `guia/mapa.md` (o status 
 
 - Comentário só explica o porquê ou uma regra não evidente, citando o identificador: `// RN034: skip closed hours`.
 - Sem código comentado nem código morto; pendência só com número de issue (`// TODO(#57): ...`).
-- Formatação pelo Prettier, análise pelo ESLint do Next.js; a revisão discute conteúdo, não estilo.
+- Formatação pelo Prettier, com a configuração padrão, nos arquivos de código e de configuração; os `.md` ficam fora (`.prettierignore`), porque o alinhamento das tabelas reescreveria a documentação a cada edição. Análise pelo ESLint do Next.js; a revisão discute conteúdo, não estilo.
