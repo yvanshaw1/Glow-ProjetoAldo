@@ -28,7 +28,7 @@ Revisar o próprio trabalho, deixar a documentação e a memória da tarefa coer
 | `02_relatorio.md` | gravado |
 | `01_plano.md` | `concluido` |
 
-Avança quando o CI e o build da Vercel passam e o responsável pela área aprova. Alterações pedidas na revisão voltam à `02_construir.md`, com o status `em_execucao`, na mesma ramificação e na mesma pasta.
+Avança quando o CI e o build da Vercel passam e outro integrante, que não o autor, aprova. Alterações pedidas na revisão voltam à `02_construir.md`, com o status `em_execucao`, na mesma ramificação e na mesma pasta.
 
 ## Pare e pergunte se
 

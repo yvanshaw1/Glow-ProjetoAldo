@@ -18,7 +18,7 @@ issue → 01 Planejar → [aprovação do plano] → 02 Construir → 03 Entrega
 ## Pontos de controle
 
 1. **Aprovação do plano**: o desenvolvedor lê `01_plano.md`, ajusta se quiser e muda o status para `aprovado`, com `aprovado_por` e `aprovado_em`. O agente nunca faz isso. Sem aprovação, nada de código.
-2. **Revisão do pull request**: só incorpora com CI aprovado, build da Vercel concluído, ramificação atualizada e aprovação do responsável pela área.
+2. **Revisão do pull request**: só incorpora com CI aprovado, build da Vercel concluído, ramificação atualizada e aprovação de outro integrante, que não o autor.
 
 ## Status do plano
 
