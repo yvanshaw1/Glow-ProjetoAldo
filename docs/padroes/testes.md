@@ -45,9 +45,9 @@ Regras de negócio e esquemas são escritos com TDD: teste do caso, que falha (v
 
 Uma tarefa só está pronta quando:
 
-- o plano foi aprovado (na tarefa trivial, na conversa) e o código segue os padrões da área;
+- o plano foi aprovado (na tarefa trivial, na conversa) e o código segue os padrões das áreas que a tarefa toca;
 - `npm run check` passa localmente e no CI, e o build da Vercel conclui;
 - os casos de uso afetados foram testados na pré-visualização;
 - o checklist de segurança do PR foi conferido;
 - `02_relatorio.md` está gravado (dispensado na tarefa trivial), e os módulos de `docs/` e a especificação OpenAPI refletem o que mudou;
-- o responsável pela área aprovou o PR, e a issue foi fechada pela sua incorporação.
+- outro integrante, que não o autor, aprovou o PR, e a issue foi fechada pela sua incorporação.

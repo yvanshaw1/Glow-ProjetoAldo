@@ -31,7 +31,7 @@ docker compose up --build   executa a aplicação compilada em contêiner, no me
 
 ## Áreas
 
-Frontend, Backend e API, Banco de dados, Testes e QA, CI/CD e fluxo Git. Cada integrante responde por uma área de ponta a ponta; os responsáveis estão em `setup/questionario.md`.
+Frontend, Backend e API, Banco de dados, Testes e QA, CI/CD e fluxo Git. Não há responsável por área: cada integrante leva uma tarefa de ponta a ponta, por todas as áreas que ela toca, e outro integrante aprova o pull request (decisão 0039). Integrantes, usuários do GitHub e quem aplica as migrations: `setup/questionario.md`.
 
 ## Regras inegociáveis (detalhes em `guia/regras.md`)
 
