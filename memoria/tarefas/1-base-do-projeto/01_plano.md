@@ -4,7 +4,7 @@ titulo: "Base do projeto: Next.js, ferramentas de qualidade e CI"
 area: cicd
 tipo: configuracao
 requisitos: [RNF014, RNF015, RS016]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 12:24 - 15/10/2026
 ---
