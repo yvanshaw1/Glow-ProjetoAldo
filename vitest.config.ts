@@ -1,0 +1,21 @@
+import { fileURLToPath } from "node:url";
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      // server-only throws outside React Server Components; every file in
+      // src/server imports it (decision 0036), so tests get its empty module.
+      "server-only": fileURLToPath(
+        new URL("./node_modules/server-only/empty.js", import.meta.url),
+      ),
+    },
+  },
+  test: {
+    include: ["tests/**/*.test.ts"],
+    environment: "node",
+    // No business rule or schema exists yet; remove when the first test lands.
+    passWithNoTests: true,
+  },
+});
