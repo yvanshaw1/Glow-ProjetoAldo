@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run check)",
+      "Bash(npm test)",
+      "Bash(npx vitest:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./.env.*.local)",
+      "Read(./.env.development)",
+      "Read(./.env.production)",
+      "Edit(./.env)",
+      "Edit(./.env.local)",
+      "Edit(./.env.*.local)",
+      "Edit(./.env.development)",
+      "Edit(./.env.production)",
+      "Bash(supabase db push:*)",
+      "Bash(npx supabase db push:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git commit --amend:*)"
+    ],
+    "ask": [
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)"
+    ]
+  }
+}

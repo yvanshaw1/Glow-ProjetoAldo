@@ -1,0 +1,46 @@
+# docs/decisoes/ – Registros de decisão
+
+Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca reescritas. Antes de propor uma escolha técnica, procure aqui se ela já foi decidida ou descartada.
+
+- Quando registrar, como propor e como gravar: `workflows/procedimentos/decisao.md`.
+- Decisão nova: próximo número livre, molde `_templates/decisao.md`, linha nova nesta tabela.
+- Decisão que muda outra: registro novo com `substitui: NNNN`; no antigo, só a linha `status:` passa a `substituída por NNNN`, e o título dele aqui ganha "(substituída por NNNN)".
+
+| Nº | Decisão |
+|---|---|
+| [0001](0001-aplicacao-unica-nextjs.md) | Uma única aplicação Next.js para portal, painel e API |
+| [0002](0002-api-em-rotas-do-nextjs.md) | API em rotas do próprio Next.js |
+| [0003](0003-backend-em-camadas.md) | Backend em camadas de rota, serviço e repositório |
+| [0004](0004-supabase.md) | Supabase para banco, autenticação e arquivos |
+| [0005](0005-autorizacao-na-api.md) | Autorização na API, com o banco fechado ao navegador |
+| [0006](0006-supabase-js-e-migration-sql.md) | Acesso a dados com supabase-js e uma migration em SQL |
+| [0007](0007-tailwind-e-shadcn.md) | Tailwind CSS com shadcn/ui |
+| [0008](0008-validacao-compartilhada.md) | Validação, formatação e mensagens compartilhadas em src/shared |
+| [0009](0009-concorrencia-otimista.md) | Controle de concorrência otimista por updated_at |
+| [0010](0010-permissoes-por-pagina.md) | Permissões fixas, uma por página do painel |
+| [0011](0011-copia-no-agendamento.md) | Cópia dos dados no agendamento |
+| [0012](0012-permissoes-como-enum.md) | Permissões como tipo enumerado |
+| [0013](0013-porte-calculado-pelo-banco.md) | Porte calculado pelo banco a partir do tipo |
+| [0014](0014-sem-controle-de-capacidade.md) | Sem controle de capacidade e de conflito de horários |
+| [0015](0015-sem-envio-de-emails.md) | Sem envio de e-mails |
+| [0016](0016-tentativas-de-login-no-banco.md) | Controle de tentativas de login em tabela do banco |
+| [0017](0017-codigo-em-ingles.md) | Todo o código em inglês, com a interface em português |
+| [0018](0018-placa-unica.md) | Placa única, com vínculo entre clientes e veículos |
+| [0019](0019-login-unico.md) | Página de login única |
+| [0020](0020-tabelas-separadas-de-contas.md) | Tabelas separadas para clientes e para funcionários |
+| [0021](0021-valores-calculados-na-edicao.md) | Edição de agendamento com valores sempre calculados pelo sistema |
+| [0022](0022-exclusao-logica.md) | Exclusão lógica de clientes e de serviços |
+| [0023](0023-typescript-6-e-node-24.md) | TypeScript 6.0 e Node.js 24 LTS |
+| [0024](0024-testes-das-regras-de-negocio.md) | Testes automatizados apenas das regras de negócio |
+| [0025](0025-erros-rfc-9457.md) | Erros no formato Problem Details (RFC 9457) |
+| [0026](0026-api-sem-versao.md) | API sem versão no caminho, com mudanças aditivas |
+| [0027](0027-react-hook-form.md) | Formulários com React Hook Form |
+| [0028](0028-prettier.md) | Formatação automática com Prettier |
+| [0029](0029-registro-estruturado.md) | Registro estruturado na saída padrão, consultado na Vercel |
+| [0030](0030-planos-gratuitos.md) | Vercel e Supabase em plano gratuito, sem domínio próprio |
+| [0031](0031-estrutura-icm.md) | Orientação da IA pela estrutura de pastas da ICM |
+| [0032](0032-proxy-ts.md) | Proteção das páginas em src/proxy.ts |
+| [0033](0033-atualizacao-por-merge.md) | Atualização das ramificações por merge, sem rebase |
+| [0034](0034-incorporacao-por-squash.md) | Incorporação por squash, com Closes #N |
+| [0035](0035-tdd-nas-regras.md) | TDD nas regras de negócio e nos esquemas de validação |
+| [0036](0036-organizacao-das-pastas.md) | Organização das pastas do código |
