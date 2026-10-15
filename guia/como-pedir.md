@@ -68,6 +68,7 @@ PR da #12 incorporado. Etapa 04.
 | Defeito | `Tarefa #20 (defeito): <issue>. Faça a etapa 01 começando pelo teste que reproduz o defeito.` |
 | Investigação | `Tarefa #21 (investigação): <pergunta>. Prazo: meio dia. Faça a etapa 01.` |
 | Tarefa trivial (critérios em `workflows/procedimentos/tarefa-trivial.md`) | `Tarefa #22: trocar o texto do botão "Enviar" para "Agendar" em /booking. Confira se é trivial e proponha o plano resumido aqui.` Depois de ler o plano resumido, responda `Aprovado.` Se a IA disser que não é trivial, siga o ciclo completo. |
+| Testar no contêiner | Crie o `.env.local` (cópia do `.env.example`) e peça: `Na #12, teste a aplicação no contêiner.` Para rodar você mesmo: `docker compose up --build` (passo a passo em `docs/plataforma/infraestrutura.md`). |
 
 ## Quando a IA aponta uma lacuna
 

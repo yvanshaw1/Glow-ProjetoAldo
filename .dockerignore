@@ -1,0 +1,13 @@
+# Secrets never enter any build stage (RS016); the container reads .env.local
+# only at run time, through compose.yaml. The **/ prefix covers every folder,
+# not only the root.
+**/.env*
+
+# Installed and generated inside the image by the build stages.
+**/node_modules
+**/.next
+
+# Version control, and the Claude Code worktrees, each with its own copies of
+# node_modules, .next and .env* files.
+.git
+.claude

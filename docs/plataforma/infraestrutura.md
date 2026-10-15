@@ -2,18 +2,18 @@
 titulo: Infraestrutura, ambientes e CI
 assunto: plataforma
 origem: Documentação de Arquitetura de Software, seção 8 (Quadros 36 e 37)
-relacionados: [RNF014, RNF015, RS016]
+relacionados: [RNF014, RNF015, RS016, 0030, 0038]
 ---
 
 # Infraestrutura, ambientes e CI
 
-Três serviços em plano gratuito: GitHub (código e CI), Vercel (aplicação) e Supabase (banco, autenticação e arquivos). Sem servidor próprio, domínio ou contêineres.
+Três serviços em plano gratuito: GitHub (código e CI), Vercel (aplicação) e Supabase (banco, autenticação e arquivos). Sem servidor próprio nem domínio, e a aplicação não é hospedada em contêineres: o Docker serve só para executá-la da mesma forma em qualquer máquina (Execução em contêiner).
 
 ## Ambientes
 
 | Ambiente | Onde | Para quê |
 |---|---|---|
-| Desenvolvimento | `npm run dev` em `http://localhost:3000` | codificar e testar localmente |
+| Desenvolvimento | `npm run dev` em `http://localhost:3000`, ou em contêiner com `docker compose up --build`, no mesmo endereço | codificar e testar localmente; o contêiner executa a aplicação compilada da mesma forma em qualquer máquina |
 | Pré-visualização | Vercel, um endereço por pull request em `vercel.app` | conferir a alteração antes da revisão |
 | Produção | Vercel, a partir da `main`, em `vercel.app` | demonstração e avaliação |
 
@@ -21,7 +21,7 @@ Todos usam o mesmo projeto do Supabase: toda migration precisa ser compatível c
 
 ## Variáveis de ambiente
 
-Nenhuma usa o prefixo `NEXT_PUBLIC_`, então nenhuma chega ao navegador. O repositório tem só `.env.example`, com os nomes e sem valores; os valores ficam em `.env.local` (ignorado pelo Git) e na Vercel (RNF015, RS016).
+Nenhuma usa o prefixo `NEXT_PUBLIC_`, então nenhuma chega ao navegador. O repositório tem só `.env.example`, com os nomes e sem valores; os valores ficam em `.env.local` (ignorado pelo Git e fora da imagem do contêiner) e na Vercel (RNF015, RS016). O código as lê na execução, durante a requisição, nunca na construção: a Vercel as fornece também no `next build`, mas a imagem do contêiner é construída sem elas, e um módulo ou página que dependa delas no build quebra o `docker compose up --build`.
 
 | Variável | Sigilosa | Uso |
 |---|---|---|
@@ -60,3 +60,22 @@ A cada envio a uma ramificação e a cada pull request para a `main`, com Node.j
 As etapas 1 a 4 são as do `npm run check`; a 5 roda só no CI. Tudo fica num único job, `check`, que é o nome do check obrigatório na proteção da `main`: renomear o job exige trocar o check no ruleset ao mesmo tempo.
 
 O fluxo tem só permissão de leitura do repositório (`permissions: contents: read`), não usa chaves e não acessa o banco. O build completo é feito pela Vercel, e o resultado dele também bloqueia a incorporação.
+
+## Execução em contêiner
+
+Por exigência da disciplina, a aplicação também roda num contêiner Docker, com o mesmo comportamento em qualquer máquina, independentemente do sistema operacional e do Node.js instalado (decisão 0038). O contêiner não substitui a Vercel, que continua publicando a pré-visualização e a produção, nem o Supabase, que continua sendo o único banco: executa localmente a aplicação compilada, ligada ao projeto do Supabase pelas variáveis do `.env.local`.
+
+| Arquivo | Função |
+|---|---|
+| `Dockerfile` | três estágios a partir da imagem oficial do Node.js 24: `npm ci`; `next build` com a saída standalone (`output: "standalone"` no `next.config.ts`); imagem final só com o servidor compilado, `public/` e `.next/static/`, executada pelo usuário `node`, sem privilégios de administrador |
+| `.dockerignore` | deixa fora da imagem os `.env*` de qualquer pasta, `node_modules`, `.next`, `.git` e `.claude`, onde ficam os worktrees do Claude Code (RS016) |
+| `compose.yaml` | serviço `app` em `http://localhost:3000`, com as variáveis lidas do `.env.local` na execução |
+
+Para usar:
+
+1. Instalar o Docker Desktop (Docker 29 e Compose 5) e deixá-lo aberto.
+2. Ter na pasta o `.env.local`, copiado do `.env.example` e preenchido (seção "Variáveis de ambiente"); sem ele, o Compose para com "env file ... not found".
+3. Rodar `docker compose up --build`: constrói a imagem com o código atual e sobe a aplicação em `http://localhost:3000`. Sem o `--build`, o Compose reaproveita a imagem anterior.
+4. Encerrar com `Ctrl+C` ou, se a aplicação subiu em segundo plano (`-d`), com `docker compose down`.
+
+A porta 3000 é a mesma do `npm run dev`: rode um de cada vez. O dia a dia continua com `npm run dev`, que recarrega as páginas a cada alteração. A imagem não é publicada em registro, e o CI não a constrói: um erro no `Dockerfile` só aparece quando alguém executa o comando. Na Vercel, a saída standalone só acrescenta a pasta `.next/standalone/` ao build.
