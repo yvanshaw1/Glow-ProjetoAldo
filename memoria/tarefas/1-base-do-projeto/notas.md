@@ -41,3 +41,11 @@ O desenvolvedor respondeu na conversa as quatro dúvidas acima, todas pela opç�
 ## 2026-10-15 – descoberta
 
 Verificações da etapa 02: um teste temporário, apagado em seguida, com `import "server-only"` passou pelo alias do `vitest.config.ts`. O `npm run dev` serviu `/` com status 200, `<html lang="pt-BR">`, título e `<h1>` "Glow – Estética Automotiva", e o `AGENTS.md` ficou igual (mesmo hash antes e depois), confirmando o `agentRules: false`. `git check-ignore -v` mostra `.env.local` ignorado por `.env*` e `.env.example` liberado por `!.env.example`. Nenhum arquivo apagado em relação à `main`; continuam 112 `README.md`. O `next build` local gera `/` e `/_not-found`. Clone limpo em pasta temporária de caminho curto (o caminho longo da pasta do agente faz o `git clone` falhar com "Filename too long" no Windows): `npm ci` só com os dois avisos aceitos e `npm run check` aprovado, sem nenhum aviso.
+
+## 2026-10-15 – dúvida
+
+PR #5 aberto. O CI passa (job `check`, eventos push e pull_request), mas o build da Vercel falha nos commits b5420e2 e c6b3d8f (deploys `dpl_5i8buVvADC9qgbSy2NrhurGEZJzZ` e `dpl_6LHkNahQDEJckY3TL3SchoSpkoLo`). O log exige login na Vercel, que o agente não faz. Descartado: falta de binários nativos de Linux no `package-lock.json` (Tailwind CSS, Lightning CSS e SWC estão lá); o `next build` local passa. Hipóteses a conferir no log: configurações do projeto criadas antes de existir a aplicação (preset de framework, comando de build ou pasta de saída) e versão do Node.js. Se a correção mudar código, a tarefa volta à etapa 02 (`em_execucao`).
+
+## 2026-10-15 – descoberta
+
+Causa da falha da Vercel (log enviado pelo desenvolvedor): o `next build` termina com sucesso e gera `/` e `/_not-found`, mas a Vercel procura a saída numa pasta `dist` ("No Output Directory named "dist" found after the Build completed"). É configuração do projeto na Vercel, criada antes de existir a aplicação: o preset de framework precisa ser Next.js, sem diretório de saída próprio. Nenhuma mudança de código; a correção é do desenvolvedor, no painel da Vercel. O log também mostra avisos do ambiente da Vercel que não vêm do repositório (`Unknown env config "cache-dir"`) e o do npm sobre o script de instalação do `unrs-resolver` (dependência do ESLint), que o `npm ci` local e o do CI não mostram.
