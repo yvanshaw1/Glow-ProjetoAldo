@@ -1,6 +1,6 @@
 ---
 issue: 6
-pull_request:
+pull_request: 7
 ---
 
 # Relatório: Executar a aplicação em contêiner Docker
