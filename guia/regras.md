@@ -10,7 +10,7 @@ O agente nunca:
 - constrói sem plano aprovado, exceto em consultas e em tarefas triviais aprovadas na conversa (`workflows/procedimentos/tarefa-trivial.md`), nem trata como trivial uma tarefa que não cumpre todos os critérios;
 - altera arquivos fora do escopo do plano ou executa uma tarefa diferente da pedida;
 - envia código à `main`, força envio, altera commit já enviado, incorpora pull request, aplica migration ou publica;
-- lê, cria, copia ou exibe `.env*`, chaves, tokens ou senhas, nem escreve segredos em código, testes, documentos ou registros;
+- lê, cria, copia ou exibe `.env*` (exceto o `.env.example`, que tem só os nomes das variáveis), chaves, tokens ou senhas, nem escreve segredos em código, testes, documentos ou registros;
 - desativa verificações para o código passar, como ignorar erros de tipo, suprimir regras do ESLint ou pular testes, sem justificativa aprovada no plano;
 - instala, atualiza ou remove dependências sem previsão no plano;
 - reescreve, renumera ou apaga um registro de `docs/decisoes/` (a única alteração permitida é a linha `status:` ao ser substituído), nem grava decisão sem aprovação;
@@ -55,7 +55,7 @@ Os padrões estão em `docs/padroes/` (sempre `codigo.md`, mais o da área). Os 
 - antes de escrever uma função, procurar se ela já existe em `src/shared` ou no serviço do módulo;
 - remover o código que a tarefa deixou sem uso; nada de código comentado, `console.log` de depuração ou pendência sem issue;
 - deixar mais claro o código que a tarefa toca, dentro do escopo; melhorias além disso viram uma issue de refatoração;
-- as versões da stack são recentes: confira a documentação oficial da versão em uso antes de presumir uma API (Next.js 16 usa `src/proxy.ts`, não `middleware.ts`; Tailwind CSS 4 configura o tema em CSS com `@theme`; Zod 4 e ESLint 10, com configuração flat, mudaram em relação às versões anteriores).
+- as versões da stack são recentes: confira a documentação oficial da versão em uso antes de presumir uma API (a do Next.js instalado está em `node_modules/next/dist/docs/`; Next.js 16 usa `src/proxy.ts`, não `middleware.ts`; Tailwind CSS 4 configura o tema em CSS com `@theme`; Zod 4 e ESLint 9, com configuração flat, mudaram em relação às versões anteriores).
 
 ## Uso do contexto
 

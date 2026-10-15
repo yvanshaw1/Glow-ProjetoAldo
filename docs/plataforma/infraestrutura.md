@@ -52,9 +52,11 @@ O arquivo opcional `supabase/seed-demo.sql` cadastra dados fictícios de demonst
 A cada envio a uma ramificação e a cada pull request para a `main`, com Node.js 24, `npm ci` e cache do npm, em sequência (se uma etapa falha, as seguintes não rodam):
 
 1. `prettier --check`;
-2. `tsc --noEmit`;
+2. `tsc --noEmit`, depois do `next typegen`, que gera os tipos das rotas e o `next-env.d.ts` (não versionados);
 3. ESLint;
 4. Vitest;
 5. `npm audit` nas dependências de produção, falhando em vulnerabilidade alta ou crítica.
+
+As etapas 1 a 4 são as do `npm run check`; a 5 roda só no CI. Tudo fica num único job, `check`, que é o nome do check obrigatório na proteção da `main`: renomear o job exige trocar o check no ruleset ao mesmo tempo.
 
 O fluxo tem só permissão de leitura do repositório (`permissions: contents: read`), não usa chaves e não acessa o banco. O build completo é feito pela Vercel, e o resultado dele também bloqueia a incorporação.
