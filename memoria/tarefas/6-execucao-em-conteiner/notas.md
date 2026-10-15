@@ -33,3 +33,7 @@ Docker 29.8.2 e Compose 5.6.0. `docker build` da ramificação (0c39488) a parti
 ## 2026-10-15 – descoberta
 
 Critério 1 pelo Compose: o desenvolvedor criou o `.env.local` no worktree, copiando o `.env.example` (o agente só conferiu que ele existe e é ignorado pelo Git). `docker compose up --build -d` construiu a imagem `glow-app` e subiu `glow-app-1` em `0.0.0.0:3000`; `/` com 200, `lang="pt-BR"`, título e `<h1>` corretos, os sete estáticos com 200; `docker compose top` mostra o `next-server` com uid 1000; `docker compose down` remove contêiner e rede em cerca de 1 s. Imagens de teste do agente apagadas; ficam a `glow-app` do Compose e o `.env.local` do desenvolvedor no worktree. Com isso, os critérios 1, 2 e 4 estão verificados nesta máquina; o 3 depende dos checks do PR e o 5 foi conferido pela busca.
+
+## 2026-10-15 – desvio
+
+Etapa 03 em andamento: decisão 0038 gravada (a `main` continua em 8eee74c, sem a 0038 da #2) e `02_relatorio.md` escrito. O desenvolvedor pediu que as instruções de uso do Docker para a equipe e para a IA estejam no sistema. Isso acrescenta `workflows/procedimentos/testes.md` e `guia/como-pedir.md`, fora do plano, e texto novo em `infraestrutura.md` e no `README.md`. Mudança de escopo: o plano ganhou a seção "Acréscimo de escopo" e voltou a `aguardando_aprovacao`; nada desses quatro arquivos foi alterado. O PR só é aberto depois da aprovação e da aplicação do acréscimo.

@@ -4,7 +4,7 @@ titulo: "Executar a aplicação em contêiner Docker"
 area: cicd
 tipo: configuracao
 requisitos: [RNF014, RNF015, RS016]
-status: em_execucao
+status: aguardando_aprovacao
 aprovado_por: yvan  
 aprovado_em: 15/10/2026 - 15:51
 ---
@@ -82,6 +82,7 @@ Verificação além dos critérios: `npm run check` aprovado. O Prettier formata
 | `docs/decisoes/NNNN-execucao-em-conteiner.md` | criar na etapa 03 |
 | `docs/decisoes/CONTEXT.md` | alterar: linha da NNNN |
 | `guia/regras.md` e `.claude/settings.json` | alterar (L4; fora da lista da issue) |
+| `workflows/procedimentos/testes.md` e `guia/como-pedir.md` | alterar (acréscimo de escopo, no fim do plano) |
 | `memoria/tarefas/6-execucao-em-conteiner/` | `01_plano.md` e `notas.md` nesta etapa; `02_relatorio.md` na etapa 03 |
 
 Não mudam: `.github/workflows/ci.yml` (o CI não constrói a imagem), `.gitignore`, `.env.example`, `tsconfig.json`, `eslint.config.mjs`, `src/`, `workflows/procedimentos/deploy.md` (a publicação não muda) e a decisão 0030 (registro imutável).
@@ -244,3 +245,49 @@ Escolhas locais, sem registro:
 - Desenvolvimento dentro do contêiner, com recarga a cada alteração (`docker compose watch` ou volumes).
 - Atualização automática da imagem base pelo Dependabot, `HEALTHCHECK`, imagem para várias arquiteturas e desligamento da telemetria do Next.js.
 - `workflows/procedimentos/deploy.md` e a decisão 0030, que não mudam.
+
+## Acréscimo de escopo: instruções de uso do Docker (15/10/2026)
+
+**Pedido.** Na etapa 03, o desenvolvedor pediu: "garanta que as instruções de uso do docker pra equipe e pra ia estao inclusos no sistema". Já entregue: o comando no `AGENTS.md`, no `README.md` e na seção 3 do questionário; a seção "Execução em contêiner" de `infraestrutura.md`, que diz o que é e qual comando roda; e a proibição de L4 em `guia/regras.md`. Falta o passo a passo da equipe e o procedimento da IA: quando testar no contêiner e como examinar a imagem sem expor as variáveis.
+
+**Arquivos.** Dois fora do plano aprovado (`workflows/procedimentos/testes.md` e `guia/como-pedir.md`) e texto novo em dois do plano (`infraestrutura.md` e `README.md`). Em comum com a #2: `guia/como-pedir.md`, em que a #2 muda as linhas 15, 47 e 62 e esta tarefa acrescenta uma linha no fim da tabela "Outros pedidos" (trechos separados). A #2 não toca `workflows/procedimentos/testes.md`. A seção 6 do questionário fica como está, porque a #2 a reescreve.
+
+**Textos propostos:**
+
+- `docs/plataforma/infraestrutura.md`, "Execução em contêiner": o parágrafo final passa a ser este passo a passo, seguido do parágrafo atual sem a primeira frase:
+
+  ```markdown
+  Para usar:
+
+  1. Instalar o Docker Desktop (Docker 29 e Compose 5) e deixá-lo aberto.
+  2. Ter na pasta o `.env.local`, copiado do `.env.example` e preenchido (seção "Variáveis de ambiente"); sem ele, o Compose para com "env file ... not found".
+  3. Rodar `docker compose up --build`: constrói a imagem com o código atual e sobe a aplicação em `http://localhost:3000`. Sem o `--build`, o Compose reaproveita a imagem anterior.
+  4. Encerrar com `Ctrl+C` ou, se a aplicação subiu em segundo plano (`-d`), com `docker compose down`.
+
+  A porta 3000 é a mesma do `npm run dev`: rode um de cada vez.
+  ```
+
+- `workflows/procedimentos/testes.md`, seção nova entre "Automatizados" e "Manuais":
+
+  ````markdown
+  ## Contêiner (Docker)
+
+  Quando a tarefa muda o `Dockerfile`, o `.dockerignore`, o `compose.yaml`, o `next.config.ts`, as dependências ou a leitura de variáveis de ambiente, conferir também a aplicação compilada no contêiner (`docs/plataforma/infraestrutura.md`):
+
+  ```
+  docker compose up --build -d   constrói a imagem e sobe a aplicação em http://localhost:3000
+  docker compose top             processos do contêiner, com o usuário (uid 1000, node)
+  docker compose logs app        saída da aplicação
+  docker compose down            encerra e remove o contêiner
+  ```
+
+  1. Com o contêiner no ar, conferir a página inicial e as rotas da tarefa.
+  2. Para examinar a imagem por dentro, usar um contêiner novo, sem o `.env.local`: `docker run --rm --entrypoint sh glow-app -c "<comando>"`. Nunca `docker compose config`, `docker inspect`, `docker exec` nem `docker compose exec`, que mostram as variáveis (`guia/regras.md`).
+  3. Sem o `.env.local`, o agente não o cria: pede ao desenvolvedor que copie o `.env.example`. Sem o Docker na máquina, o teste vira passo manual de um integrante que o tenha, registrado no plano.
+  4. Registrar o resultado em `notas.md` e no relatório.
+  ````
+
+- `guia/como-pedir.md`, "Outros pedidos", linha nova no fim da tabela: `| Testar no contêiner | Crie o `.env.local` (cópia do `.env.example`) e peça: `Na #12, teste a aplicação no contêiner.` Para rodar você mesmo: `docker compose up --build` (passo a passo em `docs/plataforma/infraestrutura.md`). |`
+- `README.md`, parágrafo do contêiner: "com o Docker instalado" passa a "com o Docker Desktop instalado", e o parágrafo termina com "Passo a passo em `docs/plataforma/infraestrutura.md`, seção "Execução em contêiner"."
+
+**Fora deste acréscimo:** liberar os comandos do Docker no `allow` do `.claude/settings.json`, que só reduziria as confirmações; o `CODEOWNERS` e os modelos de PR, que a #2 altera.
