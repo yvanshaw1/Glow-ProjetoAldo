@@ -4,7 +4,7 @@ titulo: "Equipe sem responsável por área: tarefas de ponta a ponta"
 area: cicd
 tipo: documentacao
 requisitos: [RNF014]
-status: em_execucao
+status: concluido
 aprovado_por: yvan    
 aprovado_em: 15/10/2026 - 20:09
 ---
