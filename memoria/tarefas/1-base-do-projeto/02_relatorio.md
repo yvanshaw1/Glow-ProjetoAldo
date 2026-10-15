@@ -1,6 +1,6 @@
 ---
 issue: 1
-pull_request:
+pull_request: 5
 ---
 
 # Relatório: Base do projeto: Next.js, ferramentas de qualidade e CI
