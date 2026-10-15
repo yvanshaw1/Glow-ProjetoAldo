@@ -1,7 +1,7 @@
 ---
 issue: <número>
 titulo: <título da issue>
-area: <frontend | backend | banco | testes | cicd>
+areas: [<frontend, backend, banco, testes, cicd: as que a tarefa toca>]
 tipo: <funcionalidade | defeito | investigacao | documentacao | configuracao>
 requisitos: [<RF, RN, RS, UC citados>]
 status: aguardando_aprovacao
