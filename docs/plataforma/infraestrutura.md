@@ -71,4 +71,11 @@ Por exigência da disciplina, a aplicação também roda num contêiner Docker, 
 | `.dockerignore` | deixa fora da imagem os `.env*` de qualquer pasta, `node_modules`, `.next`, `.git` e `.claude`, onde ficam os worktrees do Claude Code (RS016) |
 | `compose.yaml` | serviço `app` em `http://localhost:3000`, com as variáveis lidas do `.env.local` na execução |
 
-Com o Docker instalado e o `.env.local` preenchido: `docker compose up --build`. O dia a dia continua com `npm run dev`, que recarrega as páginas a cada alteração. A imagem não é publicada em registro, e o CI não a constrói: um erro no `Dockerfile` só aparece quando alguém executa o comando. Na Vercel, a saída standalone só acrescenta a pasta `.next/standalone/` ao build.
+Para usar:
+
+1. Instalar o Docker Desktop (Docker 29 e Compose 5) e deixá-lo aberto.
+2. Ter na pasta o `.env.local`, copiado do `.env.example` e preenchido (seção "Variáveis de ambiente"); sem ele, o Compose para com "env file ... not found".
+3. Rodar `docker compose up --build`: constrói a imagem com o código atual e sobe a aplicação em `http://localhost:3000`. Sem o `--build`, o Compose reaproveita a imagem anterior.
+4. Encerrar com `Ctrl+C` ou, se a aplicação subiu em segundo plano (`-d`), com `docker compose down`.
+
+A porta 3000 é a mesma do `npm run dev`: rode um de cada vez. O dia a dia continua com `npm run dev`, que recarrega as páginas a cada alteração. A imagem não é publicada em registro, e o CI não a constrói: um erro no `Dockerfile` só aparece quando alguém executa o comando. Na Vercel, a saída standalone só acrescenta a pasta `.next/standalone/` ao build.

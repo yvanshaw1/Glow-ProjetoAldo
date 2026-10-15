@@ -25,4 +25,4 @@ npm run dev
 
 Antes, copie `.env.example` para `.env.local` e preencha os valores (`docs/plataforma/infraestrutura.md`). Verificação completa, como no CI: `npm run check`.
 
-Em contêiner, com o Docker instalado e o `.env.local` preenchido: `docker compose up --build` constrói a imagem e executa a aplicação compilada em `http://localhost:3000`, da mesma forma em qualquer máquina. O dia a dia continua com `npm run dev`, e a publicação, na Vercel.
+Em contêiner, com o Docker Desktop instalado e o `.env.local` preenchido: `docker compose up --build` constrói a imagem e executa a aplicação compilada em `http://localhost:3000`, da mesma forma em qualquer máquina. O dia a dia continua com `npm run dev`, e a publicação, na Vercel. Passo a passo em `docs/plataforma/infraestrutura.md`, seção "Execução em contêiner".
