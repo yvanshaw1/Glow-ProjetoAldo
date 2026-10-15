@@ -30,6 +30,19 @@ issue → 01 Planejar → [aprovação do plano] → 02 Construir → 03 Entrega
 | `concluido` | Entrega completa no pull request; vale na `main` quando ele é incorporado | agente, na etapa 03 |
 | `cancelado` | Tarefa abandonada; motivo em `notas.md` | só o desenvolvedor |
 
+## Quadro de tarefas (GitHub Projects)
+
+O cartão da issue acompanha o ciclo. As colunas "A fazer", "Em revisão" e "Concluído" são movidas pela automação do quadro; as demais, pelo desenvolvedor. O agente não mexe no quadro.
+
+| Coluna | Quando |
+|---|---|
+| A fazer | issue criada ou reaberta (automático) |
+| Planejamento | etapa 01 em andamento |
+| Aguardando aprovação | plano em `aguardando_aprovacao`, inclusive quando volta por mudança de escopo |
+| Em construção | plano `aprovado`, etapa 02 |
+| Em revisão | PR aberto com `Closes #<issue>` (automático), até a incorporação; ajustes pedidos na revisão não mudam a coluna |
+| Concluído | PR incorporado e issue fechada pelo `Closes #<issue>` (automático) |
+
 ## Variações por tipo de tarefa
 
 - Consulta: não percorre o ciclo.

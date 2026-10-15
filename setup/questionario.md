@@ -51,9 +51,9 @@ Criados na tarefa de base do projeto, no `package.json`:
   - remote `origin`.
   
   O envio (`git push -u origin main`) é feito pelo desenvolvedor.
-- [ ] Varredura de segredos com proteção de envio ativada (Settings → Security).
-- [ ] Etiquetas: `area:frontend`, `area:backend`, `area:banco`, `area:testes`, `area:cicd`, `tipo:funcionalidade`, `tipo:defeito`, `tipo:investigacao`, `tipo:documentacao`, `tipo:configuracao`.
-- [ ] Quadro no GitHub Projects com as colunas: a fazer, planejamento, aguardando aprovação, em construção, em revisão, concluído.
+- [x] Varredura de segredos com proteção de envio ativada (Settings → Security).
+- [x] Etiquetas: `area:frontend`, `area:backend`, `area:banco`, `area:testes`, `area:cicd`, `tipo:funcionalidade`, `tipo:defeito`, `tipo:investigacao`, `tipo:documentacao`, `tipo:configuracao`.
+- [x] Quadro no GitHub Projects com as colunas e as automações de `workflows/CONTEXT.md` (Quadro de tarefas).
 - [ ] Proteção da `main`: só por PR; CI e build da Vercel obrigatórios; ramificação atualizada; 1 aprovação, descartada com commits novos; conversas resolvidas; só squash; remoção automática da ramificação incorporada.
 - [ ] Alertas de dependências (Dependabot) ativados.
 
