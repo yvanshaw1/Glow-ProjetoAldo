@@ -45,3 +45,4 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0035](0035-tdd-nas-regras.md) | TDD nas regras de negócio e nos esquemas de validação |
 | [0036](0036-organizacao-das-pastas.md) | Organização das pastas do código |
 | [0037](0037-eslint-9.md) | ESLint 9 com a configuração do Next.js |
+| [0038](0038-execucao-em-conteiner.md) | Docker para executar a aplicação em contêiner |
