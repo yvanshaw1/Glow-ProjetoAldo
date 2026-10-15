@@ -4,7 +4,7 @@ titulo: "Executar a aplicação em contêiner Docker"
 area: cicd
 tipo: configuracao
 requisitos: [RNF014, RNF015, RS016]
-status: aguardando_aprovacao
+status: concluido
 aprovado_por: yvan  
 aprovado_em: 15/10/2026 - 15:51
 ---

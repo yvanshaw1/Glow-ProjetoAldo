@@ -37,3 +37,7 @@ Critério 1 pelo Compose: o desenvolvedor criou o `.env.local` no worktree, copi
 ## 2026-10-15 – desvio
 
 Etapa 03 em andamento: decisão 0038 gravada (a `main` continua em 8eee74c, sem a 0038 da #2) e `02_relatorio.md` escrito. O desenvolvedor pediu que as instruções de uso do Docker para a equipe e para a IA estejam no sistema. Isso acrescenta `workflows/procedimentos/testes.md` e `guia/como-pedir.md`, fora do plano, e texto novo em `infraestrutura.md` e no `README.md`. Mudança de escopo: o plano ganhou a seção "Acréscimo de escopo" e voltou a `aguardando_aprovacao`; nada desses quatro arquivos foi alterado. O PR só é aberto depois da aprovação e da aplicação do acréscimo.
+
+## 2026-10-15 – decisão
+
+Acréscimo aprovado pelo desenvolvedor (status `aprovado`) e aplicado com os textos do plano, sem alteração. O procedimento novo de `testes.md` foi executado como escrito e funciona, inclusive o nome da imagem `glow-app` usado no `docker run`. Plano em `concluido`, relatório atualizado.
