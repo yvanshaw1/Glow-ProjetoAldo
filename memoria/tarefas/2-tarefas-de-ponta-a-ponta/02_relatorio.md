@@ -1,6 +1,6 @@
 ---
 issue: 2
-pull_request: <número>
+pull_request: 8
 ---
 
 # Relatório: Equipe sem responsável por área: tarefas de ponta a ponta
