@@ -2,7 +2,7 @@
 
 Portal público e do cliente e painel administrativo de uma empresa de estética automotiva. MVP da disciplina Sistemas Inteligentes (Sistemas de Informação, CESMAC), desenvolvido com apoio de IA.
 
-Stack: Next.js 16 e React 19 em TypeScript, Tailwind CSS e shadcn/ui, Supabase (PostgreSQL, Auth e Storage), Vitest, publicação na Vercel.
+Stack: Next.js 16 e React 19 em TypeScript, Tailwind CSS e shadcn/ui, Supabase (PostgreSQL, Auth e Storage), Vitest, publicação na Vercel e execução em contêiner com Docker.
 
 ## Como o repositório está organizado
 
@@ -24,3 +24,5 @@ npm run dev
 ```
 
 Antes, copie `.env.example` para `.env.local` e preencha os valores (`docs/plataforma/infraestrutura.md`). Verificação completa, como no CI: `npm run check`.
+
+Em contêiner, com o Docker instalado e o `.env.local` preenchido: `docker compose up --build` constrói a imagem e executa a aplicação compilada em `http://localhost:3000`, da mesma forma em qualquer máquina. O dia a dia continua com `npm run dev`, e a publicação, na Vercel.

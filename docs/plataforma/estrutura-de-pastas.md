@@ -56,7 +56,8 @@ App/
 │   └── validation/                  espelha src/shared/validation
 └── raiz: package.json (engines: Node 24) · package-lock.json · next.config.ts · tsconfig.json ·
     eslint.config.mjs · prettier.config.mjs · .prettierignore · vitest.config.ts ·
-    components.json · .env.example · .gitignore · .gitattributes (eol=lf)
+    components.json · .env.example · .gitignore · .gitattributes (eol=lf) ·
+    Dockerfile · compose.yaml · .dockerignore (execução em contêiner)
 ```
 
 ## Esqueleto
@@ -101,5 +102,5 @@ shared ← usado por todos; não importa nada de server/ nem do Supabase
 | `shared/` na raiz (types, utils, constants) | `src/shared/` (api, format, constants, validation, errors) | |
 | `app.ts` | `next.config.ts` (cabeçalhos de segurança, imagens) e `src/proxy.ts` | não há servidor para configurar |
 | `database/migrations` e `seeds` | `supabase/migrations`, `seed.sql`, `seed-demo.sql` | Supabase CLI |
-| `docker-compose.yml` e `Dockerfile` | não existem | banco e hospedagem gerenciados (decisão 0030) |
+| `docker-compose.yml` e `Dockerfile` | `compose.yaml` e `Dockerfile` na raiz, só para executar a aplicação compilada em contêiner | a hospedagem continua na Vercel e o banco no Supabase (decisões 0030 e 0038) |
 | `infrastructure/.github` | `.github/` na raiz | |

@@ -25,7 +25,7 @@ Integrante que aplica as migrations (`supabase db push`): **pendente**.
 
 ## 3. Comandos
 
-Criados na tarefa de base do projeto, no `package.json`:
+Criados nas tarefas #1 (`package.json`) e #6 (`compose.yaml`):
 
 | Comando | Faz |
 |---|---|
@@ -33,6 +33,7 @@ Criados na tarefa de base do projeto, no `package.json`:
 | `npm run check` | `prettier --check`, `tsc --noEmit`, ESLint e Vitest, na ordem do CI |
 | `npm test` | Vitest uma vez |
 | `npm run format` | `prettier --write` |
+| `docker compose up --build` | constrói a imagem e executa a aplicação compilada em contêiner, em `http://localhost:3000` |
 
 ## 4. Convenções
 

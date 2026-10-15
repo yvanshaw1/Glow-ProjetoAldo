@@ -37,6 +37,7 @@ Todo veículo é hatch, sedan, SUV ou picape; pagamento presencial por crédito,
 | Linguagem | TypeScript | 6.0 |
 | Framework | Next.js (App Router) com React | 16.4 e 19.3 |
 | Execução | Node.js | 24 LTS |
+| Contêineres | Docker e Docker Compose | 29 e 5 |
 | Interface | Tailwind CSS e shadcn/ui | 4.3 |
 | Gráficos | Recharts | 3.10 |
 | Validação | Zod | 4.6 |
@@ -46,7 +47,7 @@ Todo veículo é hatch, sedan, SUV ou picape; pagamento presencial por crédito,
 | Versionamento e CI | Git, GitHub e GitHub Actions | serviço |
 | Hospedagem | Vercel | serviço |
 
-TypeScript fica na 6.0 (e não 7.0) porque as regras de TypeScript do ESLint usadas pelo Next.js ainda não suportam a 7. As versões exatas ficam no `package.json` e no arquivo de travamento; reconfira no npm ao criar o projeto. Sem domínio próprio, Cloudflare, provedor de e-mail, monitoramento externo ou ORM.
+TypeScript fica na 6.0 (e não 7.0) porque as regras de TypeScript do ESLint usadas pelo Next.js ainda não suportam a 7. As versões exatas ficam no `package.json` e no arquivo de travamento; reconfira no npm ao criar o projeto. O Docker só executa a aplicação em contêiner, da mesma forma em qualquer máquina; a publicação continua na Vercel. Sem domínio próprio, Cloudflare, provedor de e-mail, monitoramento externo ou ORM.
 
 ## Princípios
 
