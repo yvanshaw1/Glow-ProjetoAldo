@@ -45,7 +45,7 @@ Toda escolha técnica do plano é conferida contra `docs/decisoes/`: a que já e
 
 ## Como programar
 
-Os padrões estão em `docs/padroes/` (sempre `codigo.md`, mais o da área). Os desvios mais comuns do código gerado por IA:
+Os padrões estão em `docs/padroes/` (sempre `codigo.md`, mais os das áreas que a tarefa toca). Os desvios mais comuns do código gerado por IA:
 
 - respeitar as camadas: a rota valida e autoriza, o serviço aplica as regras, o repositório acessa o banco;
 - manter regra de negócio e decisão de acesso no servidor; a interface só orienta (RS008);

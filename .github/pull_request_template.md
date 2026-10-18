@@ -24,7 +24,7 @@ Closes #<issue>
 
 ## Critérios de pronto
 
-- [ ] Plano aprovado (ou tarefa trivial aprovada na conversa) e código nos padrões da área.
+- [ ] Plano aprovado (ou tarefa trivial aprovada na conversa) e código nos padrões das áreas que a tarefa toca.
 - [ ] `npm run check` passa localmente; CI e build da Vercel aprovados.
 - [ ] Casos de uso afetados testados na pré-visualização (fluxos principal, alternativos e de exceção).
 - [ ] Cada critério de aceitação tem teste automatizado ou passo manual.

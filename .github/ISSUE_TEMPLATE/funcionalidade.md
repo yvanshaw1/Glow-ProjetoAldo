@@ -19,6 +19,6 @@ labels: ["tipo:funcionalidade"]
 
 - Dado ..., quando ..., então ... (RNxxx)
 
-## Área
+## Áreas
 
-<!-- Adicione a etiqueta area:frontend, area:backend, area:banco, area:testes ou area:cicd. -->
+<!-- Adicione uma etiqueta para cada área que a tarefa toca: area:frontend, area:backend, area:banco, area:testes, area:cicd. -->

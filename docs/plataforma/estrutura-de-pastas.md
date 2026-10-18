@@ -14,7 +14,7 @@ App/
 ├── AGENTS.md · CLAUDE.md · README.md
 ├── guia/ · workflows/ · docs/ · memoria/ · setup/ · tools/ · _templates/   orientação da IA (ICM)
 ├── .claude/settings.json            permissões do agente
-├── .github/                         workflows/ci.yml, modelos de PR e de issue, CODEOWNERS
+├── .github/                         workflows/ci.yml, modelos de PR e de issue
 ├── public/                          estáticos: logo, favicon, imagem da página inicial
 ├── src/
 │   ├── app/                         rotas do Next.js; a pasta segue a URL

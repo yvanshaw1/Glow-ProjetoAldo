@@ -9,7 +9,7 @@ Transformar a issue em um plano que o desenvolvedor possa aprovar. Esta etapa n�
 | issue da tarefa | objetivo, requisitos citados e critérios de aceitação (Dado, Quando, Então) |
 | `guia/CONTEXT.md` | o que ler para o tipo de tarefa |
 | `docs/<assunto>/` (pela rota) | caso de uso, regras citadas, `dados.md`, `rotas.md` |
-| `docs/padroes/<área>.md` e `codigo.md` | como programar na área |
+| `codigo.md` e `docs/padroes/<área>.md` de cada área que a tarefa toca | como programar nessas áreas |
 | `docs/decisoes/CONTEXT.md` e os registros que tocam a tarefa | o que já foi decidido e por quê |
 | `workflows/procedimentos/decisao.md` | quando a tarefa envolve escolha técnica |
 | `README.md` das pastas de destino em `src/`, `supabase/` e `tests/` | o que vai e o que não vai em cada pasta |

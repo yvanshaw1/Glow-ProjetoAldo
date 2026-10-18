@@ -12,7 +12,7 @@ O pedido diz **qual tarefa** e **qual etapa**. O que ler, como programar e quand
 
 ## Antes de pedir
 
-- Issue com objetivo, identificadores e critérios de aceitação no formato Dado, Quando, Então, mais as etiquetas de área e de tipo (modelos em `.github/ISSUE_TEMPLATE/`).
+- Issue com objetivo, identificadores e critérios de aceitação no formato Dado, Quando, Então, mais a etiqueta de tipo e uma `area:*` para cada área que a tarefa toca (modelos em `.github/ISSUE_TEMPLATE/`).
 - Tarefa pequena, de um ou dois dias. "Fazer o agendamento" vira várias issues: cálculo de preço, previsão de conclusão, rota de criação, tela do assistente.
 
 ## Pedidos por etapa
@@ -44,7 +44,7 @@ Plano da #12 aprovado. Faça a etapa 02.
 Etapa 03 da #12.
 ```
 
-**Revisão do pull request (responsável pela área)**: CI, build da Vercel, pré-visualização e leitura do código. Pedidos de alteração voltam à etapa 02: `Atenda os comentários do PR da #12 (volta à etapa 02).`
+**Revisão do pull request (outro integrante, nunca o autor)**: CI, build da Vercel, pré-visualização e leitura do código. Pedidos de alteração voltam à etapa 02: `Atenda os comentários do PR da #12 (volta à etapa 02).`
 
 **04 Encerrar**
 
@@ -59,7 +59,7 @@ PR da #12 incorporado. Etapa 04.
 | Retomar uma tarefa em outra sessão | `Retome a tarefa #12.` |
 | Tirar dúvida sem alterar nada | `Consulta: quem pode cancelar um agendamento em espera?` |
 | Corrigir um desvio | `Isso viola a RN033: o funcionário pode adiantar. Corrija e registre em notas.md.` |
-| Correção que se repete | `Transforme essa correção em regra no padrão da área.` |
+| Correção que se repete | `Transforme essa correção em regra no padrão correspondente de docs/padroes/.` |
 | Decidir uma lacuna apontada pela IA | `Na #12, fico com a opção 2 da lacuna sobre arredondamento. Documente como proposto.` |
 | Saber por que algo foi decidido | `Consulta: por que a API não tem /v1? Cite a decisão.` |
 | Questionar uma decisão existente | `Na #12, proponha substituir a decisão 0028 (Prettier) por <alternativa>, com a justificativa.` |

@@ -3,7 +3,7 @@
 ## Abrir
 
 1. Durante a construção, o PR pode ser aberto como rascunho para gerar a pré-visualização da Vercel.
-2. Na entrega, atualizar com a `main` (`git.md`), rodar `npm run check` e marcar como pronto para revisão.
+2. Na entrega, atualizar com a `main` (`git.md`), rodar `npm run check`, marcar como pronto para revisão e pedir a revisão a outro integrante no próprio PR.
 3. Título em Conventional Commits, porque o squash o transforma na mensagem do commit na `main`.
 4. Descrição pelo modelo `.github/pull_request_template.md`: issue (`Closes #<issue>`), requisitos atendidos, o que mudou e por quê, como testar na pré-visualização, capturas de tela se a interface mudar, checklist.
 
@@ -27,11 +27,11 @@ Em funcionalidade nova, o revisor percorre também as demais categorias do OWASP
 
 ## Revisar
 
-- O CODEOWNERS indica quem revisa, não quem pode alterar; o revisor é o responsável pela área.
+- Qualquer integrante que não seja o autor revisa e aprova (decisão 0039); a proteção da `main` exige uma aprovação.
 - Ler o código gerado pela IA como código de terceiros: entender antes de aprovar.
 - Conferir o comportamento na pré-visualização e a correspondência entre critérios de aceitação e testes.
 - O autor responde a todos os comentários; a `main` só aceita a incorporação com todas as conversas resolvidas.
 
 ## Incorporar
 
-Só com CI aprovado, build da Vercel concluído, ramificação atualizada com a `main` e aprovação do responsável (a aprovação cai se entrarem commits novos). Incorporação por squash; a ramificação é removida pelo GitHub. Quem incorpora é um integrante, nunca o agente.
+Só com CI aprovado, build da Vercel concluído, ramificação atualizada com a `main` e aprovação de outro integrante (a aprovação cai se entrarem commits novos). Incorporação por squash; a ramificação é removida pelo GitHub. Quem incorpora é um integrante, nunca o agente.

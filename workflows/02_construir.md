@@ -8,7 +8,7 @@ Implementar exatamente o plano aprovado, com os testes primeiro.
 |---|---|
 | `memoria/tarefas/<issue>-<nome>/01_plano.md` | escopo, arquivos, testes e critérios; o status precisa ser `aprovado` |
 | `memoria/tarefas/<issue>-<nome>/notas.md` | descobertas de sessões anteriores |
-| `docs/padroes/<área>.md` e `codigo.md` | como programar |
+| `codigo.md` e `docs/padroes/<área>.md` de cada área que a tarefa toca | como programar |
 | módulos de `docs/` citados no plano | regras e contratos a cumprir |
 | `workflows/procedimentos/git.md` e `testes.md` | ramificação, commits e testes |
 
