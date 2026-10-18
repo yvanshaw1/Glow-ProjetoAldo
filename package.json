@@ -17,6 +17,7 @@
     "check": "npm run format:check && npm run typecheck && npm run lint && npm test"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.117.3",
     "next": "16.4.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
@@ -31,6 +32,7 @@
     "eslint-config-next": "16.4.1",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "3.9.10",
+    "supabase": "2.120.0",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.3",
     "vite": "^8.3.4",
