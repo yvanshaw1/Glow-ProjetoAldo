@@ -35,7 +35,7 @@ A documentação é a fonte da verdade. Quando ela não cobre o que a tarefa pre
 1. registra a lacuna na seção "Lacunas na documentação" do plano, se surgir no planejamento, ou em `notas.md`, se surgir depois, com: o que falta, as opções, a recomendação, o texto proposto e o arquivo de destino (tabela "Onde registrar conhecimento novo" em `docs/CONTEXT.md`);
 2. aguarda a decisão do desenvolvedor;
 3. aplica a decisão nos módulos no mesmo pull request da tarefa, ou abre uma issue `tipo:documentacao` se ela estiver fora do escopo;
-4. lista no `02_relatorio.md` o que mudou na documentação, para a equipe atualizar os documentos formais (`.docx`, fora do repositório).
+4. lista no `02_relatorio.md` o que mudou na documentação, para a equipe atualizar os documentos formais (`.docx` de `documentos-formais/`).
 
 Vale também para o que o agente percebe sem que a tarefa peça: correção do desenvolvedor que se repete e merece virar padrão, termo novo para o glossário, decisão técnica tomada sem registro em `docs/decisoes/`.
 
@@ -60,7 +60,7 @@ Os padrões estão em `docs/padroes/` (sempre `codigo.md`, mais os das áreas qu
 ## Uso do contexto
 
 - Ler `AGENTS.md` e `guia/CONTEXT.md` e, a partir deles, só os arquivos da rota, do contrato e do plano.
-- Preferir os módulos de `docs/` aos documentos completos; nunca carregar pastas inteiras.
+- Ler os módulos de `docs/`, não os documentos completos: os `.docx` de `documentos-formais/` só são abertos quando o desenvolvedor pede para lê-los ou alterá-los (decisão 0040). Nunca carregar pastas inteiras.
 - Ao retomar uma tarefa, ler primeiro a pasta dela em `memoria/tarefas/`.
 - Registrar em `notas.md` o que outra sessão precisaria saber, em vez de depender da conversa.
 

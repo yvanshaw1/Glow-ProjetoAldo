@@ -15,6 +15,7 @@ App/
 ├── guia/ · workflows/ · docs/ · memoria/ · setup/ · tools/ · _templates/   orientação da IA (ICM)
 ├── .claude/settings.json            permissões do agente
 ├── .github/                         workflows/ci.yml, modelos de PR e de issue
+├── documentos-formais/              os três .docx da disciplina; a IA usa docs/ (decisão 0040)
 ├── public/                          estáticos: logo, favicon, imagem da página inicial
 ├── src/
 │   ├── app/                         rotas do Next.js; a pasta segue a URL
