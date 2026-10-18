@@ -4,7 +4,7 @@ titulo: "Documentos formais no repositório, guia de instalação e .docx atuali
 areas: [cicd]
 tipo: documentacao
 requisitos: [RS016]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 18/10/2026 12:24
 ---
