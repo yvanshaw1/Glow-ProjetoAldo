@@ -20,14 +20,14 @@ relacionados: [RN022, RN023, RN024, RN025, RN026, RN027, RN029, RS001, RS004, RS
 
 | Coluna | Tipo | Restrições | Descrição |
 |---|---|---|---|
-| `email` | `text` | PK | E-mail informado na tentativa. |
+| `email` | `text` | PK; em minúsculas | E-mail informado na tentativa. |
 | `failed_count` | `integer` | Padrão: 0 | Falhas consecutivas; zerado no login bem-sucedido. |
 | `locked_until` | `timestamptz` | Opcional | Fim do bloqueio temporário. |
 | `updated_at` | `timestamptz` |  | Data da última tentativa. |
 
 ## Perfis e contas
 
-Cada pessoa tem uma conta no Supabase Auth; os dados do perfil ficam em tabela própria, com o mesmo id. O Supabase Auth não aceita e-mail repetido, então o e-mail não se repete entre clientes e funcionários (RN022).
+Cada pessoa tem uma conta no Supabase Auth; os dados do perfil ficam em tabela própria, com o mesmo id. Toda conta é criada pelo servidor com a chave de serviço (`auth.admin.createUser`), já com o e-mail confirmado; a aplicação não usa o cadastro público do Supabase Auth, então nenhum e-mail é enviado (decisão 0015) e não há confirmação de e-mail (decisão 0044). O Supabase Auth não aceita e-mail repetido, então o e-mail não se repete entre clientes e funcionários (RN022).
 
 | Perfil | Tabela | Como a conta nasce | Acesso |
 |---|---|---|---|

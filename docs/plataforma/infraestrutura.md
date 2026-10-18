@@ -34,12 +34,13 @@ Nenhuma usa o prefixo `NEXT_PUBLIC_`, então nenhuma chega ao navegador. O repos
 
 ## Preparação do banco (uma vez)
 
-1. Aplicar a migration: tipos, tabelas, funções e RLS.
-2. Carregar `supabase/seed.sql`: quatro formas de pagamento sem ajuste, sete dias da semana e a linha de dados da empresa.
+1. Aplicar as migrations. A inicial cria os tipos, as tabelas, as restrições, os gatilhos, os índices, a RLS e o bucket `service-images` do Storage (leitura pública, gravação só pelo backend, até 2 MB, JPEG, PNG e WebP); cada função de gravação em várias tabelas entra depois, em migration própria, com a funcionalidade que a chama.
+2. Carregar o `supabase/seed.sql` junto com a migration, com `npx supabase db push --include-seed`: quatro formas de pagamento sem ajuste, sete dias da semana e a linha de dados da empresa.
 3. Rodar `node --env-file=.env.local supabase/scripts/create-admin.mjs`, que cria a conta de administrador no Supabase Auth e o registro em `staff` com `is_admin`, lendo `SEED_ADMIN_EMAIL` e `SEED_ADMIN_PASSWORD` do ambiente.
-4. No painel do Supabase: desativar a confirmação de e-mail, definir senha mínima de 8 caracteres e criar o bucket `service-images` (leitura pública, gravação só pelo backend).
 
-O arquivo opcional `supabase/seed-demo.sql` cadastra dados fictícios de demonstração para o catálogo e o dashboard.
+Nada é configurado à mão no painel do Supabase (decisão 0044): a senha é exigida pelo esquema de `src/shared/validation`, as contas são criadas pelo servidor já com o e-mail confirmado, e o bucket vem da migration.
+
+O arquivo opcional `supabase/seed-demo.sql` cadastra dados fictícios de demonstração para o catálogo e o dashboard. É carregado à parte, colando o arquivo no SQL Editor do painel; carregar de novo não duplica nada e só acrescenta os dias ainda sem agendamentos.
 
 ## Publicação
 

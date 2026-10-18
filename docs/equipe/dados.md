@@ -58,6 +58,8 @@ Permissões de cada cargo.
 ## Regras garantidas pelo banco
 
 - em `staff`, o cargo é obrigatório quando a conta não é de administrador;
+- há no máximo uma conta de administrador (`uq_staff_is_admin`);
+- o e-mail do funcionário é gravado em minúsculas e sem espaços (`ck_staff_email`), e o nome do cargo não se repete, sem diferenciar maiúsculas;
 
 ## Gravações em várias tabelas
 
@@ -74,5 +76,5 @@ Feitas por função SQL, em uma única transação, chamada pelo repositório (R
 
 ## Observações
 
-- A conta de administrador é um registro de `staff` com `is_admin` verdadeiro e sem cargo, criada pelo script de dados iniciais; nunca aparece nas listagens nem pode ser editada pelo painel ([RN027](RN027-administrador.md)).
+- A conta de administrador é um registro de `staff` com `is_admin` verdadeiro e sem cargo, criada pelo script de dados iniciais, com o nome "Administrador" e o sobrenome "Glow"; nunca aparece nas listagens nem pode ser editada pelo painel ([RN027](RN027-administrador.md)).
 - Funcionários e cargos não são excluídos, apenas desativados (`is_active`) ([RN026](RN026-desativacao.md)).

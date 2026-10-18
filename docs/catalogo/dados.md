@@ -72,6 +72,8 @@ Vínculo entre serviço principal e adicional.
 
 - em `services`, os tipos principal e complementar exigem categoria e descrição; o tipo adicional não tem categoria, descrição nem imagem e é sempre de valor fixo; o valor fixo é preenchido se e somente se a precificação for `fixed`; e o tipo não pode ser alterado depois do cadastro;
 - em `service_additionals`, o primeiro serviço deve ser do tipo principal e o segundo, do tipo adicional;
+- um serviço por porte tem exatamente os quatro valores em `service_prices`, e um serviço de valor fixo não tem nenhum; a conferência é feita no fim da transação, por isso o serviço e os valores são gravados juntos, pela `save_service`;
+- os nomes de categoria e de serviço não excluído não se repetem, sem diferenciar maiúsculas;
 - os valores de serviço e de agendamento são maiores que zero, exceto o total, que pode ser zero quando houver desconto de 100%.
 
 ## Gravações em várias tabelas
@@ -90,5 +92,5 @@ Feitas por função SQL, em uma única transação, chamada pelo repositório (R
 
 ## Observações
 
-- As imagens ficam no bucket `service-images` do Supabase Storage, com leitura pública e gravação apenas pelo backend; a tabela guarda só o caminho (`image_path`). Envio: JPEG, PNG ou WebP até 2 MB (RS015).
+- As imagens ficam no bucket `service-images` do Supabase Storage, com leitura pública e gravação apenas pelo backend, criado pela migration inicial com limite de 2 MB e os tipos JPEG, PNG e WebP; a tabela guarda só o caminho (`image_path`). Envio: JPEG, PNG ou WebP até 2 MB (RS015).
 - Serviço e categoria inativos ficam ocultos para o cliente, mas disponíveis no painel ([RN008](RN008-servico-inativo.md), [RN031](RN031-categoria-inativa.md)); serviço excluído recebe `deleted_at` ([RN030](../plataforma/RN030-exclusao-logica.md)).

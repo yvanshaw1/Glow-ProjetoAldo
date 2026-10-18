@@ -60,6 +60,6 @@ Criados nas tarefas #1 (`package.json`) e #6 (`compose.yaml`):
 
 ## 6. Serviços (**pendente**)
 
-- [ ] Projeto no Supabase: criado, ainda sem configuração; faltam desativar a confirmação de e-mail, definir a senha mínima de 8 caracteres e criar o bucket `service-images`.
+- [ ] Projeto no Supabase: criado; não precisa de configuração no painel (decisão 0044): o bucket `service-images` vem da migration da #17.
 - [ ] Projeto na Vercel: ligado ao repositório, com o preset Next.js; ainda sem as variáveis de `docs/plataforma/infraestrutura.md`.
 - [ ] Cada integrante com o seu `.env.local` (nunca versionado nem colado em conversas com IA): só o Yvan criou o dele, na tarefa #6.
