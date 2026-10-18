@@ -1,6 +1,6 @@
 # docs/ – Referências
 
-Os módulos reproduzem, por assunto, os três documentos formais do projeto (Análise do Sistema, Arquitetura de Software e Desenvolvimento com IA, entregues na AV2 em 15/10/2026), para que o agente leia só o necessário. Os `.docx` ficam fora do repositório; quando um deles muda, os módulos correspondentes mudam no mesmo pull request, e vice-versa.
+Os módulos reproduzem, por assunto, os três documentos formais do projeto (Análise do Sistema, Arquitetura de Software e Desenvolvimento com IA, entregues na AV2 em 15/10/2026), para que o agente leia só o necessário. Os `.docx` ficam em `documentos-formais/`, versionados porque a disciplina exige a documentação no projeto; o agente lê estes módulos e só abre os `.docx` quando o desenvolvedor pede para lê-los ou alterá-los (decisão 0040). Quando um deles muda, os módulos correspondentes mudam no mesmo pull request, e vice-versa.
 
 | Pasta | Conteúdo |
 |---|---|

@@ -59,5 +59,5 @@ Desvios do plano, registrados em `notas.md`, todos mecânicos e sem mudança de 
 
 ## Pendências
 
-- Questionário, seção 2: atualizar a tabela quando o Kayke aceitar o convite e quando Igor e Laura informarem os usuários do GitHub (sem issue: é a manutenção do próprio questionário, feita numa tarefa de documentação).
+- Questionário, seção 2: atualizar a tabela quando o Kayke aceitar o convite e quando a Laura informar o usuário do GitHub (sem issue: é a manutenção do próprio questionário, feita numa tarefa de documentação).
 - Cópia principal (`App/`): a alteração local não commitada em `setup/questionario.md` (linha "Equipe" com o João) é substituída por este PR; descartá-la antes do `git pull` depois da incorporação.

@@ -109,7 +109,7 @@ Linha nova no fim da tabela:
 Seção 1, item da equipe:
 
 ```
-- Equipe: Igor, João, Kayke, Laura, Lucas e Yvan.
+- Equipe: João, Kayke, Laura, Lucas e Yvan.
 ```
 
 Seção 2, inteira:
@@ -121,7 +121,6 @@ Não há responsável fixo por área (decisão 0038). Cada integrante leva uma t
 
 | Integrante | Usuário no GitHub | Acesso ao repositório |
 |---|---|---|
-| Igor | pendente | sem acesso até informar o usuário |
 | João | `joaomanoel999` | colaborador |
 | Kayke | `Kaykebr144` | convite enviado, ainda não aceito |
 | Laura | pendente | sem acesso até informar o usuário |
@@ -247,6 +246,6 @@ Nenhum teste automatizado: a tarefa só muda documentação e modelos, e o Vites
 ## Fora do escopo
 
 - Documentos formais (`.docx`): o `02_relatorio.md` lista o que muda neles, como a descrição das áreas e responsáveis e do CODEOWNERS na Documentação de Desenvolvimento com IA.
-- Configuração do Supabase e da Vercel, convites do GitHub (Igor, Laura e o aceite do Kayke) e a fase 2 da proteção da `main` (PR da #1).
+- Configuração do Supabase e da Vercel, convites do GitHub (Laura e o aceite do Kayke) e a fase 2 da proteção da `main` (PR da #1).
 - Nomes e descrições das etiquetas no GitHub, que continuam valendo; modelos de issue de defeito e de investigação.
 - O plano da #1, que usa o campo `area` do modelo atual.

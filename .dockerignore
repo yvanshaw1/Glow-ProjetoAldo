@@ -11,3 +11,7 @@
 # node_modules, .next and .env* files.
 .git
 .claude
+
+# Formal course documents (.docx), versioned for the course and not part of
+# the app.
+documentos-formais
