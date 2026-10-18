@@ -16,6 +16,7 @@ Leia `guia/CONTEXT.md` e siga a rota do tipo de tarefa. Carregue só o que a rot
 | `workflows/` | ciclo da tarefa: `01_planejar` → `02_construir` → `03_entregar` → `04_encerrar`, e `procedimentos/` |
 | `docs/` | referências por assunto (requisitos, regras `RNxxx`, casos de uso `UCxx`, dados e rotas), `padroes/` e `decisoes/` |
 | `documentos-formais/` | os três documentos formais em Word (`.docx`), exigidos pela disciplina; a IA usa `docs/` e só abre os `.docx` quando o desenvolvedor pede para lê-los ou alterá-los |
+| `wireframes/` | telas de outro sistema, em PDF, como referência de esqueleto e componentes das páginas; o que a página tem vem de `docs/` e as cores, do tema (`README.md` da pasta) |
 | `memoria/tarefas/` | plano, relatório e notas de cada tarefa |
 | `_templates/` | moldes de plano, relatório, notas, módulo e decisão |
 | `setup/` · `tools/` | questionário da estrutura · scripts mecânicos, sem IA |

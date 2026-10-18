@@ -25,6 +25,8 @@ public/                      logo, favicon, imagem da página inicial
 
 Os grupos `(portal)` e `(admin)` não aparecem no endereço; cada um tem o seu `layout.tsx`. Os nomes de módulo nas subpastas de componentes são os do backend (`catalog`, `clients`, `vehicles`, `appointments`, `dashboard`, `staff`, `roles`, `settings`), mais `layout`. As páginas só compõem componentes; regras de negócio ficam no backend. Componente de cliente nunca importa de `src/server/`. Árvore completa: `docs/plataforma/estrutura-de-pastas.md`.
 
+Antes de construir uma página, abrir o wireframe dela em `wireframes/` (mapa no `README.md` da pasta). Ele orienta o esqueleto e os componentes; o conteúdo vem do caso de uso, e as cores, do tema.
+
 ## Renderização
 
 Estrutura, layouts e textos fixos são componentes de servidor. As partes que exibem ou alteram dados são componentes de cliente que buscam pela API. Só o componente que precisa de interação ou estado leva `'use client'`, nunca a página inteira. Páginas não acessam Supabase nem banco, nem pelo servidor (RNF013).
