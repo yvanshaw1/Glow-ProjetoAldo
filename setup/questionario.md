@@ -6,7 +6,7 @@ Respondido uma vez pela equipe; as respostas alimentam o `AGENTS.md`, a pasta `g
 
 - Sistema: Glow – Estética Automotiva; portal público e do cliente e painel administrativo.
 - Contexto: MVP da disciplina Sistemas Inteligentes (Sistemas de Informação, CESMAC). Documentação entregue na AV2 (15/10/2026); sistema completo em produção na AV3 (início de dezembro de 2026).
-- Equipe: Igor, João, Kayke, Laura, Lucas e Yvan.
+- Equipe: João, Kayke, Laura, Lucas e Yvan.
 - Fuso da empresa: `America/Maceio`.
 
 ## 2. Equipe
@@ -15,7 +15,6 @@ Não há responsável fixo por área (decisão 0039). Cada integrante leva uma t
 
 | Integrante | Usuário no GitHub | Acesso ao repositório |
 |---|---|---|
-| Igor | pendente | sem acesso até informar o usuário |
 | João | `joaomanoel999` | colaborador |
 | Kayke | `Kaykebr144` | convite enviado, ainda não aceito |
 | Laura | pendente | sem acesso até informar o usuário |

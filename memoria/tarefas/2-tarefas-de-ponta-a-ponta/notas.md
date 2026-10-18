@@ -6,7 +6,7 @@ Registro curto do que outra sessão precisaria saber. Uma entrada por fato, a ma
 
 Estado do GitHub conferido com o `gh` (autenticado como `yvanshaw1`), base das seções 2 e 5 do questionário:
 
-- Colaboradores: `yvanshaw1`, `joaomanoel999` e `LFaustin0`; convite pendente para `Kaykebr144`. Igor e Laura ainda sem usuário.
+- Colaboradores: `yvanshaw1`, `joaomanoel999` e `LFaustin0`; convite pendente para `Kaykebr144`. Laura ainda sem usuário.
 - Ruleset `main` ativo, sem exceções: bloqueia exclusão e envio forçado; PR com 1 aprovação, descartada com commits novos; conversas resolvidas; só squash; `require_code_owner_review: false`. Sem checks obrigatórios (fase 2, no PR da #1).
 - Repositório público; remoção automática da ramificação incorporada ligada; só squash permitido.
 - Alertas do Dependabot ativos (`vulnerability-alerts` responde 204); atualizações automáticas de segurança desligadas.
@@ -27,7 +27,7 @@ Plano aprovado pelo Yvan com a opção 1 (recomendada) de L1, L2 e L3. Enquanto 
 - Questionário, seção 6: o Yvan criou o `.env.local` na #6 (relatório dela), e a Vercel usa o preset Next.js (nota da sessão da #1); os itens dizem isso.
 - Os conflitos previstos com a #1 não existem mais: a ramificação `docs/2-team-model` parte de `eb85140`, que já tem a 0037 e a 0038 no índice.
 - A #3 (planejamento em outro worktree) altera só a seção "Lacunas na documentação" de `_templates/plano.md`; esta tarefa, só o cabeçalho. Sem conflito.
-- A cópia principal (`App/`) tem uma alteração local, não commitada, em `setup/questionario.md` (seção 1, "Equipe: ... Igor e João"). Este PR substitui a linha pelo texto aprovado; o desenvolvedor descarta a alteração local antes do `git pull` depois da incorporação.
+- A cópia principal (`App/`) tem uma alteração local, não commitada, em `setup/questionario.md` (seção 1, "Equipe: ... e João"). Este PR substitui a linha pelo texto aprovado; o desenvolvedor descarta a alteração local antes do `git pull` depois da incorporação.
 - Questionário, seção 5: com todos os itens marcados, o título perde o "(**pendente**)", como a seção 2, que agora é "Equipe".
 
 ## 2026-10-15 – descoberta
