@@ -16,7 +16,7 @@ Não há responsável fixo por área (decisão 0039). Cada integrante leva uma t
 | Integrante | Usuário no GitHub | Acesso ao repositório |
 |---|---|---|
 | João | `joaomanoel999` | colaborador |
-| Kayke | `Kaykebr144` | convite enviado, ainda não aceito |
+| Kayke | `Kaykebr144` | colaborador |
 | Laura | pendente | sem acesso até informar o usuário |
 | Lucas | `LFaustin0` | colaborador |
 | Yvan | `yvanshaw1` | dono do repositório |
