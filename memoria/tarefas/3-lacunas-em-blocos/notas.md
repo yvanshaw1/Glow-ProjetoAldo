@@ -17,3 +17,7 @@ Etapa 02 iniciada: plano `aprovado` por yvan em 18/10/2026 12:46, sem alteraçã
 ## 2026-10-18 – descoberta
 
 `npm run check` aprovado (Prettier, tipos, ESLint sem avisos; o Vitest sai com código 0 sem arquivos de teste). O `npm ci` avisa "deprecated eslint@9.39.5: This version is no longer supported": vem da `main` (decisão 0037), não desta tarefa, e não altera o `package-lock.json`. Se o desenvolvedor quiser tratar, vira outra issue `tipo:configuracao`.
+
+## 2026-10-18 – descoberta
+
+Etapa 03: PR #11 aberto a partir de `docs/3-plan-gap-blocks`, atualizada com a `main` (`2f5beee`). A pedido do desenvolvedor, os worktrees da #3 ganham o nome da tarefa: o antigo passou de `optimistic-bartik-2fb396` a `3-lacunas-em-blocos-antigo` (`git worktree move`; o plano antigo, sem commit, continua lá), e este passa de `angry-dijkstra-1b028a` a `3-lacunas-em-blocos` depois da entrega. A sessão do worktree antigo ("Lacunas em blocos no molde do plano") ainda aponta para o caminho anterior.

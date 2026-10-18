@@ -4,7 +4,7 @@ titulo: "Molde do plano: lacunas em blocos com caixas de seleção"
 areas: [cicd]
 tipo: documentacao
 requisitos: []
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 18/10/2026 - 12:46
 ---
