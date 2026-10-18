@@ -4,7 +4,7 @@ titulo: "Banco de dados: esquema completo, dados iniciais e conta de administrad
 areas: [banco, cicd]
 tipo: funcionalidade
 requisitos: [RN002, RN006, RN007, RN009, RN010, RN012, RN013, RN017, RN021, RN022, RN024, RN027, RN030, RN035, RN036, RN037, RNF011, RS003, RS006, RS016, UC01, UC09]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 20:21 18/10/2026
 ---
