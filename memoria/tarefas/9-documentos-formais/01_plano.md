@@ -40,6 +40,7 @@ Versionar os três documentos formais (.docx) em `documentos-formais/`, porque a
 | `guia/regras.md` | alterar: os `.docx` ficam em `documentos-formais/`, não fora do repositório; em "Uso do contexto", o item "ler os módulos de `docs/`; abrir os `.docx` só quando o desenvolvedor pedir para lê-los ou alterá-los" |
 | `docs/CONTEXT.md` | alterar: idem, com a mesma regra de leitura |
 | `docs/plataforma/estrutura-de-pastas.md` | alterar: `documentos-formais/` na árvore da raiz |
+| `docs/plataforma/infraestrutura.md` | alterar: na tabela de "Execução em contêiner", o `.dockerignore` também deixa fora a pasta `documentos-formais` (incluído na etapa 02; ver `notas.md`) |
 | `memoria/tarefas/9-documentos-formais/` | criar: plano, notas e relatório |
 
 ## Mudanças nos .docx
