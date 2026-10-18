@@ -32,3 +32,6 @@ npm-debug.log*
 # claude code
 .claude/settings.local.json
 .claude/worktrees/
+
+# office lock files of open documents
+~$*
