@@ -33,11 +33,23 @@ aprovado_em:
 
 ## Lacunas na documentação
 
-<O que a documentação não cobre, ou onde ela se contradiz. Escrever "nenhuma" se a documentação cobre tudo. A aprovação do plano decide cada lacuna; marcar a opção escolhida.>
+<O que a documentação não cobre, ou onde ela se contradiz: um bloco por lacuna, numerados L1, L2..., com a opção recomendada em primeiro. O arquivo de cada item do texto proposto segue a tabela "Onde registrar conhecimento novo" de `docs/CONTEXT.md`. Se a documentação cobre tudo, trocar o parágrafo e os blocos abaixo por "nenhuma".>
 
-| Lacuna | Opções (recomendada primeiro) | Texto proposto | Onde documentar |
-|---|---|---|---|
-| <o que falta> | 1. ... (recomendada) 2. ... | <redação para o módulo> | `docs/<assunto>/<arquivo>.md` |
+Cada lacuna traz o problema, as opções com a consequência de cada uma e o texto que entra na documentação. Marque com `x` a opção escolhida. O texto proposto corresponde à opção recomendada; se você escolher outra, ele é refeito antes da construção.
+
+### L1. <título curto>
+
+**Problema.** <O que falta ou o que se contradiz, citando os arquivos e os trechos.>
+
+**Opções:**
+
+- [ ] **1. <nome> (recomendada).** <consequência>
+- [ ] **2. <nome>.** <consequência>
+
+**Texto proposto (opção recomendada):**
+
+- `<arquivo>`, <trecho>: "<texto atual>" passa a "<texto novo>".
+- `<arquivo novo>`, novo: <o que contém>.
 
 ## Decisões técnicas
 
