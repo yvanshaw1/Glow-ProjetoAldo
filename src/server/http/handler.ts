@@ -23,7 +23,14 @@ const REQUEST_ID_BYTES = 4;
 const WRITE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 const JSON_MEDIA_TYPE = "application/json";
 // docs/padroes/backend.md (Registro): handled anomalies are logged as warn.
-const WARN_CODES = new Set<ErrorCode>(["ACCOUNT_LOCKED", "VERSION_CONFLICT"]);
+const WARN_CODES = new Set<ErrorCode>([
+  "ACCOUNT_LOCKED",
+  "VERSION_CONFLICT",
+  "SERVICE_UNAVAILABLE",
+]);
+// docs/padroes/api.md (Desenho): any response may renew the session cookies,
+// so no cache keeps one.
+const CACHE_CONTROL = "no-store";
 
 export type RouteInput<Params> = {
   request: Request;
@@ -82,7 +89,19 @@ async function respondAndLog<Params>(call: Call<Params>): Promise<Response> {
     durationMs: Math.round(performance.now() - startedAt),
     ...logFields,
   });
-  return response;
+  return withoutCache(response);
+}
+
+// A new Response, because the headers of the route's response may be
+// read-only.
+function withoutCache(response: Response): Response {
+  const headers = new Headers(response.headers);
+  headers.set("Cache-Control", CACHE_CONTROL);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
 }
 
 async function resolveOutcome<Params>(
