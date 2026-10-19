@@ -1,6 +1,6 @@
 ---
 issue: 24
-pull_request: <número>
+pull_request: 32
 ---
 
 # Relatório: Cadastro de cliente e troca de senha pela API
