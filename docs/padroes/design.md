@@ -6,7 +6,7 @@ relacionados: [RNF001, RNF005, RNF006, RNF016, 0007, 0049]
 
 # Padrões de design e estilo
 
-Estilo visual do portal e do painel. Engenharia de tela (estrutura, dados, formulários, layouts): [frontend.md](frontend.md). Imagens e ícones: [design-midia.md](design-midia.md).
+Estilo visual do portal e do painel. Engenharia de tela: [frontend.md](frontend.md); cabeçalho, rodapé e navegação: [layouts.md](layouts.md); ícones e imagens: [design-midia.md](design-midia.md).
 
 ## Princípios
 
@@ -23,7 +23,7 @@ O tema segue a preferência do sistema (`prefers-color-scheme`), sem botão de t
 
 | Variável | Claro | Escuro | Uso | Contraste (claro / escuro) |
 |---|---|---|---|---|
-| `--background`, `--card`, `--popover`, `--secondary` | `#F3E6D8` | `#2E2E24` | fundo e superfícies | – |
+| `--background` | `#F3E6D8` | `#2E2E24` | fundo e superfícies: cartões, menus e botões secundários usam a mesma cor | – |
 | `--foreground` | `#2E2318` | `#F2EDE4` | texto principal | 12,5 / 11,8 |
 | `--muted-foreground` | `#745F46` | `#A89878` | texto secundário | 4,9 / 4,9 |
 | `--primary` | `#FF8C42` | `#FF9A56` | preenchimento do botão principal; nunca texto | – |

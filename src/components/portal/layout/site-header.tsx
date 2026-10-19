@@ -21,7 +21,7 @@ import { PERMISSION_PAGES } from "@/shared/constants/permissions";
 
 type NavLink = { href: string; label: string };
 
-// Items of the portal header by profile (docs/padroes/frontend.md, Layouts).
+// Items of the portal header by profile (docs/padroes/layouts.md).
 const PUBLIC_LINKS: NavLink[] = [
   { href: "/", label: "Início" },
   { href: "/services", label: "Serviços" },

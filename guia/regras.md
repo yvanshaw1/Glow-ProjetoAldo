@@ -55,7 +55,7 @@ Os padrões estão em `docs/padroes/` (sempre `codigo.md`, mais os das áreas qu
 - antes de escrever uma função, procurar se ela já existe em `src/shared` ou no serviço do módulo;
 - remover o código que a tarefa deixou sem uso; nada de código comentado, `console.log` de depuração ou pendência sem issue;
 - deixar mais claro o código que a tarefa toca, dentro do escopo; melhorias além disso viram uma issue de refatoração;
-- as versões da stack são recentes: confira a documentação oficial da versão em uso antes de presumir uma API (a do Next.js instalado está em `node_modules/next/dist/docs/`; Next.js 16 usa `src/proxy.ts`, não `middleware.ts`; Tailwind CSS 4 configura o tema em CSS com `@theme`; Zod 4 e ESLint 9, com configuração flat, mudaram em relação às versões anteriores).
+- as versões da stack são recentes: confira a documentação oficial da versão em uso antes de presumir uma API (a do Next.js instalado está em `node_modules/next/dist/docs/`; Next.js 16 usa `src/proxy.ts`, não `middleware.ts`; Tailwind CSS 4 configura o tema em CSS com `@theme`; Zod 4 e ESLint 9, com configuração flat, mudaram em relação às versões anteriores; o shadcn/ui usa Base UI, com a propriedade `render` no lugar do `asChild` do Radix (decisão 0049)).
 
 ## Uso do contexto
 

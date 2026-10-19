@@ -6,7 +6,7 @@ Os PDFs desta pasta são telas de outro sistema de estética automotiva, com as 
 
 - **Aproveitar:** a disposição da página (cabeçalho, menu, colunas, cartões, tabelas, formulários e modais), a ordem dos passos dos assistentes e a adaptação entre desktop e celular.
 - **Deixar de fora:** toda funcionalidade, campo ou detalhe sem requisito em `docs/`. O que a página tem vem dos requisitos e dos casos de uso do assunto; o wireframe só mostra como organizá-la. Exemplos que aparecem nas telas e não existem no Glow: cupons (fora do escopo do MVP, `docs/plataforma/visao-geral.md`), avaliações (Reviews), relatórios, o seletor de animações, os boxes de atendimento e a exclusão da conta pelo próprio cliente (no Glow, só o funcionário exclui a conta de um cliente, RF074).
-- **Não copiar:** as cores, o nome, o logotipo, os textos e as imagens da outra empresa. As cores do Glow vêm das variáveis do tema (`@theme` em `src/app/globals.css`), que ainda serão definidas; os componentes usam só essas variáveis (`docs/padroes/frontend.md`). Os textos da interface seguem os casos de uso.
+- **Não copiar:** o estilo visual (cores, fontes, sombras, raios e ícones), o nome, o logotipo, os textos e as imagens da outra empresa. O estilo do Glow segue `docs/padroes/design.md`, aplicado nas variáveis do tema (`@theme` em `src/app/globals.css`); os componentes usam só essas variáveis. Os textos da interface seguem os casos de uso.
 - **Em caso de conflito:** se o wireframe e `docs/` divergirem, vale `docs/`.
 
 Os PDFs são imagens, sem texto selecionável. Para construir uma página, abra só os PDFs da pasta dela.

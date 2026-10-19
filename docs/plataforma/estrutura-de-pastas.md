@@ -25,7 +25,7 @@ App/
 │   │   ├── (admin)/admin/           page.tsx (dashboard), appointments/, services/, clients/,
 │   │   │                            staff/, settings/; layout.tsx com a navegação por permissões
 │   │   ├── api/                     auth/, public/, me/, admin/; cada endpoint é um route.ts
-│   │   ├── layout.tsx · globals.css (tema com @theme) · not-found.tsx · error.tsx
+│   │   ├── layout.tsx · globals.css (entrada do CSS e tema com @theme) · reset.css · not-found.tsx · error.tsx
 │   ├── components/
 │   │   ├── ui/                      gerados pelo shadcn/ui
 │   │   ├── shared/                  usados pelo portal e pelo painel
@@ -55,6 +55,7 @@ App/
 │   └── scripts/create-admin.mjs     conta de administrador, com SEED_ADMIN_* do ambiente
 ├── tests/
 │   ├── http/                        espelha src/server/http
+│   ├── lib/                         espelha src/lib (cliente da API)
 │   ├── rules/                       espelha src/server/rules
 │   └── validation/                  espelha src/shared/validation
 └── raiz: package.json (engines: Node 24) · package-lock.json · next.config.ts · tsconfig.json ·
@@ -69,7 +70,7 @@ As pastas acima já existem no repositório, e cada pasta de `src/`, `supabase/`
 
 - Em `src/app/api/`, há uma pasta para cada endpoint de `docs/*/rotas.md`, com `:id` virando `[id]`: o `route.ts` de `GET /api/me/vehicles/:id` vai em `src/app/api/me/vehicles/[id]/`. O README de cada uma lista os métodos, o guard e o serviço. Rota nova: pasta nova com README e `rotas.md` atualizado no mesmo PR.
 - O README fica quando a pasta ganha código e é atualizado no mesmo PR que mudar a função da pasta. Pasta nova sempre leva README.
-- `public/` e `supabase/migrations/` não têm README: tudo em `public/` é publicado no site, e a CLI do Supabase lê todos os arquivos de `migrations/`. Essas duas guardam um `.gitkeep` até o primeiro arquivo, e as orientações delas estão neste arquivo e no README de `supabase/`. Em `public/` vão só arquivos estáticos referenciados pelo código (logo, favicon, imagem da página inicial), nunca imagens de serviços (vão para o Storage) nem nada privado.
+- `public/` e `supabase/migrations/` não têm README: tudo em `public/` é publicado no site, e a CLI do Supabase lê todos os arquivos de `migrations/`. Essas duas guardam um `.gitkeep` até o primeiro arquivo, e as orientações delas estão neste arquivo e no README de `supabase/`. Em `public/` vão só arquivos estáticos referenciados pelo código (logo, favicon, imagem da página inicial); imagens em `public/images/`, com origem e licença registradas em `docs/padroes/design-midia.md`; nunca imagens de serviços (vão para o Storage) nem nada privado.
 - Não criar pasta fora desta árvore sem atualizar este arquivo no mesmo PR; mudança estrutural também passa por `workflows/procedimentos/decisao.md`.
 
 ## Regras de dependência
