@@ -15,3 +15,6 @@
 # Formal course documents (.docx), versioned for the course and not part of
 # the app.
 documentos-formais
+
+# Reference wireframes (PDF), not part of the app.
+wireframes

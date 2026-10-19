@@ -16,6 +16,7 @@ App/
 ├── .claude/settings.json            permissões do agente
 ├── .github/                         workflows/ci.yml, modelos de PR e de issue
 ├── documentos-formais/              os três .docx da disciplina; a IA usa docs/ (decisão 0040)
+├── wireframes/                      telas de referência (PDF): esqueleto e componentes das páginas (decisão 0041)
 ├── public/                          estáticos: logo, favicon, imagem da página inicial
 ├── src/
 │   ├── app/                         rotas do Next.js; a pasta segue a URL

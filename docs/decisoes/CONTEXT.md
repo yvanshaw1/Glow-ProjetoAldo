@@ -48,3 +48,4 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0038](0038-execucao-em-conteiner.md) | Docker para executar a aplicação em contêiner |
 | [0039](0039-tarefas-de-ponta-a-ponta.md) | Tarefas de ponta a ponta, sem dono por área |
 | [0040](0040-documentos-formais-versionados.md) | Documentos formais versionados em documentos-formais/ |
+| [0041](0041-wireframes-de-referencia.md) | Wireframes de referência versionados em wireframes/ |
