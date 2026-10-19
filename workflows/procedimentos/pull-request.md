@@ -5,7 +5,7 @@
 1. Durante a construção, o PR pode ser aberto como rascunho para gerar a pré-visualização da Vercel.
 2. Na entrega, atualizar com a `main` (`git.md`), rodar `npm run check`, marcar como pronto para revisão e pedir a revisão a outro integrante no próprio PR.
 3. Título em Conventional Commits, porque o squash o transforma na mensagem do commit na `main`.
-4. Descrição pelo modelo `.github/pull_request_template.md`: issue (`Closes #<issue>`), requisitos atendidos, o que mudou e por quê, como testar na pré-visualização, capturas de tela se a interface mudar, checklist.
+4. Descrição pelo modelo `.github/pull_request_template.md`: issue (`Closes #<issue>`), requisitos atendidos, a lista do que mudou e do que é novo (sem o porquê nem as lacunas decididas), como testar na pré-visualização, capturas de tela se a interface mudar, checklist.
 
 ```
 gh pr create --draft --title "feat(appointments): allow clients to edit scheduled appointments" --body-file <arquivo>

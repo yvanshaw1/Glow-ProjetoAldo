@@ -14,14 +14,15 @@ git switch -c feat/42-edit-appointment
 
 ## Commits
 
-- Conventional Commits, em inglês: `tipo(escopo): descrição no imperativo`, título com até 72 caracteres; corpo opcional explicando o porquê.
+- Conventional Commits, em inglês: `tipo(escopo): descrição no imperativo`, título com até 72 caracteres; corpo opcional com a lista do que mudou.
 - Um commit é uma mudança lógica, com os testes passando; refatoração nunca vai junto com mudança de comportamento.
 
 ```
 feat(appointments): allow clients to postpone scheduled appointments
 
-Clients can only move the date forward while the status is
-scheduled; staff can still move it in both directions (RN032).
+- PATCH /api/me/appointments/:id accepts a later date and time (RN032)
+- postponeAppointment in src/server/services/appointments.ts
+- tests in tests/rules/appointment-edit.test.ts
 ```
 
 ## Atualização com a main
