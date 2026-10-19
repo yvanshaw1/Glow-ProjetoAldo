@@ -1,6 +1,6 @@
 # `/api/auth/me`
 
-Guard: `requireUser`. Serviço: `src/server/services/auth.ts`.
+Guard: `requireUser`, aceitando a senha inicial pendente. Serviço: `src/server/services/auth.ts`.
 
 | Método | Finalidade |
 |---|---|

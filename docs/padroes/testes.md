@@ -19,7 +19,7 @@ O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calc
 | Datas e previsão | fora do expediente, na pausa, em dia fechado, no passado; previsão atravessando a pausa, a noite e dias fechados (RN013, RN034) |
 | Regras de edição | cliente só posterga; funcionário adianta ou posterga; data incompatível com o status é recusada (RN032, RN033) |
 | Validação e formatos | nomes com partículas, e-mail, celular, placa nos dois padrões, ano, CNPJ, senha, descarte de campos não previstos (RN035) |
-| Tratamento único | Problem Details de `AppError`, de erro de validação e de erro inesperado; recusa por formato, tamanho e origem sem chegar à rota; registro sem senha, token, cookie, cabeçalho de autorização nem corpo (RS014, RS017, RS018) |
+| Tratamento único | Problem Details de `AppError`, de erro de validação e de erro inesperado; recusa por formato, tamanho e origem sem chegar à rota; registro sem senha, token, cookie, cabeçalho de autorização nem corpo; resposta fora de cache; usuário em toda linha do registro (RS014, RS017, RS018) |
 
 Todo caso desta tabela tem ao menos um teste, e o revisor confere a correspondência no pull request.
 

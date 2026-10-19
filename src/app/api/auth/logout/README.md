@@ -1,6 +1,6 @@
 # `/api/auth/logout`
 
-Guard: `requireUser`. Serviço: `src/server/services/auth.ts`.
+Guard: nenhum (encerra a sessão, se houver). Serviço: `src/server/services/auth.ts`.
 
 | Método | Finalidade |
 |---|---|
