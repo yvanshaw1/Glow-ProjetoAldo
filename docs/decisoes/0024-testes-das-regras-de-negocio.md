@@ -1,7 +1,7 @@
 ---
 id: 0024
 titulo: Testes automatizados apenas das regras de negócio
-status: aceita
+status: substituída por 0045
 data: 2026-10-15
 origem: Documentação de Arquitetura de Software, seção 9 (Quadro 38)
 relacionados: []
