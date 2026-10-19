@@ -36,3 +36,7 @@ Etapa 02:
 - O Docker Desktop estava fechado; o agente o abriu para conferir a imagem.
 - Contêiner, sem `.env.local` no worktree: `docker build -t glow-app-22 .` concluiu sem nenhuma variável, e `docker run -p 3022:3000` respondeu 200 em `/`, com "Glow – Estética Automotiva", e 404 em `/api/nao-existe`, os dois com os cinco cabeçalhos de segurança. Depois, o contêiner e a imagem `glow-app-22` foram removidos.
 - Falta, para a etapa 03: conferir os cabeçalhos na pré-visualização da Vercel, `02_relatorio.md` (com a variável `APP_URL` e a decisão 0045 em "Documentos formais a atualizar") e o PR. O desenvolvedor tira `APP_URL=` do `.env.example` (L3).
+
+## 2026-10-19 – desvio
+
+Etapa 03: a correção do Kayke (97f6d99) já estava na `main`. O PR #20 saiu da ramificação `docs/19-formal-documents`, que continha o commit, e o squash levou a linha. O merge de `docs/kayke-collaborator` só trouxe a ancestralidade, sem mudar arquivo. A memória do agente que pedia levar a correção ao próximo PR foi apagada, e a ramificação local fica para o desenvolvedor apagar.

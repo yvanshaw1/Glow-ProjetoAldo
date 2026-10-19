@@ -4,7 +4,7 @@ titulo: "Base do servidor: clientes do Supabase, tratamento único das requisiç
 areas: [backend, testes]
 tipo: funcionalidade
 requisitos: [RS007, RS014, RS016, RS017, RS018, RNF008]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 08:58 - 19/10/2026
 ---
