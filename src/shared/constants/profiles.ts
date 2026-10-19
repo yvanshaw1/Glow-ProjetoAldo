@@ -3,3 +3,10 @@
 export const PROFILES = ["client", "staff", "admin"] as const;
 
 export type Profile = (typeof PROFILES)[number];
+
+// Names of the profiles in the glossary, shown in the panel navigation.
+export const PROFILE_LABELS = {
+  client: "Cliente",
+  staff: "Funcionário",
+  admin: "Administrador",
+} as const satisfies Record<Profile, string>;

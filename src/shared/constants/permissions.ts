@@ -20,3 +20,14 @@ export const PERMISSION_LABELS = {
   staff: "Funcionários",
   settings: "Configurações",
 } as const satisfies Record<Permission, string>;
+
+// Page of each permission (docs/acesso/autenticacao.md), used by the panel
+// navigation and to find the first allowed page.
+export const PERMISSION_PAGES = {
+  dashboard: "/admin",
+  appointments: "/admin/appointments",
+  services: "/admin/services",
+  clients: "/admin/clients",
+  staff: "/admin/staff",
+  settings: "/admin/settings",
+} as const satisfies Record<Permission, string>;
