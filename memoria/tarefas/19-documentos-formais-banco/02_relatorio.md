@@ -1,6 +1,6 @@
 ---
 issue: 19
-pull_request: <número>
+pull_request: 20
 ---
 
 # Relatório: Documentos formais atualizados com a #15 e a #17, sem confirmação de e-mail
