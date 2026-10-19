@@ -24,7 +24,7 @@ As rotas de cada assunto estão em `docs/<assunto>/rotas.md`. Aqui fica o que va
 
 - Toda entrada passa pelos esquemas Zod de `src/shared/validation`, que normalizam (espaços, caixa, máscaras) e depois validam tipo, formato e tamanho. Os mesmos esquemas servem aos formulários.
 - Campos não previstos são descartados; valores calculados pelo sistema (preços, totais, porte, status, previsão, cópias do agendamento) nunca são aceitos na entrada.
-- Id no caminho deve ser UUID válido; id inválido responde o mesmo 404 de registro inexistente.
+- Id no caminho deve ser UUID válido, isto é, 32 algarismos hexadecimais no formato 8-4-4-4-12, como aceita o tipo `uuid` do PostgreSQL, sem exigir a versão (os ids do `seed-demo.sql` vêm de `md5`); id inválido responde o mesmo 404 de registro inexistente.
 - Filtros, ordenação e paginação só aceitam os valores previstos.
 - Gravação só com `application/json` (exceto envio de imagem); outro formato → 415. Corpo JSON até 100 KB e imagem até 2 MB; acima → 413.
 - Dinheiro calculado no servidor em centavos inteiros.

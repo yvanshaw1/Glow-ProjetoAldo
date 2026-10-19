@@ -10,6 +10,7 @@ Leia só o arquivo do tema da tarefa; estes módulos valem para todos os assunto
 | seguranca.md | Requisitos de segurança RS001–RS018 com a implementação de cada um |
 | RN030-exclusao-logica.md | Exclusão lógica |
 | RN035-formatos-dos-dados.md | Formatos dos dados |
+| mensagens-de-validacao.md | Mensagens de validação de cada formato de RN035 |
 | visao-geral.md | Produto, escopo, fora do escopo, atores, stack com versões e princípios |
 | infraestrutura.md | Ambientes, variáveis de ambiente, preparação do banco, publicação, CI e execução em contêiner |
 | estrutura-de-pastas.md | Árvore de pastas do repositório, regras de dependência e equivalência com a estrutura clássica |

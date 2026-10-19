@@ -1,6 +1,6 @@
 # `tests/validation/` – Testes dos esquemas
 
-Um arquivo por esquema de `src/shared/validation/` (`clients.test.ts`, `vehicles.test.ts`...): normalização e validação de cada formato.
+Um arquivo de teste para cada arquivo de `src/shared/validation/` (`formats.test.ts`, `params.test.ts`, `clients.test.ts`...): normalização e validação de cada formato.
 
 ## Vai aqui
 

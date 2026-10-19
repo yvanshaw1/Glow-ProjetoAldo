@@ -1,6 +1,6 @@
 # `src/shared/validation/` – Esquemas Zod
 
-Um arquivo por módulo (`clients.ts`, `vehicles.ts`, `appointments.ts`...). Cada esquema primeiro normaliza (espaços, caixa, máscaras) e depois valida tipo, formato e tamanho. Os mesmos esquemas servem aos formulários e às rotas.
+`formats.ts` tem um esquema para cada dado de RN035, e `params.ts`, o id do caminho e a paginação, comuns a todas as rotas. Os arquivos de módulo (`clients.ts`, `vehicles.ts`, `appointments.ts`...) montam com eles os corpos e os filtros das rotas. Cada esquema primeiro normaliza (espaços, caixa, máscaras) e depois valida tipo, formato e tamanho. Os mesmos esquemas servem aos formulários e às rotas.
 
 ## Vai aqui
 

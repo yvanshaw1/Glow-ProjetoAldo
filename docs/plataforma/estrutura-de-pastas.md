@@ -34,7 +34,7 @@ App/
 │   ├── hooks/                       hooks de cliente reutilizáveis
 │   ├── lib/                         api-client.ts · utils.ts (cn() do shadcn)
 │   ├── shared/                      roda no navegador e no servidor
-│   │   ├── validation/              esquemas Zod por módulo (normalizam e validam)
+│   │   ├── validation/              formatos de RN035 (formats.ts), id e paginação (params.ts) e esquemas por módulo
 │   │   ├── format/                  exibição de moeda, telefone, placa, CNPJ e datas (Intl)
 │   │   ├── errors/                  catálogo de códigos e mensagens
 │   │   ├── constants/               enums como listas `as const`, rótulos em português, limites
