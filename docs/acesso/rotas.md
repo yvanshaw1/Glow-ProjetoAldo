@@ -28,8 +28,8 @@ Acesso: Cadastro, login e logout são públicos; `me` e troca de senha exigem se
 
 Cria a conta de cliente (UC02).
 
-- Entrada: `firstName*, lastName*, email*, phone*, password*`
-- Resposta: **201** conta criada; 409 `EMAIL_IN_USE`.
+- Entrada: `firstName*, lastName*` (nome e sobrenome de RN035), `email*` (RN035), `phone*` (celular de RN035), `password*` (RS003)
+- Resposta: **201** dados gravados, já normalizados: `firstName`, `lastName`, `email` e `phone`, sem iniciar sessão (a interface leva ao login); 409 `EMAIL_IN_USE`, também para o e-mail de um funcionário.
 
 #### `POST /api/auth/login`
 
@@ -56,5 +56,5 @@ Devolve o usuário da sessão e suas permissões.
 
 Troca a senha, inclusive no primeiro acesso.
 
-- Entrada: `currentPassword*, newPassword*`
-- Resposta: **204** senha alterada; 400 senha nova igual à atual ou fora do tamanho mínimo; 401 senha atual incorreta.
+- Entrada: `currentPassword*` (a senha atual, que no primeiro acesso é a inicial; só obrigatória e com até 72 bytes, como no login), `newPassword*` (RS003, diferente da atual)
+- Resposta: **204** senha alterada e marca de troca pendente removida; a sessão deste navegador continua, renovada nos cookies, e as de outros aparelhos são encerradas; 400 `VALIDATION_ERROR`: nova senha igual à atual ou fora do formato de RS003; 401 `INVALID_CURRENT_PASSWORD`; 429 `ACCOUNT_LOCKED`.

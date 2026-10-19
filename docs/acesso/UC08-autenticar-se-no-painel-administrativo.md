@@ -35,7 +35,7 @@ regras: [RN023, RN024, RN026, RN027, RN029]
 ### FA01 – Primeiro acesso do funcionário (passo 4)
 
 1. O sistema identifica que a senha inicial, definida no cadastro, ainda não foi trocada e solicita ao funcionário uma nova senha (RN023, RS004).
-2. O funcionário informa a nova senha e confirma.
+2. O funcionário informa a senha inicial e a nova senha e confirma.
 3. O sistema valida e grava a nova senha (RS003, RS002), e o fluxo prossegue no passo 5.
 
 ### FA02 – Autenticação do administrador (passo 5)

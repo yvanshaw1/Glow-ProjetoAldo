@@ -1,9 +1,9 @@
 ---
 titulo: Dados – Acesso
 assunto: acesso
-origem: Documentação de Arquitetura de Software, seção 5.2 (Quadro 28); issue #23 (decisão 0047)
+origem: Documentação de Arquitetura de Software, seção 5.2 (Quadro 28); issues #23 (decisão 0047) e #24 (troca de senha)
 tabelas: [login_attempts]
-relacionados: [RS005, RS006, 0016, 0042, 0047]
+relacionados: [RS005, RS006, 0016, 0042, 0047, 0048]
 ---
 
 # Dados: Acesso
@@ -28,6 +28,8 @@ Tentativas de login por e-mail (RS006, decisão 0016).
 5 falhas seguidas para o mesmo e-mail, exista a conta ou não, bloqueiam o login por 15 minutos, contados da quinta tentativa (RS006). Durante o bloqueio, a resposta é 429 `ACCOUNT_LOCKED`, com `Retry-After` nos segundos que faltam, sem conferir a senha; essas tentativas não contam nem prolongam o bloqueio. Quando ele acaba, a contagem recomeça do zero. A senha certa zera o contador, mesmo quando a conta não pode entrar (desativada ou sem perfil). Se o Supabase Auth não atende, a tentativa é devolvida (`release_login_attempt`) e a resposta é 503 `SERVICE_UNAVAILABLE`.
 
 O e-mail com formato inválido recebe 400 antes de qualquer contagem. Os valores 5 e 15 ficam em `src/server/auth/login-attempts.ts` e chegam às funções como parâmetros.
+
+A conferência da senha atual na troca de senha usa o mesmo contador, pelo e-mail da conta: conta como tentativa, a senha certa zera o contador, a falha do Supabase Auth devolve a tentativa, e o e-mail bloqueado recebe 429 `ACCOUNT_LOCKED` também na troca.
 
 ## Funções
 
