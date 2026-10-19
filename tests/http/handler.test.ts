@@ -530,6 +530,29 @@ describe("log (RS017, RS018)", () => {
     });
   });
 
+  it("logs only the code and the message of an error that is not an Error", async () => {
+    await callRoute(
+      failWith({
+        code: "23514",
+        message:
+          'new row for relation "clients" violates check constraint "ck_clients_email"',
+        details: "Failing row contains (7f3c9a1e, Maria, Silva, 82999998888).",
+        hint: null,
+      }),
+      buildRequest("/api/me/profile"),
+    );
+
+    const line = readRequestLine();
+    expect(line.level).toBe("error");
+    expect(line.error).toEqual({
+      name: null,
+      code: "23514",
+      message:
+        'new row for relation "clients" violates check constraint "ck_clients_email"',
+      stack: null,
+    });
+  });
+
   it.each([
     "ACCOUNT_LOCKED",
     "VERSION_CONFLICT",
@@ -658,6 +681,16 @@ describe("log (RS017, RS018)", () => {
         "when the body is not valid JSON",
         async () => respondNoContent(),
         `email=${EMAIL}&password=${PASSWORD}`,
+      ],
+      [
+        "when a database error of a 500 quotes the refused row",
+        failWith({
+          code: "23514",
+          message: 'new row for relation "clients" violates check constraint',
+          details: `Failing row contains (7f3c9a1e, Maria, Silva, ${EMAIL}).`,
+          hint: null,
+        }),
+        JSON.stringify({ email: EMAIL, password: PASSWORD }),
       ],
     ])("%s", async (_label, route: Route, body) => {
       await callRoute(route, buildLogin(body));
