@@ -1,6 +1,6 @@
 ---
 issue: 17
-pull_request: <número>
+pull_request: 18
 ---
 
 # Relatório: Banco de dados: esquema completo, dados iniciais e conta de administrador
