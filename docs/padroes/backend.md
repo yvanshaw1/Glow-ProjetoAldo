@@ -50,13 +50,14 @@ As regras de preço, status, datas e edição são funções puras em `src/serve
 ## Gravações e consultas
 
 - Gravação em mais de uma tabela é feita por função SQL, chamada pelo repositório via `rpc`, numa transação (RNF010): `create_appointment`, `update_appointment`, `reschedule_appointment`, `save_service`, `save_role`, `link_vehicle`.
+- O controle de tentativas de login também usa funções SQL (`reserve_login_attempt` e `release_login_attempt`), para contar sem corrida entre requisições simultâneas (decisão 0047).
 - Cadastro de conta: cria no Supabase Auth com `auth.admin.createUser` e o e-mail confirmado, nunca com `signUp`, e depois o perfil; se o perfil falhar, remove a conta recém-criada.
 - Dados relacionados na mesma consulta (seleção aninhada do `supabase-js`) ou em lote (`in`); nunca uma consulta por item de lista (N+1).
 - Registros com exclusão lógica (`deleted_at`) ficam fora de toda listagem e seleção.
 
 ## Erros
 
-- Toda rota exporta os métodos por `handleRoute`, de `src/server/http/handler.ts`: `export const POST = handleRoute(async ({ request, params, body }) => ...)`. Nas gravações, ele confere origem, tamanho e formato antes da rota (`api.md`, Validação) e entrega o corpo já convertido; a rota o valida com `schema.parse`, e o `ZodError` vira 400 `VALIDATION_ERROR`. O sucesso responde por `src/server/http/respond.ts`: `respondOk`, `respondCreated`, `respondNoContent` e `respondPage`. As rotas ficam no ambiente Node.js, o padrão, porque o registro usa `AsyncLocalStorage`.
+- Toda rota exporta os métodos por `handleRoute`, de `src/server/http/handler.ts`: `export const POST = handleRoute(async ({ request, params, body }) => ...)`. Nas gravações, ele confere origem, tamanho e formato antes da rota (`api.md`, Validação) e entrega o corpo já convertido; em toda resposta, envia `Cache-Control: no-store` (`api.md`); a rota o valida com `schema.parse`, e o `ZodError` vira 400 `VALIDATION_ERROR`. O sucesso responde por `src/server/http/respond.ts`: `respondOk`, `respondCreated`, `respondNoContent` e `respondPage`. As rotas ficam no ambiente Node.js, o padrão, porque o registro usa `AsyncLocalStorage`.
 - Erro previsto: `throw new AppError(code)`, com código do catálogo de `src/shared/errors`; só o tratamento único (`src/server/http/handler.ts`) o converte em resposta.
 - Nenhum `catch` vazio; capturar só para tratar ou para acrescentar contexto e relançar.
 - O `supabase-js` devolve o erro no resultado em vez de lançar: conferir `error` em toda chamada; o repositório converte em falha da aplicação (violação de `uq_vehicles_plate` vira `PLATE_IN_USE`), e o detalhe técnico vai só para o registro.
@@ -64,12 +65,12 @@ As regras de preço, status, datas e edição são funções puras em `src/serve
 
 ## Registro (`src/server/http/logger.ts`)
 
-Uma linha JSON por evento na saída padrão, lida nos registros da Vercel. O tratamento único grava uma linha ao fim de cada requisição da API, com nível, `requestId`, método, caminho sem a query string, status, código do erro, usuário e duração; os serviços gravam linhas próprias para os eventos de negócio. O `requestId` é gerado no início da requisição e incluído em todas as linhas dela via `AsyncLocalStorage` do Node.js.
+Uma linha JSON por evento na saída padrão, lida nos registros da Vercel. O tratamento único grava uma linha ao fim de cada requisição da API, com nível, `requestId`, método, caminho sem a query string, status, código do erro, usuário e duração; os serviços gravam linhas próprias para os eventos de negócio. O `requestId` é gerado no início da requisição e incluído em todas as linhas dela via `AsyncLocalStorage` do Node.js, assim como o id do usuário (`userId`), depois que o guard identifica a sessão.
 
 | Nível | Quando |
 |---|---|
 | `error` | falha inesperada que vira 500, com o rastro de execução |
-| `warn` | anomalia tratada: bloqueio de login, conflito de versão, origem recusada |
+| `warn` | anomalia tratada: bloqueio de login, conflito de versão, origem recusada, conta do Supabase Auth sem perfil, Supabase Auth indisponível |
 | `info` | requisição concluída sem falha nem anomalia; evento de negócio: login, agendamento criado, editado, cancelado ou concluído, alteração de cargo |
 | `debug` | detalhe de investigação, só em desenvolvimento |
 

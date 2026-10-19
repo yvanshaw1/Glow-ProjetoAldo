@@ -2,7 +2,7 @@
 titulo: Autenticação, perfis e autorização
 assunto: acesso
 origem: Documentação de Arquitetura de Software, seções 3.2 (Quadro 5), 4.3 (Quadros 9 e 10) e 5.2 (Quadro 28)
-relacionados: [RN022, RN023, RN024, RN025, RN026, RN027, RN029, RS001, RS004, RS005, RS006, RS007, RS008, RS009, RS010, RS011]
+relacionados: [RN022, RN023, RN024, RN025, RN026, RN027, RN029, RS001, RS004, RS005, RS006, RS007, RS008, RS009, RS010, RS011, 0046, 0047]
 ---
 
 # Autenticação, perfis e autorização
@@ -10,20 +10,12 @@ relacionados: [RN022, RN023, RN024, RN025, RN026, RN027, RN029, RS001, RS004, RS
 ## Sessão
 
 - Supabase Auth com e-mail e senha. O navegador nunca fala com o Supabase: o login é `POST /api/auth/login`, que valida no Supabase Auth e grava a sessão em cookies com `@supabase/ssr`.
-- Token de acesso de 1 hora mais token de renovação; o servidor renova sozinho. Cookies `HttpOnly`, `Secure`, `SameSite=Lax`. Logout encerra a sessão no Supabase Auth e apaga os cookies (RS007).
+- Token de acesso de 1 hora mais token de renovação; o servidor renova sozinho. A sessão vale até o logout ou a revogação no Supabase Auth, sem limite de duração (o limite do Supabase Auth exigiria configuração no painel, decisão 0044); os cookies valem 400 dias, valor fixo do `@supabase/ssr`. Cookies `HttpOnly`, `Secure`, `SameSite=Lax`.
+- O logout encerra no Supabase Auth a sessão deste navegador, sem afetar as de outros aparelhos, e apaga os cookies (RS007). Ele não exige sessão: sem ela, sem perfil, com a conta desativada ou com a senha inicial pendente, responde 204 do mesmo jeito.
 - Login único para clientes e funcionários (RN029): depois de validar, o backend procura o id da conta em `clients` e em `staff`; a resposta traz o perfil, e a interface manda o cliente ao portal e o funcionário ou o admin ao painel.
-- Conta desativada (`staff.is_active` falso) ou excluída (`clients.deleted_at`) não inicia sessão (RN026, RN030).
+- Conta desativada (`staff.is_active` falso) ou excluída (`clients.deleted_at`) não inicia sessão (RN026, RN030). Com a senha certa, a desativada recebe 403 `ACCOUNT_INACTIVE`, e a excluída, ou a conta do Supabase Auth sem perfil, recebe o mesmo 401 `INVALID_CREDENTIALS` do e-mail inexistente (RS005). Nos dois casos, a sessão aberta pela validação da senha é encerrada. A conta sem perfil gera uma linha `warn` no registro.
 - Falha sempre responde 401 `INVALID_CREDENTIALS`, sem dizer se o e-mail existe (RS005).
-- Bloqueio: 5 falhas seguidas para o mesmo e-mail bloqueiam por 15 minutos; resposta 429 `ACCOUNT_LOCKED` com `Retry-After` em segundos; login certo zera o contador (RS006).
-
-### Tabela `login_attempts`
-
-| Coluna | Tipo | Restrições | Descrição |
-|---|---|---|---|
-| `email` | `text` | PK; em minúsculas | E-mail informado na tentativa. |
-| `failed_count` | `integer` | Padrão: 0 | Falhas consecutivas; zerado no login bem-sucedido. |
-| `locked_until` | `timestamptz` | Opcional | Fim do bloqueio temporário. |
-| `updated_at` | `timestamptz` |  | Data da última tentativa. |
+- Bloqueio: 5 falhas seguidas para o mesmo e-mail bloqueiam o login por 15 minutos, com 429 `ACCOUNT_LOCKED` e `Retry-After` em segundos; a senha certa zera o contador (RS006). Regras e funções: [dados.md](dados.md).
 
 ## Perfis e contas
 
@@ -35,17 +27,19 @@ Cada pessoa tem uma conta no Supabase Auth; os dados do perfil ficam em tabela p
 | `staff` | `staff` | pelo painel, com a permissão `staff` (UC19) | páginas e rotas permitidas pelo cargo |
 | `admin` | `staff` com `is_admin` | script de dados iniciais | tudo; oculto nas listagens (RN027) |
 
-Senha inicial: contas criadas pelo painel ficam com `must_change_password`. Enquanto a marca existir, toda rota, exceto a de troca de senha, responde 403 `PASSWORD_CHANGE_REQUIRED`, e a interface leva a `/set-password`. A nova senha precisa ser diferente da inicial; a troca remove a marca (RN023, RS004).
+Senha inicial: contas criadas pelo painel ficam com `must_change_password`. Enquanto a marca existir, toda rota com sessão responde 403 `PASSWORD_CHANGE_REQUIRED`, exceto a troca de senha, `GET /api/auth/me` e o logout, e a interface leva a `/set-password`. A nova senha precisa ser diferente da inicial; a troca remove a marca (RN023, RS004).
 
 ## Autorização
 
 Guards em `src/server/auth/guards.ts`, chamados na camada de rota em toda requisição:
 
-- `requireUser`: sessão válida (RS001);
+- `requireUser`: sessão válida, conferida no Supabase Auth a cada requisição (decisão 0046), e conta ativa, sem troca de senha pendente (RS001, RS004, RN026); só o `me` e a troca de senha aceitam a senha pendente;
 - `requireClient`: perfil `client`; nas rotas `/api/me`, o id do cliente vem sempre da sessão, e registro de outro cliente responde 404 (RS009);
 - `requirePermission(key)`: perfil `staff` ou `admin` com a permissão da página; cliente recebe 403 (RS008, RS010).
 
 Perfil, situação, cargo e permissões são lidos do banco a cada requisição, nunca do token: desativação e mudança de cargo valem na requisição seguinte (RS011). A barra do painel é montada com as permissões de `GET /api/auth/me`; o admin recebe todas.
+
+Desativada depois do login, a conta recebe 403 `ACCOUNT_INACTIVE` em toda rota com sessão, até o logout; excluída ou sem perfil, recebe 401 `UNAUTHENTICATED`.
 
 | Permissão | Página | Rotas liberadas |
 |---|---|---|

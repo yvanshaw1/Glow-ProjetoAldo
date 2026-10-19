@@ -1,6 +1,6 @@
 # `/api/auth`
 
-Cadastro e login são públicos; logout, `me` e troca de senha exigem sessão (`requireUser`). Módulo do backend: `auth`. Subpastas: `register/`, `login/`, `logout/`, `me/`, `change-password/`.
+Cadastro, login e logout são públicos; `me` e troca de senha exigem sessão (`requireUser`, aceitando a senha inicial pendente). Módulo do backend: `auth`. Subpastas: `register/`, `login/`, `logout/`, `me/`, `change-password/`.
 
 ## Vai aqui
 

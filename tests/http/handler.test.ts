@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { MockInstance } from "vitest";
 import { z } from "zod";
 import { handleRoute, type RouteInput } from "@/server/http/handler";
-import { logger } from "@/server/http/logger";
+import { logger, setRequestUser } from "@/server/http/logger";
 import { respondNoContent, respondOk } from "@/server/http/respond";
 import type { ProblemDetails } from "@/shared/api/problem";
 import { AppError } from "@/shared/errors/app-error";
@@ -456,6 +456,38 @@ describe("input protections (RS014)", () => {
   });
 });
 
+describe("cache (docs/padroes/api.md)", () => {
+  it.each([
+    [
+      "a success of the route",
+      async () => respondOk({ ok: true }),
+      buildRequest("/api/auth/me"),
+    ],
+    [
+      "the Problem Details of an AppError",
+      failWith(new AppError("UNAUTHENTICATED")),
+      buildRequest("/api/auth/me"),
+    ],
+    [
+      "an unexpected error",
+      failWith(new Error("connection refused")),
+      buildRequest("/api/auth/me"),
+    ],
+    [
+      "a refused origin",
+      async () => respondNoContent(),
+      buildRequest("/api/auth/logout", {
+        method: "POST",
+        headers: { origin: OTHER_SITE_ORIGIN },
+      }),
+    ],
+  ] as const)("marks %s as not cacheable", async (_case, route, request) => {
+    const response = await callRoute(route, request);
+
+    expect(response.headers.get("cache-control")).toBe("no-store");
+  });
+});
+
 describe("log (RS017, RS018)", () => {
   it("logs one info line per request with requestId, method, path without query string, status and duration", async () => {
     await callRoute(
@@ -468,6 +500,7 @@ describe("log (RS017, RS018)", () => {
       time: expect.any(String),
       level: "info",
       requestId: expect.stringMatching(REQUEST_ID_PATTERN),
+      userId: null,
       event: "request",
       method: "GET",
       path: "/api/admin/clients",
@@ -497,19 +530,20 @@ describe("log (RS017, RS018)", () => {
     });
   });
 
-  it.each(["ACCOUNT_LOCKED", "VERSION_CONFLICT"] as const)(
-    "logs a warn line for %s",
-    async (code) => {
-      await callRoute(
-        failWith(new AppError(code)),
-        buildJsonWrite("/api/admin/settings", {}, "PUT"),
-      );
+  it.each([
+    "ACCOUNT_LOCKED",
+    "VERSION_CONFLICT",
+    "SERVICE_UNAVAILABLE",
+  ] as const)("logs a warn line for %s", async (code) => {
+    await callRoute(
+      failWith(new AppError(code)),
+      buildJsonWrite("/api/admin/settings", {}, "PUT"),
+    );
 
-      const line = readRequestLine();
-      expect(line.level).toBe("warn");
-      expect(line.code).toBe(code);
-    },
-  );
+    const line = readRequestLine();
+    expect(line.level).toBe("warn");
+    expect(line.code).toBe(code);
+  });
 
   it("logs a warn line with the refused origin", async () => {
     await callRoute(
@@ -536,6 +570,16 @@ describe("log (RS017, RS018)", () => {
     expect(line.level).toBe("info");
     expect(line.code).toBe("FORBIDDEN");
     expect(line).not.toHaveProperty("refusedOrigin");
+  });
+
+  it("logs the user set by the route in the request line", async () => {
+    const userId = "4e31423b-fe30-cf42-7e5a-eebc618ac6e6";
+    await callRoute(async () => {
+      setRequestUser(userId);
+      throw new AppError("FORBIDDEN");
+    }, buildRequest("/api/admin/staff"));
+
+    expect(readRequestLine().userId).toBe(userId);
   });
 
   it("keeps the requestId of the response in the lines written by the route", async () => {

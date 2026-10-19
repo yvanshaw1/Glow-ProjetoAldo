@@ -15,4 +15,5 @@ Leia só o que a tarefa pede: o caso de uso do fluxo, as regras que ele cita e, 
 | RN023-senha-inicial.md | Senha inicial |
 | RN029-login-unico.md | Login único |
 | rotas.md | Telas e rotas da API |
-| autenticacao.md | Sessão, perfis, guards, permissões, proteção das páginas e tabela `login_attempts` |
+| autenticacao.md | Sessão, perfis, guards, permissões e proteção das páginas |
+| dados.md | Tabela `login_attempts`, bloqueio por tentativas e funções do login |

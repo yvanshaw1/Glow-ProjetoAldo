@@ -10,28 +10,44 @@ type LogFields = Record<string, unknown>;
 
 type RequestContext = {
   requestId: string;
-  // TODO(#23): add the signed-in user, set by the guards, to every line.
 };
 
-const requestContext = new AsyncLocalStorage<RequestContext>();
+type RequestState = RequestContext & {
+  // Signed-in user, set by the guard once the session is known.
+  userId: string | null;
+};
+
+const requestContext = new AsyncLocalStorage<RequestState>();
 
 // Every line written while `callback` runs, even after an await, carries the
-// requestId of this context.
+// requestId of this context and, after setRequestUser, the user.
 export function runWithRequestContext<T>(
-  context: RequestContext,
+  { requestId }: RequestContext,
   callback: () => T,
 ): T {
-  return requestContext.run(context, callback);
+  return requestContext.run({ requestId, userId: null }, callback);
+}
+
+// The state of the request is changed in place: the guard runs inside the
+// route, and the request line, written by the handler after the route, has to
+// see the user too. Outside a request there is nothing to set.
+export function setRequestUser(userId: string): void {
+  const state = requestContext.getStore();
+  if (state) {
+    state.userId = userId;
+  }
 }
 
 function writeLine(level: LogLevel, event: string, fields: LogFields): void {
   if (level === "debug" && process.env.NODE_ENV !== "development") {
     return;
   }
+  const state = requestContext.getStore();
   const line = {
     time: new Date().toISOString(),
     level,
-    requestId: requestContext.getStore()?.requestId ?? null,
+    requestId: state?.requestId ?? null,
+    userId: state?.userId ?? null,
     event,
     ...fields,
   };

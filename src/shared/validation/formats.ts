@@ -289,6 +289,16 @@ export const passwordSchema = textFormat({
   toStoredValue: (password) => (isStrongPassword(password) ? password : null),
 });
 
+// Password typed at the login: only required and limited to the bytes bcrypt
+// handles. RS005: a password outside the RS003 rules gets the same answer as a
+// wrong one, so the composition rules apply only where a password is defined.
+export const signInPasswordSchema = textFormat({
+  message: PASSWORD_MESSAGE,
+  prepare: (value) => value,
+  toStoredValue: (password) =>
+    utf8.encode(password).length <= PASSWORD_MAX_BYTES ? password : null,
+});
+
 export const plateSchema = textFormat({
   message: PLATE_MESSAGE,
   toStoredValue: (text) => {

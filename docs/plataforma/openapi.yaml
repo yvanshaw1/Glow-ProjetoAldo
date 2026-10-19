@@ -1,0 +1,328 @@
+openapi: 3.1.0
+info:
+  title: Glow – Estética Automotiva API
+  version: 0.1.0
+  description: >-
+    API interna do Glow, servida pelas rotas do Next.js sob /api, no mesmo
+    domínio das páginas (docs/padroes/api.md). Não tem versão no caminho
+    (decisão 0026); o campo version acompanha o package.json só porque é
+    obrigatório. Toda resposta de erro é Problem Details (RFC 9457, decisão
+    0025), e nenhuma resposta vai para cache (Cache-Control: no-store). Toda
+    gravação (POST, PUT, PATCH e DELETE) exige o cabeçalho Origin com o host
+    da própria requisição; com corpo, só application/json, até 100 KB.
+    Rotas e regras de cada assunto: docs/<assunto>/rotas.md.
+servers:
+  - url: /
+tags:
+  - name: auth
+    description: >-
+      Login único de clientes e funcionários, sessão e logout
+      (docs/acesso/rotas.md, docs/acesso/autenticacao.md).
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - auth
+      operationId: login
+      summary: Inicia a sessão de cliente ou de funcionário
+      description: >-
+        Login único (UC03, UC08, RN029). Valida o e-mail e a senha no
+        Supabase Auth e grava a sessão em cookies. Cinco falhas seguidas para
+        o mesmo e-mail bloqueiam o login por 15 minutos (RS006). Com a senha
+        certa, a conta desativada recebe 403, e a conta excluída ou sem perfil
+        recebe o mesmo 401 do e-mail inexistente (RS005).
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Sessão iniciada.
+          headers:
+            Set-Cookie:
+              $ref: "#/components/headers/SessionCookies"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionUser"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          description: >-
+            INVALID_CREDENTIALS: e-mail inexistente, senha errada ou conta sem
+            perfil, sempre com a mesma mensagem (RS005).
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "403":
+          description: >-
+            ACCOUNT_INACTIVE: funcionário desativado, com a senha certa
+            (RN026); nenhum cookie de sessão é gravado. FORBIDDEN: origem
+            recusada (RS014).
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "429":
+          description: >-
+            ACCOUNT_LOCKED: e-mail bloqueado por excesso de tentativas, mesmo
+            com a senha certa (RS006).
+          headers:
+            Retry-After:
+              description: Segundos até o fim do bloqueio.
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /api/auth/logout:
+    post:
+      tags:
+        - auth
+      operationId: logout
+      summary: Encerra a sessão deste navegador
+      description: >-
+        Encerra no Supabase Auth a sessão deste navegador, sem afetar as de
+        outros aparelhos, e apaga os cookies (RS007). Não exige sessão: sem
+        ela, com a conta desativada ou com a senha inicial pendente, responde
+        204 do mesmo jeito. Sem corpo.
+      security: []
+      responses:
+        "204":
+          description: Sessão encerrada, ou nenhuma sessão a encerrar.
+          headers:
+            Set-Cookie:
+              $ref: "#/components/headers/SessionCookies"
+        "403":
+          $ref: "#/components/responses/ForbiddenOrigin"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+  /api/auth/me:
+    get:
+      tags:
+        - auth
+      operationId: getSessionUser
+      summary: Devolve o usuário da sessão e suas permissões
+      description: >-
+        Perfil, situação e permissões lidos do banco nesta requisição (RS011).
+        Aceita a senha inicial pendente, informada em mustChangePassword
+        (RS004).
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Usuário da sessão.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionUser"
+        "401":
+          description: >-
+            UNAUTHENTICATED: sem sessão, sessão expirada ou encerrada, ou conta
+            excluída ou sem perfil.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "403":
+          description: "ACCOUNT_INACTIVE: funcionário desativado (RN026)."
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sb-<referência-do-projeto>-auth-token
+      description: >-
+        Sessão do Supabase Auth, gravada pelo servidor com @supabase/ssr. O
+        valor pode vir dividido em pedaços (.0, .1). HttpOnly, Secure,
+        SameSite=Lax e Path=/.
+  headers:
+    SessionCookies:
+      description: >-
+        Cookies da sessão, com HttpOnly, Secure, SameSite=Lax e Path=/; no
+        encerramento, com Max-Age=0.
+      schema:
+        type: string
+  schemas:
+    Profile:
+      type: string
+      enum:
+        - client
+        - staff
+        - admin
+      description: Perfil da conta (guia/mapa.md); admin é o staff com is_admin.
+    Permission:
+      type: string
+      enum:
+        - dashboard
+        - appointments
+        - services
+        - clients
+        - staff
+        - settings
+      description: Uma permissão por página do painel, na ordem de RN025.
+    LoginInput:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: Formato de RN035; gravado em minúsculas e sem espaços.
+          examples:
+            - maria@email.com
+        password:
+          type: string
+          minLength: 1
+          description: >-
+            Como digitada, até 72 bytes em UTF-8, sem as regras de composição
+            do RS003.
+      description: Campos não previstos são descartados (RS013).
+    SessionUser:
+      type: object
+      required:
+        - profile
+        - firstName
+        - lastName
+        - mustChangePassword
+        - permissions
+      properties:
+        profile:
+          $ref: "#/components/schemas/Profile"
+        firstName:
+          type: string
+          examples:
+            - Ana
+        lastName:
+          type: string
+          examples:
+            - Souza
+        mustChangePassword:
+          type: boolean
+          description: Senha inicial pendente de troca (RN023, RS004).
+        permissions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Permission"
+          description: >-
+            Na ordem de RN025; todas para o admin (RN027) e nenhuma para o
+            cliente ou para o funcionário de cargo inativo.
+          examples:
+            - - dashboard
+              - appointments
+    ProblemDetails:
+      type: object
+      required:
+        - type
+        - title
+        - status
+        - detail
+        - instance
+        - code
+        - requestId
+      properties:
+        type:
+          type: string
+          const: about:blank
+        title:
+          type: string
+          examples:
+            - Unauthorized
+        status:
+          type: integer
+          examples:
+            - 401
+        detail:
+          type: string
+          description: Mensagem do catálogo de docs/padroes/api.md.
+          examples:
+            - E-mail ou senha incorretos.
+        instance:
+          type: string
+          examples:
+            - /api/auth/login
+        code:
+          type: string
+          description: Código do catálogo de docs/padroes/api.md.
+          examples:
+            - INVALID_CREDENTIALS
+        fields:
+          type: object
+          additionalProperties:
+            type: string
+          description: >-
+            Só em VALIDATION_ERROR: a primeira mensagem de cada campo, com o
+            caminho com pontos nos campos aninhados.
+        requestId:
+          type: string
+          pattern: "^[0-9a-f]{8}$"
+          examples:
+            - 7f3c9a1e
+  responses:
+    ValidationError:
+      description: >-
+        VALIDATION_ERROR: campo fora do formato, com a mensagem em fields, ou
+        corpo que não é JSON válido, sem fields.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    ForbiddenOrigin:
+      description: "FORBIDDEN: origem recusada (RS014)."
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    PayloadTooLarge:
+      description: "PAYLOAD_TOO_LARGE: corpo acima de 100 KB."
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    UnsupportedMediaType:
+      description: "UNSUPPORTED_MEDIA_TYPE: corpo fora de application/json."
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    InternalError:
+      description: >-
+        INTERNAL_ERROR: falha inesperada; o detalhe fica só no registro, pelo
+        requestId (RS017).
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    ServiceUnavailable:
+      description: "SERVICE_UNAVAILABLE: o Supabase Auth não atendeu."
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
