@@ -6,7 +6,9 @@ Closes #<issue>
 
 <!-- RF, RN, RS, UC -->
 
-## O que mudou e por quê
+## O que mudou
+
+<!-- Só a lista do que é novo e do que foi alterado, em "Novo", "Alterado" e "Testes": arquivos, rotas, funções, migrations, testes e documentação. Sem o porquê nem as lacunas decididas no plano: eles ficam no plano e no relatório, em memoria/tarefas/. -->
 
 ## Como testar na pré-visualização
 
