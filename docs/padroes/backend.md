@@ -74,7 +74,7 @@ Uma linha JSON por evento na saída padrão, lida nos registros da Vercel. O tra
 | `info` | requisição concluída sem falha nem anomalia; evento de negócio: login, agendamento criado, editado, cancelado ou concluído, alteração de cargo |
 | `debug` | detalhe de investigação, só em desenvolvimento |
 
-Nunca registrar senha, token, cookie, cabeçalho de autorização nem o corpo das rotas de autenticação (RS018).
+Nunca registrar senha, token, cookie, cabeçalho de autorização nem o corpo das rotas de autenticação (RS018). Do erro do banco, que não é `Error`, o registro guarda só o código e a mensagem: o detalhe pode citar a linha recusada, com dados do corpo.
 
 ## Cabeçalhos de segurança (`next.config.ts`)
 
