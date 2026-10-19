@@ -1,6 +1,6 @@
 ---
 issue: 22
-pull_request: <número>
+pull_request: 28
 ---
 
 # Relatório: Base do servidor: clientes do Supabase, tratamento único das requisições e registro
@@ -41,7 +41,7 @@ Nenhuma rota de negócio ou tela mudou. A partir da #23, toda rota da API passa 
   - no `next dev`, com `curl`: JSON da mesma origem 200; `text/plain` 415; 150 KB 413, com e sem `Content-Length`; outra origem e sem `Origin` 403, com linha `warn`; `DELETE` sem corpo 204; JSON inválido 400, sem a senha do corpo no registro.
 - Cabeçalhos de segurança: os cinco vieram em `/`, numa rota da API e num 404 de `/api`, no `next dev` e no contêiner.
 - Contêiner, porque mudaram as dependências, o `next.config.ts` e a leitura das variáveis: sem `.env.local` no worktree, `docker build` concluiu sem nenhuma variável, e `docker run` respondeu 200 na página inicial. O contêiner e a imagem foram removidos.
-- Manual na pré-visualização: <a preencher depois do build da Vercel>.
+- Manual na pré-visualização: o build da Vercel concluiu, e o endereço da ramificação (`glow-projetoaldo-git-feat-22-server-base-yvanshaw1s-projects.vercel.app`), o mesmo do link do PR, respondeu 200 em `/` e 404 em `/api/nao-existe`, os dois com os cinco cabeçalhos de segurança e os valores de `backend.md`. Não há tela nem rota para percorrer.
 
 ## Documentação atualizada
 
