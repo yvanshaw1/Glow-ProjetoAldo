@@ -50,7 +50,7 @@ As regras de preço, status, datas e edição são funções puras em `src/serve
 ## Gravações e consultas
 
 - Gravação em mais de uma tabela é feita por função SQL, chamada pelo repositório via `rpc`, numa transação (RNF010): `create_appointment`, `update_appointment`, `reschedule_appointment`, `save_service`, `save_role`, `link_vehicle`.
-- Cadastro de conta: cria no Supabase Auth e depois o perfil; se o perfil falhar, remove a conta recém-criada.
+- Cadastro de conta: cria no Supabase Auth com `auth.admin.createUser` e o e-mail confirmado, nunca com `signUp`, e depois o perfil; se o perfil falhar, remove a conta recém-criada.
 - Dados relacionados na mesma consulta (seleção aninhada do `supabase-js`) ou em lote (`in`); nunca uma consulta por item de lista (N+1).
 - Registros com exclusão lógica (`deleted_at`) ficam fora de toda listagem e seleção.
 

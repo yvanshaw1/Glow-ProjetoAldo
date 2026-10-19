@@ -64,5 +64,5 @@ Ajuste por forma de pagamento.
 
 ## Observações
 
-- Os dados iniciais (`supabase/seed.sql`) criam a linha única de `business_settings`, os sete dias de `business_hours` e as quatro formas de pagamento sem ajuste em `payment_fees`. Essas tabelas não ganham nem perdem linhas pelo painel: só são alteradas.
+- Os dados iniciais (`supabase/seed.sql`) criam a linha única de `business_settings`, os sete dias de `business_hours` e as quatro formas de pagamento sem ajuste em `payment_fees`. Valores iniciais: de segunda a sexta, das 08:00 às 18:00, com pausa das 12:00 às 13:00; sábado, das 08:00 às 12:00, sem pausa; domingo fechado; nome da empresa "Glow – Estética Automotiva" e os demais dados vazios. Essas tabelas não ganham nem perdem linhas pelo painel: só são alteradas.
 - Na interface, o funcionário escolhe "acréscimo" ou "desconto" e informa um percentual de 0 a 100; o banco guarda o valor com sinal (negativo para desconto) ([RN012](RN012-percentual-da-forma-de-pagamento.md)).

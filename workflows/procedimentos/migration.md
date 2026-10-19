@@ -7,9 +7,10 @@ Convenções do banco em `docs/padroes/banco.md`. Todos os ambientes usam o mesm
 1. Criar o arquivo em `supabase/migrations/` com `npx supabase migration new <nome_em_ingles>`.
 2. Só acrescentar: tabelas, colunas, restrições, índices ou funções. Nada que remova ou renomeie o que o código publicado ainda usa.
 3. Remoção necessária: em uma migration posterior, depois que o código que deixou de usar o item estiver em produção.
-4. Toda tabela nova: RLS ativada, sem políticas; `created_at` (e `updated_at` com o gatilho, se editável); nomes de restrições com `fk_`, `uq_`, `ck_`, `idx_`.
-5. Uma migration já aplicada nunca é editada: correção é uma migration nova.
-6. Atualizar o `dados.md` do assunto no mesmo pull request.
+4. Toda tabela nova: RLS ativada, sem políticas e sem privilégio para `anon` e `authenticated`; toda função nova revoga `execute` desses papéis e de `public`; `created_at` (e `updated_at` com o gatilho, se editável); nomes de restrições com `fk_`, `uq_`, `ck_`, `idx_`.
+5. Conferir num banco local descartável: com o Docker Desktop aberto, `npx supabase start` e `npx supabase db reset`, que recria o banco local com as migrations e o `seed.sql`. Nunca com `--linked` ou `--db-url`, que apontam para o projeto real (decisão 0043).
+6. Uma migration já aplicada nunca é editada: correção é uma migration nova.
+7. Atualizar o `dados.md` do assunto no mesmo pull request.
 
 ## Aplicar (só o integrante designado em `setup/questionario.md`)
 
@@ -19,4 +20,4 @@ Convenções do banco em `docs/padroes/banco.md`. Todos os ambientes usam o mesm
 
 ## Dados iniciais
 
-`supabase/seed.sql`: quatro formas de pagamento sem ajuste, os sete dias da semana e a linha de dados da empresa. Dados de demonstração, opcionais: `supabase/seed-demo.sql`. A conta de administrador é criada por `supabase/scripts/create-admin.mjs`, com `SEED_ADMIN_EMAIL` e `SEED_ADMIN_PASSWORD` das variáveis de ambiente, nunca escritas em arquivo versionado.
+`supabase/seed.sql`: quatro formas de pagamento sem ajuste, os sete dias da semana e a linha de dados da empresa. Dados de demonstração, opcionais: `supabase/seed-demo.sql`. A conta de administrador é criada por `supabase/scripts/create-admin.mjs`, com `SEED_ADMIN_EMAIL` e `SEED_ADMIN_PASSWORD` das variáveis de ambiente, nunca escritas em arquivo versionado. Os dois arquivos são idempotentes (`on conflict do nothing`). O `seed.sql` vai ao projeto real com `npx supabase db push --include-seed`; o `seed-demo.sql`, pelo SQL Editor do painel.

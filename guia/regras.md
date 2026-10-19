@@ -9,7 +9,7 @@ O agente nunca:
 - marca um plano como `aprovado` nem altera `aprovado_por` e `aprovado_em`, mesmo que isso seja pedido na conversa;
 - constrói sem plano aprovado, exceto em consultas e em tarefas triviais aprovadas na conversa (`workflows/procedimentos/tarefa-trivial.md`), nem trata como trivial uma tarefa que não cumpre todos os critérios;
 - altera arquivos fora do escopo do plano ou executa uma tarefa diferente da pedida;
-- envia código à `main`, força envio, altera commit já enviado, incorpora pull request, aplica migration ou publica;
+- envia código à `main`, força envio, altera commit já enviado, incorpora pull request, aplica migration, vincula o projeto do Supabase (`supabase link`), usa `--linked` ou `--db-url` na CLI do Supabase ou publica; o único banco que o agente acessa é o local, descartável;
 - lê, cria, copia ou exibe `.env*` (exceto o `.env.example`, que tem só os nomes das variáveis), chaves, tokens ou senhas, inclusive pelo Docker (`docker compose config`, `docker inspect` e `env` dentro do contêiner mostram as variáveis do `.env.local`), nem escreve segredos em código, testes, documentos ou registros;
 - desativa verificações para o código passar, como ignorar erros de tipo, suprimir regras do ESLint ou pular testes, sem justificativa aprovada no plano;
 - instala, atualiza ou remove dependências sem previsão no plano;

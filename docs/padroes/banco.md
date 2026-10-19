@@ -11,6 +11,7 @@ PostgreSQL gerenciado pelo Supabase. Tabelas de cada assunto: `docs/<assunto>/da
 ## Acesso
 
 - RLS ativada em todas as tabelas, sem nenhuma política: a chave pública não lê nem grava nada. Só o backend, com a chave de serviço em `src/server`, acessa os dados.
+- Além da RLS, os papéis `anon` e `authenticated` do Supabase não têm privilégio nas tabelas e funções de `public`; só o `service_role` tem. Toda função nova revoga `execute` de `public`, `anon` e `authenticated` (decisão 0042).
 - O backend não abre conexão direta com o PostgreSQL: usa a API do Supabase via `supabase-js`, que administra as conexões (evita esgotamento em funções sem servidor).
 - Consultas sempre parametrizadas pelo `supabase-js`; nunca SQL montado por concatenação.
 
@@ -24,12 +25,15 @@ PostgreSQL gerenciado pelo Supabase. Tabelas de cada assunto: `docs/<assunto>/da
 - Dinheiro em `numeric(10,2)`, percentual em `numeric(5,2)`, nunca ponto flutuante; data com horário em `timestamptz`; horário do dia em `time`.
 - Domínios fechados são tipos enumerados: `permission_key`, `vehicle_type`, `vehicle_size`, `service_type`, `pricing_mode`, `payment_method`, `appointment_status`.
 - Nomes explícitos de restrições e índices: `fk_`, `uq_`, `ck_`, `idx_` + tabela + colunas (`uq_vehicles_plate`). O repositório usa o nome para converter a violação no código de erro (`PLATE_IN_USE`).
+- Gatilhos com `trg_` + tabela + regra (`trg_services_type_unchanged`), funções em `snake_case` com verbo (`set_updated_at`), sempre com `set search_path = ''` e nomes qualificados. O gatilho que recusa uma gravação levanta a violação com o nome `ck_` da regra (`ck_services_type_unchanged`), e o repositório a converte como as demais restrições.
 - Regras de preenchimento de uma linha: `CHECK`; regras entre linhas ou que impedem mudança de coluna: gatilho. Nenhuma combinação inválida pode ser gravada, mesmo se a aplicação falhar.
+- Os formatos do RN035 são conferidos pelos esquemas Zod. O banco confere só a forma normalizada das colunas únicas: placa em maiúsculas e sem hífen, e-mail em minúsculas e sem espaços. Os nomes únicos são comparados sem diferenciar maiúsculas (`lower(name)`).
 - Modelo em terceira forma normal. Os dados copiados no agendamento não são redundância: registram o que valia na ordem de serviço (RN037).
 
 ## Transações
 
 - Gravação em várias tabelas: função SQL, numa transação (RNF010).
+- Cada função de gravação entra em migration própria, na tarefa da funcionalidade que a chama; os parâmetros são definidos pelo serviço dessa tarefa.
 - Funções curtas e sem chamadas externas: envio de imagem ao Storage e criação de conta no Supabase Auth ficam fora delas.
 - Isolamento padrão `READ COMMITTED`; a alteração simultânea do mesmo registro é detectada pelo `updated_at` (`docs/padroes/api.md`).
 

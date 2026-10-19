@@ -58,6 +58,10 @@ Vínculo entre clientes e veículos.
 | `vehicle_type` | `hatch`, `sedan`, `suv`, `pickup` | Tipo do veículo. |
 | `vehicle_size` | `small`, `medium`, `large`, `extra_large` | Porte do veículo, exibido na interface como P, M, G e GG (RN002). |
 
+## Regras garantidas pelo banco
+
+- a placa é gravada em maiúsculas e sem hífen, no padrão Mercosul ou no antigo (`ck_vehicles_plate`), e o e-mail do cliente, em minúsculas e sem espaços (`ck_clients_email`).
+
 ## Gravações em várias tabelas
 
 Feitas por função SQL, em uma única transação, chamada pelo repositório (RNF010):

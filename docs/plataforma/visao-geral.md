@@ -42,7 +42,7 @@ Todo veículo é hatch, sedan, SUV ou picape; pagamento presencial por crédito,
 | Gráficos | Recharts | 3.10 |
 | Validação | Zod | 4.6 |
 | Formulários | React Hook Form | 7.90 |
-| Dados | PostgreSQL, Auth e Storage do Supabase, via `supabase-js` e `@supabase/ssr` | gerenciado; 2.117 e 0.12 |
+| Dados | PostgreSQL, Auth e Storage do Supabase, via `supabase-js` e `@supabase/ssr`; CLI do Supabase para as migrations | gerenciado; 2.117, 0.12 e 2.120 |
 | Qualidade | Vitest, ESLint e Prettier | 5.0, 9 e 3.9 |
 | Versionamento e CI | Git, GitHub e GitHub Actions | serviço |
 | Hospedagem | Vercel | serviço |
