@@ -17,6 +17,7 @@ As rotas de cada assunto estão em `docs/<assunto>/rotas.md`. Aqui fica o que va
 - JSON em `camelCase`; datas e horários ISO 8601 com fuso; dinheiro como número com duas casas.
 - Autenticação só pelo cookie de sessão; não há chave de API nem token enviado pela página.
 - Sucesso: 200, 201 (criado) e 204 (sem corpo).
+- Nenhuma resposta da API vai para cache: o tratamento único envia `Cache-Control: no-store` em todas, de sucesso e de erro, porque qualquer uma pode renovar os cookies da sessão.
 - API interna, sem versão no caminho. Mudanças de contrato aditivas (campo novo e opcional); remover ou renomear um campo só quando nenhuma página o usa mais.
 - O contrato de um módulo é definido antes da implementação. A especificação OpenAPI fica em `docs/plataforma/openapi.yaml` (criada na primeira tarefa de API) e muda no mesmo PR que a rota, junto com o `rotas.md` do assunto.
 
@@ -86,6 +87,8 @@ Em `fields`, cada campo aparece uma vez, com a primeira mensagem; o campo dentro
 | 429 | `ACCOUNT_LOCKED` | Muitas tentativas. Aguarde alguns minutos e tente novamente. (com `Retry-After`) |
 | 500 | `INTERNAL_ERROR` | Não foi possível concluir a operação. Tente novamente em instantes. |
 | 503 | `SERVICE_UNAVAILABLE` | O serviço está temporariamente indisponível. Tente novamente em instantes. |
+
+O 503 `SERVICE_UNAVAILABLE` responde quando o Supabase Auth não atende (rede, indisponibilidade ou limite de requisições), no login, no logout e na conferência da sessão; o detalhe vai só ao registro, numa linha `warn`.
 
 Os códigos e as mensagens ficam em `src/shared/errors`, usados pelo backend para responder e pelo frontend para exibir. Código novo entra nesta tabela no mesmo PR.
 
