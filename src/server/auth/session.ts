@@ -25,6 +25,8 @@ export type Account = {
   profile: Profile;
   firstName: string;
   lastName: string;
+  // Copy of the e-mail of the Supabase Auth account (docs/clientes/dados.md).
+  email: string;
   isActive: boolean;
   mustChangePassword: boolean;
   // In the order of RN025.
@@ -38,7 +40,7 @@ export type SignInResult =
 
 // Network failure, request limit or server error of Supabase Auth: the
 // credentials were not checked (docs/padroes/api.md, Erros).
-function isAuthUnavailable(error: AuthError): boolean {
+export function isAuthUnavailable(error: AuthError): boolean {
   const status = error.status ?? 0;
   return (
     isAuthRetryableFetchError(error) ||
@@ -48,7 +50,7 @@ function isAuthUnavailable(error: AuthError): boolean {
 }
 
 // RS018: only the code and the status of the error, never the e-mail.
-function logAuthUnavailable(error: AuthError): void {
+export function logAuthUnavailable(error: AuthError): void {
   logger.warn("auth_unavailable", {
     authCode: error.code ?? null,
     authStatus: error.status ?? null,
@@ -95,6 +97,21 @@ export async function signOut(): Promise<void> {
   throw error;
 }
 
+// Saves the new password through this browser's session. Supabase Auth keeps
+// this session and ends every other session of the account (decision 0048).
+export async function updatePassword(password: string): Promise<void> {
+  const supabase = await createSessionClient();
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error === null) {
+    return;
+  }
+  if (isAuthUnavailable(error)) {
+    logAuthUnavailable(error);
+    throw new AppError("SERVICE_UNAVAILABLE");
+  }
+  throw error;
+}
+
 // Decision 0046: the session is checked in Supabase Auth on every request, so
 // an ended session stops working at once; an expired access token is renewed
 // on the way. Null without a valid session.
@@ -131,6 +148,7 @@ function toAccountOfStaff(staff: StaffAccount): Account {
     profile: staff.isAdmin ? "admin" : "staff",
     firstName: staff.firstName,
     lastName: staff.lastName,
+    email: staff.email,
     isActive: staff.isActive,
     mustChangePassword: staff.mustChangePassword,
     permissions: listStaffPermissions(staff),
