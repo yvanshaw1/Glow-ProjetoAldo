@@ -22,20 +22,32 @@ export async function login({
   email,
   password,
 }: LoginInput): Promise<SessionUser> {
+  const userId = await checkPassword(email, password);
+  // RS005: the same answer for an unknown e-mail and a wrong password.
+  if (userId === null) {
+    throw new AppError("INVALID_CREDENTIALS");
+  }
+  const account = await keepSession(email, userId);
+  setRequestUser(account.id);
+  logger.info("login", { profile: account.profile });
+  return toSessionUser(account);
+}
+
+// RS006 (decision 0047): the attempt is counted before the password is
+// checked and given back when Supabase Auth does not answer. The right
+// password puts a new session in the cookies and returns the account id; a
+// wrong one returns null.
+async function checkPassword(
+  email: string,
+  password: string,
+): Promise<string | null> {
   await reserveLoginAttempt(email);
   const result = await signIn(email, password);
   if (result.outcome === "auth_unavailable") {
     await releaseLoginAttempt(email);
     throw new AppError("SERVICE_UNAVAILABLE");
   }
-  // RS005: the same answer for an unknown e-mail and a wrong password.
-  if (result.outcome === "invalid_credentials") {
-    throw new AppError("INVALID_CREDENTIALS");
-  }
-  const account = await keepSession(email, result.userId);
-  setRequestUser(account.id);
-  logger.info("login", { profile: account.profile });
-  return toSessionUser(account);
+  return result.outcome === "signed_in" ? result.userId : null;
 }
 
 // The password was right, so the count is reset; the session stays only for
