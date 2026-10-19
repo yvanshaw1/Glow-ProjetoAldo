@@ -230,10 +230,39 @@ function toValidationError(error: z.ZodError): AppError {
   );
 }
 
+type DatabaseError = { code: string; message: string };
+
+function isDatabaseError(error: unknown): error is DatabaseError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    "message" in error &&
+    typeof error.code === "string" &&
+    typeof error.message === "string"
+  );
+}
+
+// RS018: an error that is not an Error, such as the database error returned
+// by supabase-js, keeps only its code and message; its details may quote the
+// refused row, with data of the request body.
 function describeError(error: unknown) {
-  return error instanceof Error
-    ? { name: error.name, message: error.message, stack: error.stack ?? null }
-    : { name: null, message: inspect(error), stack: null };
+  if (error instanceof Error) {
+    return {
+      name: error.name,
+      message: error.message,
+      stack: error.stack ?? null,
+    };
+  }
+  if (isDatabaseError(error)) {
+    return {
+      name: null,
+      code: error.code,
+      message: error.message,
+      stack: null,
+    };
+  }
+  return { name: null, message: inspect(error), stack: null };
 }
 
 function respondProblem(

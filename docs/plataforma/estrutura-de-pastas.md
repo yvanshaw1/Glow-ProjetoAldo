@@ -40,7 +40,7 @@ App/
 │   │   ├── constants/               enums como listas `as const`, rótulos em português, limites
 │   │   └── api/                     tipos das respostas e da paginação
 │   ├── server/                      só servidor: todo arquivo começa com import 'server-only'
-│   │   ├── auth/                    session.ts · guards.ts · login-attempts.ts
+│   │   ├── auth/                    session.ts · guards.ts · login-attempts.ts · accounts.ts
 │   │   ├── http/                    handler.ts · logger.ts · respond.ts
 │   │   ├── rules/                   funções puras: pricing, status-transitions, scheduling, editing
 │   │   ├── services/                um arquivo por módulo: busca, chama as regras, grava

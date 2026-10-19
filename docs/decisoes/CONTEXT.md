@@ -55,3 +55,4 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0045](0045-testes-do-tratamento-unico.md) | Testes automatizados das regras, dos esquemas e do tratamento único das requisições |
 | [0046](0046-sessao-conferida-no-supabase-auth.md) | Sessão conferida no Supabase Auth a cada requisição |
 | [0047](0047-tentativa-de-login-reservada.md) | Tentativa de login reservada por função SQL antes de conferir a senha |
+| [0048](0048-senha-atual-conferida-por-nova-entrada.md) | Senha atual conferida por nova entrada no Supabase Auth, que renova a sessão do navegador |

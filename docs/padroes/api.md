@@ -71,6 +71,7 @@ Em `fields`, cada campo aparece uma vez, com a primeira mensagem; o campo dentro
 | 400 | `VALIDATION_ERROR` | Confira os campos destacados. (cada campo com a sua mensagem em `fields`) |
 | 401 | `UNAUTHENTICATED` | Sua sessão expirou. Entre novamente. |
 | 401 | `INVALID_CREDENTIALS` | E-mail ou senha incorretos. |
+| 401 | `INVALID_CURRENT_PASSWORD` | A senha atual está incorreta. |
 | 403 | `FORBIDDEN` | Você não tem permissão para realizar esta ação. |
 | 403 | `ACCOUNT_INACTIVE` | Esta conta está desativada. Procure a administração da empresa. |
 | 403 | `PASSWORD_CHANGE_REQUIRED` | Defina uma nova senha para continuar. |
@@ -88,7 +89,7 @@ Em `fields`, cada campo aparece uma vez, com a primeira mensagem; o campo dentro
 | 500 | `INTERNAL_ERROR` | Não foi possível concluir a operação. Tente novamente em instantes. |
 | 503 | `SERVICE_UNAVAILABLE` | O serviço está temporariamente indisponível. Tente novamente em instantes. |
 
-O 503 `SERVICE_UNAVAILABLE` responde quando o Supabase Auth não atende (rede, indisponibilidade ou limite de requisições), no login, no logout e na conferência da sessão; o detalhe vai só ao registro, numa linha `warn`.
+O 503 `SERVICE_UNAVAILABLE` responde quando o Supabase Auth não atende (rede, indisponibilidade ou limite de requisições), no login, no logout, na conferência da sessão, no cadastro e na troca de senha; o detalhe vai só ao registro, numa linha `warn`.
 
 Os códigos e as mensagens ficam em `src/shared/errors`, usados pelo backend para responder e pelo frontend para exibir. Código novo entra nesta tabela no mesmo PR.
 

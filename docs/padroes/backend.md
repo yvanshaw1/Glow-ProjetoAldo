@@ -22,7 +22,7 @@ Cada camada só conhece a de baixo.
 
 ```
 src/server/                    todo arquivo começa com import 'server-only'
-├── auth/          session.ts (sessão e perfil), guards.ts (requireUser, requireClient, requirePermission), login-attempts.ts
+├── auth/          session.ts (sessão e perfil), guards.ts (requireUser, requireClient, requirePermission), login-attempts.ts, accounts.ts (criação e remoção de contas no Supabase Auth)
 ├── http/          handler.ts (tratamento único e requestId), logger.ts (registro com níveis), respond.ts (JSON e paginação)
 ├── rules/         pricing.ts, status-transitions.ts, scheduling.ts, editing.ts
 ├── services/      um arquivo por módulo: auth.ts, catalog.ts, clients.ts, vehicles.ts, appointments.ts, dashboard.ts, staff.ts, roles.ts, settings.ts
@@ -51,7 +51,7 @@ As regras de preço, status, datas e edição são funções puras em `src/serve
 
 - Gravação em mais de uma tabela é feita por função SQL, chamada pelo repositório via `rpc`, numa transação (RNF010): `create_appointment`, `update_appointment`, `reschedule_appointment`, `save_service`, `save_role`, `link_vehicle`.
 - O controle de tentativas de login também usa funções SQL (`reserve_login_attempt` e `release_login_attempt`), para contar sem corrida entre requisições simultâneas (decisão 0047).
-- Cadastro de conta: cria no Supabase Auth com `auth.admin.createUser` e o e-mail confirmado, nunca com `signUp`, e depois o perfil; se o perfil falhar, remove a conta recém-criada.
+- Cadastro de conta: cria no Supabase Auth com `auth.admin.createUser` e o e-mail confirmado, nunca com `signUp`, e depois o perfil; se o perfil falhar, remove a conta recém-criada. A violação de `uq_clients_email` na gravação do perfil vira `EMAIL_IN_USE`, depois de removida a conta; se a remoção falhar, o id da conta vai ao registro numa linha `error`.
 - Dados relacionados na mesma consulta (seleção aninhada do `supabase-js`) ou em lote (`in`); nunca uma consulta por item de lista (N+1).
 - Registros com exclusão lógica (`deleted_at`) ficam fora de toda listagem e seleção.
 
@@ -74,7 +74,7 @@ Uma linha JSON por evento na saída padrão, lida nos registros da Vercel. O tra
 | `info` | requisição concluída sem falha nem anomalia; evento de negócio: login, agendamento criado, editado, cancelado ou concluído, alteração de cargo |
 | `debug` | detalhe de investigação, só em desenvolvimento |
 
-Nunca registrar senha, token, cookie, cabeçalho de autorização nem o corpo das rotas de autenticação (RS018).
+Nunca registrar senha, token, cookie, cabeçalho de autorização nem o corpo das rotas de autenticação (RS018). Do erro do banco, que não é `Error`, o registro guarda só o código e a mensagem: o detalhe pode citar a linha recusada, com dados do corpo.
 
 ## Cabeçalhos de segurança (`next.config.ts`)
 

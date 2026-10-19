@@ -13,6 +13,10 @@ export const ERROR_CATALOG = {
     status: 401,
     message: "E-mail ou senha incorretos.",
   },
+  INVALID_CURRENT_PASSWORD: {
+    status: 401,
+    message: "A senha atual está incorreta.",
+  },
   FORBIDDEN: {
     status: 403,
     message: "Você não tem permissão para realizar esta ação.",

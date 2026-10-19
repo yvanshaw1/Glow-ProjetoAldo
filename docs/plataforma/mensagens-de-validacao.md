@@ -7,7 +7,7 @@ relacionados: [RN035, RNF003]
 
 # Mensagens de validação
 
-Mensagens exibidas junto ao campo quando a entrada não segue RN035 ([RN035-formatos-dos-dados.md](RN035-formatos-dos-dados.md)); vêm de `src/shared/validation/formats.ts`. Na API, cada uma vai em `fields` do erro `VALIDATION_ERROR` ([../padroes/api.md](../padroes/api.md)).
+Mensagens exibidas junto ao campo quando a entrada não segue RN035 ([RN035-formatos-dos-dados.md](RN035-formatos-dos-dados.md)); vêm de `src/shared/validation/formats.ts`, exceto a da nova senha igual à atual, que vem de `auth.ts`, na mesma pasta. Na API, cada uma vai em `fields` do erro `VALIDATION_ERROR` ([../padroes/api.md](../padroes/api.md)).
 
 | Dado | Mensagem |
 |---|---|
@@ -17,6 +17,7 @@ Mensagens exibidas junto ao campo quando a entrada não segue RN035 ([RN035-form
 | Celular e WhatsApp | Informe um celular com DDD, como (82) 99999-8888. |
 | Telefone da empresa | Informe um telefone com DDD, como (82) 3333-4444. |
 | Senha | A senha deve ter de 8 a 72 caracteres, com letra maiúscula, número e caractere especial. |
+| Nova senha igual à atual | A nova senha precisa ser diferente da atual. |
 | Placa | Informe uma placa válida. |
 | Marca e modelo | Use de 1 a 40 caracteres. |
 | Cor | Use de 3 a 30 letras. |

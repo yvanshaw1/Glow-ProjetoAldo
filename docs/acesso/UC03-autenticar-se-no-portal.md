@@ -43,7 +43,7 @@ regras: [RN001, RN023, RN029]
 ### FA03 – Primeiro acesso de conta criada pelo painel administrativo (passo 4)
 
 1. O sistema identifica que a senha inicial, definida pelo funcionário no cadastro, ainda não foi trocada e solicita ao cliente uma nova senha (RN023, RS004).
-2. O cliente informa a nova senha e confirma.
+2. O cliente informa a senha inicial e a nova senha e confirma.
 3. O sistema valida e grava a nova senha (RS003, RS002), e o fluxo prossegue no passo 5.
 
 ### FA04 – Conta de funcionário (passo 5)

@@ -16,9 +16,55 @@ servers:
 tags:
   - name: auth
     description: >-
-      Login único de clientes e funcionários, sessão e logout
-      (docs/acesso/rotas.md, docs/acesso/autenticacao.md).
+      Cadastro de cliente, login único de clientes e funcionários, sessão,
+      logout e troca de senha (docs/acesso/rotas.md,
+      docs/acesso/autenticacao.md).
 paths:
+  /api/auth/register:
+    post:
+      tags:
+        - auth
+      operationId: register
+      summary: Cria a conta de cliente
+      description: >-
+        Cadastro pelo portal (UC02). Cria a conta no Supabase Auth, com o
+        e-mail já confirmado, e o cliente em clients; se a gravação do cliente
+        falhar, a conta recém-criada é removida. Não inicia sessão nem altera
+        a que existir: a interface leva ao login.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterInput"
+      responses:
+        "201":
+          description: Conta criada, com os dados gravados.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisteredClient"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "403":
+          $ref: "#/components/responses/ForbiddenOrigin"
+        "409":
+          description: >-
+            EMAIL_IN_USE: o e-mail já tem conta, de cliente ou de funcionário
+            (RN022).
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
   /api/auth/login:
     post:
       tags:
@@ -150,6 +196,81 @@ paths:
           $ref: "#/components/responses/InternalError"
         "503":
           $ref: "#/components/responses/ServiceUnavailable"
+  /api/auth/change-password:
+    post:
+      tags:
+        - auth
+      operationId: changePassword
+      summary: Troca a senha, inclusive a inicial no primeiro acesso
+      description: >-
+        Confere a senha atual, que no primeiro acesso é a inicial, por uma
+        nova entrada no Supabase Auth e grava a nova senha (UC03, UC04, UC08,
+        RN023, RS004, decisão 0048). Aceita a senha inicial pendente e remove
+        a marca de troca. A sessão deste navegador continua, renovada nos
+        cookies, e as de outros aparelhos são encerradas. As senhas atuais
+        erradas contam no mesmo bloqueio do login (RS006).
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordInput"
+      responses:
+        "204":
+          description: Senha alterada e marca de troca pendente removida.
+          headers:
+            Set-Cookie:
+              $ref: "#/components/headers/SessionCookies"
+        "400":
+          description: >-
+            VALIDATION_ERROR: nova senha igual à atual ou fora do formato de
+            RS003, com a mensagem em fields; ou corpo que não é JSON válido,
+            sem fields.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "401":
+          description: >-
+            INVALID_CURRENT_PASSWORD: senha atual incorreta; a sessão continua.
+            UNAUTHENTICATED: sem sessão, sessão expirada ou encerrada, ou conta
+            excluída ou sem perfil.
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "403":
+          description: >-
+            ACCOUNT_INACTIVE: funcionário desativado (RN026). FORBIDDEN: origem
+            recusada (RS014).
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "429":
+          description: >-
+            ACCOUNT_LOCKED: e-mail da conta bloqueado por excesso de senhas
+            erradas, no login ou na troca de senha (RS006).
+          headers:
+            Retry-After:
+              description: Segundos até o fim do bloqueio.
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+        "500":
+          $ref: "#/components/responses/InternalError"
+        "503":
+          $ref: "#/components/responses/ServiceUnavailable"
 components:
   securitySchemes:
     sessionCookie:
@@ -185,6 +306,99 @@ components:
         - staff
         - settings
       description: Uma permissão por página do painel, na ordem de RN025.
+    RegisterInput:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - phone
+        - password
+      properties:
+        firstName:
+          type: string
+          description: >-
+            Nome no formato de RN035: de 2 a 60 letras, com espaço, hífen e
+            apóstrofo; gravado com as iniciais maiúsculas e as partículas em
+            minúsculas.
+          examples:
+            - maria
+        lastName:
+          type: string
+          description: Sobrenome, no mesmo formato do nome.
+          examples:
+            - DA SILVA
+        email:
+          type: string
+          format: email
+          maxLength: 254
+          description: Formato de RN035; gravado em minúsculas e sem espaços.
+          examples:
+            - maria@email.com
+        phone:
+          type: string
+          description: >-
+            Celular com DDD válido e nove dígitos, iniciado por 9 (RN035); a
+            máscara é aceita e removida.
+          examples:
+            - (82) 99999-8888
+        password:
+          type: string
+          minLength: 8
+          description: >-
+            RS003: de 8 a 72 caracteres, com o máximo contado em bytes UTF-8,
+            ao menos uma letra maiúscula, um número e um caractere especial;
+            gravada como digitada.
+      description: >-
+        Campos não previstos são descartados (RS013), inclusive a marca de
+        troca de senha.
+    RegisteredClient:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - phone
+      properties:
+        firstName:
+          type: string
+          examples:
+            - Maria
+        lastName:
+          type: string
+          examples:
+            - da Silva
+        email:
+          type: string
+          examples:
+            - maria@email.com
+        phone:
+          type: string
+          pattern: "^[0-9]{11}$"
+          examples:
+            - "82999998888"
+      description: >-
+        Dados gravados, já normalizados (RN035): os mesmos campos de GET
+        /api/me/profile, sem o id, que vem sempre da sessão (RS009).
+    ChangePasswordInput:
+      type: object
+      required:
+        - currentPassword
+        - newPassword
+      properties:
+        currentPassword:
+          type: string
+          minLength: 1
+          description: >-
+            Senha atual, que no primeiro acesso é a inicial; como digitada,
+            até 72 bytes em UTF-8, sem as regras de composição do RS003.
+        newPassword:
+          type: string
+          minLength: 8
+          description: >-
+            Formato de RS003, como digitada, e diferente da atual (RN023,
+            RS004).
+      description: Campos não previstos são descartados (RS013).
     LoginInput:
       type: object
       required:
