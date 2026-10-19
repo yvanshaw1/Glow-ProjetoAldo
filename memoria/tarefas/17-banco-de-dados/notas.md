@@ -91,3 +91,15 @@ Resultados:
 - A carga foi num domingo à noite, então não há agendamentos "do dia" (`checked_in`, `awaiting_payment`). Há 2 `in_progress`, de serviços longos que começaram no sábado e terminam na segunda. Uma carga em dia aberto, durante o expediente, gera esses status.
 - `ck_appointments_total` é `total >= 0`, como diz a coluna do `dados.md`. A restrição não exige o desconto de 100% para o total zero, porque um total arredondado a zero com outro desconto quase total seria recusado sem ser inválido.
 - `docs/agendamento/dados.md` estava na lista de arquivos, mas nenhum texto aprovado o altera; ficou igual.
+
+## 2026-10-19 – desvio
+
+O primeiro CI do PR #18 falhou no `npm ci` ("Missing: @emnapi/runtime@1.11.3, @emnapi/core@1.11.3 from lock file"). O `npm install` da etapa 02 rodou com o npm 11.6.2 desta máquina (Node 24.11.1), que tirou do `package-lock.json` as dependências opcionais `@emnapi/*` que a `main` tinha. O CI usa o npm 11.19 (Node 24.21), que as exige.
+
+Correção:
+
+- O lock foi refeito a partir do lock da `main`, com o `package.json` da ramificação, por `npm install --package-lock-only` no npm 11.19.1 de um contêiner `node:24-slim`.
+- Em relação à `main`, só entram pacotes: o Supabase e suas dependências, mais as cópias internas de `@emnapi` do `@tailwindcss/oxide-wasm32-wasi`. Nenhuma versão muda e nada sai.
+- `npm ci --dry-run` no npm 11.19.1, `npm run check` e `npm audit --omit=dev` aprovados.
+
+Cuidado para as próximas tarefas: um `npm install` com npm anterior ao 11.19 volta a podar essas entradas. Quem instalar dependências deve atualizar o Node 24 local (o npm vem junto) ou gerar o lock como acima.
