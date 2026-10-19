@@ -252,7 +252,7 @@ describe("input protections (RS014)", () => {
     "refuses a body above 100 KB with 413 without calling the route, %s Content-Length",
     async (_label, hasContentLength) => {
       const body = jsonOfSize(MAX_JSON_BODY_BYTES + 1);
-      const contentLength = hasContentLength
+      const contentLength: Record<string, string> = hasContentLength
         ? { "content-length": String(body.length) }
         : {};
 
