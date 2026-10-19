@@ -69,7 +69,7 @@ Por exigência da disciplina, a aplicação também roda num contêiner Docker, 
 | Arquivo | Função |
 |---|---|
 | `Dockerfile` | três estágios a partir da imagem oficial do Node.js 24: `npm ci`; `next build` com a saída standalone (`output: "standalone"` no `next.config.ts`); imagem final só com o servidor compilado, `public/` e `.next/static/`, executada pelo usuário `node`, sem privilégios de administrador |
-| `.dockerignore` | deixa fora da imagem os `.env*` de qualquer pasta, `node_modules`, `.next`, `.git`, `.claude`, onde ficam os worktrees do Claude Code, e `documentos-formais` (RS016) |
+| `.dockerignore` | deixa fora da imagem os `.env*` de qualquer pasta, `node_modules`, `.next`, `.git`, `.claude`, onde ficam os worktrees do Claude Code, `documentos-formais` e `wireframes` (RS016) |
 | `compose.yaml` | serviço `app` em `http://localhost:3000`, com as variáveis lidas do `.env.local` na execução |
 
 Para usar:

@@ -14,6 +14,7 @@ O repositório segue a Interpretable Context Methodology (ICM): a estrutura de p
 - `docs/`: requisitos, regras de negócio, casos de uso, dados e rotas por assunto; padrões de código; registros de decisão.
 - `memoria/tarefas/`: plano, relatório e notas de cada tarefa.
 - `documentos-formais/`: os três documentos formais em Word exigidos pela disciplina. A IA usa os módulos de `docs/` e só abre os `.docx` quando alguém pede.
+- `wireframes/`: telas de referência, em PDF, para o esqueleto e os componentes das páginas; o `README.md` da pasta explica o uso.
 
 **Para a equipe:** como pedir tarefas à IA, etapa por etapa, está em [`guia/como-pedir.md`](guia/como-pedir.md).
 

@@ -87,7 +87,7 @@ As seis funções de gravação em várias tabelas ficaram para a tarefa de cada
   - L5, só os formatos de que a unicidade depende → `banco.md`, `clientes/dados.md`, `equipe/dados.md`, `catalogo/dados.md` e `autenticacao.md`;
   - L6, `seed.sql` pela CLI e `seed-demo.sql` pelo SQL Editor → `infraestrutura.md` e `migration.md`;
   - L7, nomes de gatilhos e funções → `banco.md`.
-- **Decisões:** 0042, 0043 e 0044 criadas. O PR #16, ainda aberto, cria a 0041. Se esta tarefa for incorporada antes dele, as três passam a 0041, 0042 e 0043, junto com as citações em `banco.md`, `migration.md`, `infraestrutura.md`, `seguranca.md`, `autenticacao.md`, `setup/questionario.md` e a migration.
+- **Decisões:** 0042, 0043 e 0044 criadas, depois da 0041 do PR #16, que foi incorporado antes desta tarefa. A numeração é definitiva.
 - **Documentos formais a atualizar:**
   - **Documentação de Arquitetura de Software, seção 5:**
     - o banco garante também a forma normalizada de placa e e-mail, nomes únicos sem diferenciar maiúsculas, um único administrador e os quatro preços por porte;

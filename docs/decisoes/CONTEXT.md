@@ -48,6 +48,7 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0038](0038-execucao-em-conteiner.md) | Docker para executar a aplicação em contêiner |
 | [0039](0039-tarefas-de-ponta-a-ponta.md) | Tarefas de ponta a ponta, sem dono por área |
 | [0040](0040-documentos-formais-versionados.md) | Documentos formais versionados em documentos-formais/ |
+| [0041](0041-wireframes-de-referencia.md) | Wireframes de referência versionados em wireframes/ |
 | [0042](0042-banco-sem-privilegios-publicos.md) | Banco sem privilégios para as chaves públicas |
 | [0043](0043-cli-e-banco-local-do-supabase.md) | CLI do Supabase fixada no projeto e banco local para conferir as migrations |
 | [0044](0044-preparacao-sem-painel.md) | Preparação do Supabase sem configuração manual no painel |
