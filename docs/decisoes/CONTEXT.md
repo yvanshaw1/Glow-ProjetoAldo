@@ -31,7 +31,7 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0021](0021-valores-calculados-na-edicao.md) | Edição de agendamento com valores sempre calculados pelo sistema |
 | [0022](0022-exclusao-logica.md) | Exclusão lógica de clientes e de serviços |
 | [0023](0023-typescript-6-e-node-24.md) | TypeScript 6.0 e Node.js 24 LTS |
-| [0024](0024-testes-das-regras-de-negocio.md) | Testes automatizados apenas das regras de negócio |
+| [0024](0024-testes-das-regras-de-negocio.md) | Testes automatizados apenas das regras de negócio (substituída por 0045) |
 | [0025](0025-erros-rfc-9457.md) | Erros no formato Problem Details (RFC 9457) |
 | [0026](0026-api-sem-versao.md) | API sem versão no caminho, com mudanças aditivas |
 | [0027](0027-react-hook-form.md) | Formulários com React Hook Form |
@@ -52,3 +52,4 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0042](0042-banco-sem-privilegios-publicos.md) | Banco sem privilégios para as chaves públicas |
 | [0043](0043-cli-e-banco-local-do-supabase.md) | CLI do Supabase fixada no projeto e banco local para conferir as migrations |
 | [0044](0044-preparacao-sem-painel.md) | Preparação do Supabase sem configuração manual no painel |
+| [0045](0045-testes-do-tratamento-unico.md) | Testes automatizados das regras, dos esquemas e do tratamento único das requisições |

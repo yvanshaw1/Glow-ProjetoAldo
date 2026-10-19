@@ -54,6 +54,7 @@ App/
 │   ├── seed-demo.sql                dados fictícios de demonstração (opcional)
 │   └── scripts/create-admin.mjs     conta de administrador, com SEED_ADMIN_* do ambiente
 ├── tests/
+│   ├── http/                        espelha src/server/http
 │   ├── rules/                       espelha src/server/rules
 │   └── validation/                  espelha src/shared/validation
 └── raiz: package.json (engines: Node 24) · package-lock.json · next.config.ts · tsconfig.json ·

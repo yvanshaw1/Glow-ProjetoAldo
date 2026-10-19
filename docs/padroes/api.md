@@ -26,9 +26,9 @@ As rotas de cada assunto estão em `docs/<assunto>/rotas.md`. Aqui fica o que va
 - Campos não previstos são descartados; valores calculados pelo sistema (preços, totais, porte, status, previsão, cópias do agendamento) nunca são aceitos na entrada.
 - Id no caminho deve ser UUID válido, isto é, 32 algarismos hexadecimais no formato 8-4-4-4-12, como aceita o tipo `uuid` do PostgreSQL, sem exigir a versão (os ids do `seed-demo.sql` vêm de `md5`); id inválido responde o mesmo 404 de registro inexistente.
 - Filtros, ordenação e paginação só aceitam os valores previstos.
-- Gravação só com `application/json` (exceto envio de imagem); outro formato → 415. Corpo JSON até 100 KB e imagem até 2 MB; acima → 413.
+- Gravação com corpo só com `application/json` (exceto envio de imagem); outro formato → 415. A gravação sem corpo, como o `DELETE` e o logout, dispensa o formato. Corpo JSON até 100 KB (102.400 bytes) e imagem até 2 MB; acima → 413. Corpo que não é JSON válido → 400 `VALIDATION_ERROR`, sem `fields`.
 - Dinheiro calculado no servidor em centavos inteiros.
-- Proteção contra CSRF: cookies `SameSite=Lax`, gravação só com JSON e conferência do cabeçalho `Origin` contra `APP_URL` (ou `VERCEL_URL` na pré-visualização) (RS014).
+- Proteção contra CSRF: cookies `SameSite=Lax`, gravação só com JSON e conferência do cabeçalho `Origin` em toda gravação (`POST`, `PUT`, `PATCH` e `DELETE`): o host do `Origin` precisa ser o da própria requisição (`X-Forwarded-Host`, na Vercel, ou `Host`), como o Next.js confere nas Server Actions, e a gravação sem `Origin` é recusada (RS014). A origem recusada responde 403 `FORBIDDEN` e gera uma linha `warn` no registro.
 
 ## Paginação (RNF008)
 
@@ -62,6 +62,8 @@ Toda resposta de erro é Problem Details, com `Content-Type: application/problem
   "requestId": "7f3c9a1e"
 }
 ```
+
+Em `fields`, cada campo aparece uma vez, com a primeira mensagem; o campo dentro de objeto ou lista usa o caminho com pontos (`vehicle.plate`, `services.0.serviceId`).
 
 | HTTP | `code` | Mensagem |
 |---|---|---|

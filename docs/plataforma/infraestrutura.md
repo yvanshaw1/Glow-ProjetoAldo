@@ -28,7 +28,6 @@ Nenhuma usa o prefixo `NEXT_PUBLIC_`, então nenhuma chega ao navegador. O repos
 | `SUPABASE_URL` | não | endereço do projeto |
 | `SUPABASE_ANON_KEY` | não | chave pública, usada pelo servidor no login e na validação da sessão |
 | `SUPABASE_SERVICE_ROLE_KEY` | sim | chave de serviço: leitura e gravação dos dados e criação de contas, só em `src/server` |
-| `APP_URL` | não | endereço de produção, usado na conferência da origem das requisições; nas pré-visualizações vale `VERCEL_URL` |
 | `APP_TIMEZONE` | não | fuso da empresa, `America/Maceio` |
 | `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` | sim | conta de administrador, só para o script de dados iniciais |
 

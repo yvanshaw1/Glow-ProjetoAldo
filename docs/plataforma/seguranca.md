@@ -32,7 +32,7 @@ Todos os RS são obrigatórios no MVP. A coluna Implementação diz como cada um
 
 ## Complementos
 
-Complementam essas medidas o fechamento do banco ao acesso direto, descrito em `docs/padroes/banco.md`, e o envio dos cabeçalhos de segurança `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Strict-Transport-Security` e `Content-Security-Policy`, esta impedindo a exibição das páginas dentro de outros sites e o carregamento de objetos incorporados, em todas as respostas, configurados em `next.config.ts`, e os limites de formato e de tamanho das requisições, descritos em `docs/padroes/api.md`.
+Complementam essas medidas o fechamento do banco ao acesso direto, descrito em `docs/padroes/banco.md`, e o envio dos cabeçalhos de segurança `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Strict-Transport-Security` e `Content-Security-Policy`, esta impedindo a exibição das páginas dentro de outros sites, o carregamento de objetos incorporados e o desvio de links e formulários, em todas as respostas, configurados em `next.config.ts` com os valores de `docs/padroes/backend.md`, e os limites de formato e de tamanho das requisições, descritos em `docs/padroes/api.md`.
 
 A segurança também é verificada durante o desenvolvimento: a lista OWASP Top 10 orienta as verificações de segurança de cada pull request, descritas na Documentação de Desenvolvimento com IA, e o CI audita as dependências a cada alteração (`docs/plataforma/infraestrutura.md`). Os acessos seguem o princípio do menor privilégio: a chave de serviço do Supabase é usada apenas pelo código de `src/server`, o fluxo do GitHub Actions tem somente permissão de leitura do repositório e não recebe nenhuma chave, e cada funcionário acessa apenas as páginas do seu cargo.
 

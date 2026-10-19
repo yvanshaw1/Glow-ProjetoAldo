@@ -56,6 +56,7 @@ As regras de preço, status, datas e edição são funções puras em `src/serve
 
 ## Erros
 
+- Toda rota exporta os métodos por `handleRoute`, de `src/server/http/handler.ts`: `export const POST = handleRoute(async ({ request, params, body }) => ...)`. Nas gravações, ele confere origem, tamanho e formato antes da rota (`api.md`, Validação) e entrega o corpo já convertido; a rota o valida com `schema.parse`, e o `ZodError` vira 400 `VALIDATION_ERROR`. O sucesso responde por `src/server/http/respond.ts`: `respondOk`, `respondCreated`, `respondNoContent` e `respondPage`. As rotas ficam no ambiente Node.js, o padrão, porque o registro usa `AsyncLocalStorage`.
 - Erro previsto: `throw new AppError(code)`, com código do catálogo de `src/shared/errors`; só o tratamento único (`src/server/http/handler.ts`) o converte em resposta.
 - Nenhum `catch` vazio; capturar só para tratar ou para acrescentar contexto e relançar.
 - O `supabase-js` devolve o erro no resultado em vez de lançar: conferir `error` em toda chamada; o repositório converte em falha da aplicação (violação de `uq_vehicles_plate` vira `PLATE_IN_USE`), e o detalhe técnico vai só para o registro.
@@ -63,13 +64,27 @@ As regras de preço, status, datas e edição são funções puras em `src/serve
 
 ## Registro (`src/server/http/logger.ts`)
 
-Uma linha JSON por evento na saída padrão, lida nos registros da Vercel, com nível, `requestId`, rota, status, usuário e duração. O `requestId` é gerado no início da requisição e incluído em todas as linhas dela via `AsyncLocalStorage` do Node.js.
+Uma linha JSON por evento na saída padrão, lida nos registros da Vercel. O tratamento único grava uma linha ao fim de cada requisição da API, com nível, `requestId`, método, caminho sem a query string, status, código do erro, usuário e duração; os serviços gravam linhas próprias para os eventos de negócio. O `requestId` é gerado no início da requisição e incluído em todas as linhas dela via `AsyncLocalStorage` do Node.js.
 
 | Nível | Quando |
 |---|---|
 | `error` | falha inesperada que vira 500, com o rastro de execução |
 | `warn` | anomalia tratada: bloqueio de login, conflito de versão, origem recusada |
-| `info` | evento de negócio: login, agendamento criado, editado, cancelado ou concluído, alteração de cargo |
+| `info` | requisição concluída sem falha nem anomalia; evento de negócio: login, agendamento criado, editado, cancelado ou concluído, alteração de cargo |
 | `debug` | detalhe de investigação, só em desenvolvimento |
 
 Nunca registrar senha, token, cookie, cabeçalho de autorização nem o corpo das rotas de autenticação (RS018).
+
+## Cabeçalhos de segurança (`next.config.ts`)
+
+Enviados em todas as respostas, das páginas, da API e dos arquivos estáticos:
+
+| Cabeçalho | Valor |
+|---|---|
+| `X-Frame-Options` | `DENY` |
+| `X-Content-Type-Options` | `nosniff` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| `Strict-Transport-Security` | `max-age=63072000` (dois anos) |
+| `Content-Security-Policy` | `frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'` |
+
+A política de conteúdo não restringe os scripts, o que exigiria um nonce a cada requisição e páginas sempre dinâmicas; contra XSS, vale o escape do React (RS014).
