@@ -4,7 +4,7 @@ titulo: "Documentos formais atualizados com a #15 e a #17, sem confirmação de 
 areas: [cicd]
 tipo: documentacao
 requisitos: [RS003, RS015, RS016]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 23:03 18/10/2026
 ---
