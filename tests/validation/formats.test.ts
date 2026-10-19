@@ -19,6 +19,7 @@ import {
   plainTextSchema,
   plateSchema,
   searchTermSchema,
+  signInPasswordSchema,
   vehicleBrandModelSchema,
   vehicleColorSchema,
   vehicleYearSchema,
@@ -270,6 +271,35 @@ describe("passwordSchema", () => {
   it("rejects an empty value with the required message", () => {
     expect(messageOf(passwordSchema, "")).toBe(REQUIRED);
     expect(messageOf(passwordSchema, undefined)).toBe(REQUIRED);
+  });
+});
+
+describe("signInPasswordSchema", () => {
+  // "é" takes two bytes in UTF-8.
+  const ACCENTED = "é";
+
+  it("keeps the sign-in password as typed", () => {
+    expect(signInPasswordSchema.parse(" Senha forte 1! ")).toBe(
+      " Senha forte 1! ",
+    );
+  });
+
+  it("accepts a sign-in password outside the RS003 rules, answered with 401 by the service (RS005)", () => {
+    expect(signInPasswordSchema.parse("abc")).toBe("abc");
+  });
+
+  it("accepts a sign-in password of exactly 72 bytes", () => {
+    const seventyTwoBytes = ACCENTED.repeat(36);
+    expect(signInPasswordSchema.parse(seventyTwoBytes)).toBe(seventyTwoBytes);
+  });
+
+  it("rejects a sign-in password above 72 bytes in UTF-8 with the RS003 message", () => {
+    expect(messageOf(signInPasswordSchema, ACCENTED.repeat(37))).toBe(PASSWORD);
+  });
+
+  it("requires the sign-in password", () => {
+    expect(messageOf(signInPasswordSchema, "")).toBe(REQUIRED);
+    expect(messageOf(signInPasswordSchema, undefined)).toBe(REQUIRED);
   });
 });
 
