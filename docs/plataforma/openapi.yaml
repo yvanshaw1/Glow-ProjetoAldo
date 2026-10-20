@@ -19,6 +19,14 @@ tags:
       Cadastro de cliente, login único de clientes e funcionários, sessão,
       logout e troca de senha (docs/acesso/rotas.md,
       docs/acesso/autenticacao.md).
+  - name: public
+    description: >-
+      Dados da empresa e catálogo, sem autenticação
+      (docs/configuracoes/rotas.md, docs/catalogo/rotas.md).
+  - name: settings
+    description: >-
+      Configurações do painel: dados da empresa, disponibilidade e formas de
+      pagamento, com a permissão settings (docs/configuracoes/rotas.md).
 paths:
   /api/auth/register:
     post:
@@ -271,6 +279,88 @@ paths:
           $ref: "#/components/responses/InternalError"
         "503":
           $ref: "#/components/responses/ServiceUnavailable"
+  /api/public/company:
+    get:
+      tags:
+        - public
+      operationId: getPublicCompany
+      summary: Devolve os dados institucionais e a disponibilidade
+      description: >-
+        Dados exibidos no rodapé e na página inicial do portal (RN028, RF004)
+        e a disponibilidade dos sete dias da semana. O CNPJ não é público. O
+        dado opcional vazio vem como null.
+      security: []
+      responses:
+        "200":
+          description: Dados da empresa e disponibilidade.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicCompany"
+        "500":
+          $ref: "#/components/responses/InternalError"
+  /api/admin/settings/company:
+    get:
+      tags:
+        - settings
+      operationId: getCompanySettings
+      summary: Devolve os dados da empresa para edição
+      description: >-
+        Dados da empresa (UC22), com o updatedAt que o PUT devolve (RNF011).
+      security:
+        - sessionCookie: []
+      responses:
+        "200":
+          description: Dados da empresa.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanySettings"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/PanelForbidden"
+        "500":
+          $ref: "#/components/responses/InternalError"
+    put:
+      tags:
+        - settings
+      operationId: updateCompanySettings
+      summary: Grava os dados da empresa
+      description: >-
+        Substitui os dados da empresa (UC22), com os formatos de RN035. O dado
+        opcional ausente, null ou vazio apaga o valor gravado. A gravação só
+        acontece se o registro ainda tiver o updatedAt enviado, conferido na
+        própria instrução (RNF011, decisão 0009).
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanySettingsInput"
+      responses:
+        "200":
+          description: Dados gravados, já normalizados, com o novo updatedAt.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanySettings"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/PanelForbidden"
+        "409":
+          $ref: "#/components/responses/VersionConflict"
+        "413":
+          $ref: "#/components/responses/PayloadTooLarge"
+        "415":
+          $ref: "#/components/responses/UnsupportedMediaType"
+        "500":
+          $ref: "#/components/responses/InternalError"
 components:
   securitySchemes:
     sessionCookie:
@@ -451,6 +541,276 @@ components:
           examples:
             - - dashboard
               - appointments
+    BusinessDay:
+      type: object
+      required:
+        - weekday
+        - isOpen
+        - opensAt
+        - closesAt
+        - breakStartsAt
+        - breakEndsAt
+      properties:
+        weekday:
+          type: integer
+          minimum: 0
+          maximum: 6
+          description: Dia da semana, de domingo (0) a sábado (6).
+        isOpen:
+          type: boolean
+          description: Indica se a empresa funciona no dia.
+        opensAt:
+          type:
+            - string
+            - "null"
+          pattern: "^([01][0-9]|2[0-3]):(00|30)$"
+          description: >-
+            Abertura em HH:MM, no fuso da empresa, sem data nem deslocamento;
+            null no dia fechado.
+          examples:
+            - "08:00"
+        closesAt:
+          type:
+            - string
+            - "null"
+          pattern: "^([01][0-9]|2[0-3]):(00|30)$"
+          description: Encerramento em HH:MM; null no dia fechado.
+          examples:
+            - "18:00"
+        breakStartsAt:
+          type:
+            - string
+            - "null"
+          pattern: "^([01][0-9]|2[0-3]):(00|30)$"
+          description: Início da pausa em HH:MM (RN013); null sem pausa.
+          examples:
+            - "12:00"
+        breakEndsAt:
+          type:
+            - string
+            - "null"
+          pattern: "^([01][0-9]|2[0-3]):(00|30)$"
+          description: Fim da pausa em HH:MM; null sem pausa.
+          examples:
+            - "13:00"
+    PublicCompany:
+      type: object
+      required:
+        - companyName
+        - email
+        - phone
+        - whatsapp
+        - address
+        - instagramUrl
+        - facebookUrl
+        - businessHours
+      properties:
+        companyName:
+          type: string
+          maxLength: 100
+          examples:
+            - Glow – Estética Automotiva
+        email:
+          type:
+            - string
+            - "null"
+          examples:
+            - contato@glow.com
+        phone:
+          type:
+            - string
+            - "null"
+          pattern: "^[0-9]{10,11}$"
+          description: Fixo ou celular, só os algarismos.
+          examples:
+            - "8233334444"
+        whatsapp:
+          type:
+            - string
+            - "null"
+          pattern: "^[0-9]{11}$"
+          description: Celular, só os algarismos.
+          examples:
+            - "82999998888"
+        address:
+          type:
+            - string
+            - "null"
+          maxLength: 200
+          examples:
+            - Rua Exemplo, 100 – Ponta Verde, Maceió – AL
+        instagramUrl:
+          type:
+            - string
+            - "null"
+          format: uri
+          maxLength: 200
+          examples:
+            - https://instagram.com/glow
+        facebookUrl:
+          type:
+            - string
+            - "null"
+          format: uri
+          maxLength: 200
+          examples:
+            - https://facebook.com/glow
+        businessHours:
+          type: array
+          minItems: 7
+          maxItems: 7
+          items:
+            $ref: "#/components/schemas/BusinessDay"
+          description: Os sete dias, de domingo a sábado.
+      description: >-
+        Dados como gravados, já normalizados (RN035); o opcional vazio é null.
+    CompanySettings:
+      type: object
+      required:
+        - companyName
+        - cnpj
+        - email
+        - phone
+        - address
+        - instagramUrl
+        - facebookUrl
+        - whatsapp
+        - updatedAt
+      properties:
+        companyName:
+          type: string
+          maxLength: 100
+          examples:
+            - Glow – Estética Automotiva
+        cnpj:
+          type:
+            - string
+            - "null"
+          pattern: "^[0-9A-Z]{12}[0-9]{2}$"
+          description: Sem a máscara, com as letras em maiúsculas.
+          examples:
+            - "12345678000195"
+        email:
+          type:
+            - string
+            - "null"
+          examples:
+            - contato@glow.com
+        phone:
+          type:
+            - string
+            - "null"
+          pattern: "^[0-9]{10,11}$"
+          examples:
+            - "8233334444"
+        address:
+          type:
+            - string
+            - "null"
+          maxLength: 200
+        instagramUrl:
+          type:
+            - string
+            - "null"
+          format: uri
+          maxLength: 200
+        facebookUrl:
+          type:
+            - string
+            - "null"
+          format: uri
+          maxLength: 200
+        whatsapp:
+          type:
+            - string
+            - "null"
+          pattern: "^[0-9]{11}$"
+          examples:
+            - "82999998888"
+        updatedAt:
+          type: string
+          format: date-time
+          description: >-
+            Versão do registro: enviada de volta no PUT como veio, tratada como
+            texto (RNF011).
+          examples:
+            - "2026-10-20T13:45:12.345678+00:00"
+      description: Dados como gravados, já normalizados (RN035).
+    CompanySettingsInput:
+      type: object
+      required:
+        - companyName
+        - updatedAt
+      properties:
+        companyName:
+          type: string
+          description: Até 100 caracteres, em texto puro (RN035).
+          examples:
+            - Glow – Estética Automotiva
+        cnpj:
+          type:
+            - string
+            - "null"
+          description: >-
+            CNPJ de RN035, com ou sem a máscara, inclusive o alfanumérico;
+            gravado sem a máscara, com as letras em maiúsculas.
+          examples:
+            - 12.345.678/0001-95
+        email:
+          type:
+            - string
+            - "null"
+          description: Formato de RN035; gravado em minúsculas.
+          examples:
+            - contato@glow.com
+        phone:
+          type:
+            - string
+            - "null"
+          description: >-
+            Fixo ou celular com DDD válido (RN035); a máscara é aceita e
+            removida.
+          examples:
+            - (82) 3333-4444
+        address:
+          type:
+            - string
+            - "null"
+          description: Até 200 caracteres, em texto puro.
+        instagramUrl:
+          type:
+            - string
+            - "null"
+          description: >-
+            Endereço iniciado por https://, em instagram.com ou num subdomínio,
+            com o caminho do perfil, até 200 caracteres (RN035).
+          examples:
+            - https://instagram.com/glow
+        facebookUrl:
+          type:
+            - string
+            - "null"
+          description: >-
+            Endereço iniciado por https://, em facebook.com ou num subdomínio,
+            com o caminho da página, até 200 caracteres (RN035).
+          examples:
+            - https://facebook.com/glow
+        whatsapp:
+          type:
+            - string
+            - "null"
+          description: >-
+            Celular com DDD válido e nove dígitos, iniciado por 9 (RN035); a
+            máscara é aceita e removida.
+          examples:
+            - (82) 99999-8888
+        updatedAt:
+          type: string
+          format: date-time
+          description: O updatedAt da última leitura, como veio.
+      description: >-
+        Campos não previstos são descartados (RS013). O opcional ausente, null
+        ou vazio apaga o valor gravado.
     ProblemDetails:
       type: object
       required:
@@ -536,6 +896,32 @@ components:
             $ref: "#/components/schemas/ProblemDetails"
     ServiceUnavailable:
       description: "SERVICE_UNAVAILABLE: o Supabase Auth não atendeu."
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    Unauthenticated:
+      description: >-
+        UNAUTHENTICATED: sem sessão, sessão expirada ou encerrada, ou conta
+        excluída ou sem perfil.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    PanelForbidden:
+      description: >-
+        FORBIDDEN: cliente ou funcionário sem a permissão da página (RS008,
+        RS010) ou, nas gravações, origem recusada (RS014). ACCOUNT_INACTIVE:
+        funcionário desativado (RN026). PASSWORD_CHANGE_REQUIRED: senha inicial
+        pendente de troca (RS004).
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/ProblemDetails"
+    VersionConflict:
+      description: >-
+        VERSION_CONFLICT: o registro mudou depois da leitura, e nada foi
+        gravado (RNF011).
       content:
         application/problem+json:
           schema:
