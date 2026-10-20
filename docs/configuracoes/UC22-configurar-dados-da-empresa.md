@@ -5,7 +5,7 @@ assunto: configuracoes
 ator: Funcionário
 origem: Documentação de Análise do Sistema, seção 10.2 (Quadro 47)
 requisitos: [RF004, RF085, RF086]
-regras: [RN028]
+regras: [RN028, RN035]
 ---
 
 # UC22 – Configurar dados da empresa
@@ -43,5 +43,5 @@ Não há.
 ## Relacionados
 
 - Requisitos: [RF004](../catalogo/requisitos.md), [RF085](requisitos.md), [RF086](requisitos.md)
-- Regras: [RN028](RN028-dados-institucionais.md)
+- Regras: [RN028](RN028-dados-institucionais.md), [RN035](../plataforma/RN035-formatos-dos-dados.md)
 - Telas e API: [rotas.md](rotas.md)

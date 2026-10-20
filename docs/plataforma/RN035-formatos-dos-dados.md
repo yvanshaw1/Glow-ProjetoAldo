@@ -43,7 +43,7 @@ DDD válido é um dos 67 códigos nacionais da Anatel: 11 a 19, 21, 22, 24, 27, 
 
 ## Campos obrigatórios e opcionais
 
-Um cadastro só é gravado quando todas as obrigatórias estão presentes e válidas.
+Um cadastro só é gravado quando todas as obrigatórias estão presentes e válidas. Uma opcional deixada vazia fica sem valor, e o valor que estava gravado é apagado.
 
 | Cadastro | Obrigatórias | Opcionais |
 |---|---|---|

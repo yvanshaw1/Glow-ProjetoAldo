@@ -18,11 +18,11 @@ O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calc
 | Transições de status | sequência completa, conclusão com troca da forma de pagamento, cancelamento pelo cliente e pelo funcionário, reagendamento único (RN017, RN018, RN019, RN020) |
 | Datas e previsão | duração estimada; fora do expediente, na pausa, em dia fechado, fora dos intervalos de 30 minutos, no passado; previsão atravessando a pausa, a noite e dias fechados e terminando no encerramento (RN013, RN014, RN015, RN034) |
 | Regras de edição | quem edita em cada status; cliente só posterga; funcionário adianta ou posterga; data incompatível com o status é recusada; data mantida (RN032, RN033) |
-| Validação e formatos | nomes com partículas, e-mail, celular, placa nos dois padrões, ano, CNPJ, senha, descarte de campos não previstos (RN035) |
+| Validação e formatos | nomes com partículas, e-mail, celular, placa nos dois padrões, ano, CNPJ, senha, descarte de campos não previstos, dado opcional vazio, versão do registro (`updatedAt`) (RN035) |
 | Tratamento único | Problem Details de `AppError`, de erro de validação e de erro inesperado; recusa por formato, tamanho e origem sem chegar à rota; registro sem senha, token, cookie, cabeçalho de autorização nem corpo; resposta fora de cache; usuário em toda linha do registro (RS014, RS017, RS018) |
 | Cliente da API | JSON e Problem Details; 401 `UNAUTHENTICATED` leva a `/login` com a página atual, os outros 401 voltam à tela, e o da carga da sessão não sai da página; 403 `PASSWORD_CHANGE_REQUIRED` leva a `/set-password`; nenhuma chamada repetida; falha de rede e resposta fora do formato; parâmetros de consulta, sem os vazios |
 | Proteção das páginas | visitante, troca pendente, cliente, funcionário com e sem a permissão, sem nenhuma permissão e admin, em cada tipo de página; `next` de outro site, da API e das telas de acesso (RF010, RN025, RS004, RS010) |
-| Formatação | telefone celular e fixo, durante a digitação e já formatado; moeda, inclusive zero, e a leitura do campo monetário; data de um instante no fuso da empresa, perto da meia-noite, e data de calendário; data e hora; duração com e sem horas ou minutos (RN035, RNF016) |
+| Formatação | telefone celular e fixo, durante a digitação e já formatado; moeda, inclusive zero, e a leitura do campo monetário; data de um instante no fuso da empresa, perto da meia-noite, e data de calendário; data e hora; duração com e sem horas ou minutos; CNPJ durante a digitação e alfanumérico; links de telefone e de WhatsApp; ano no fuso da empresa (RN035, RNF016) |
 
 Todo caso desta tabela tem ao menos um teste, e o revisor confere a correspondência no pull request.
 
