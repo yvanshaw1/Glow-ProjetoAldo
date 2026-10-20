@@ -10,7 +10,7 @@ Comandos e passos: `workflows/procedimentos/testes.md`.
 
 ## O que é testado automaticamente
 
-O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calculos.md`), os esquemas de `src/shared/validation`, o tratamento único das requisições (`src/server/http`), este com `Request` e `Response` padrão, sem servidor, e o cliente da API (`src/lib/api-client.ts`), com `fetch` e `location` simulados. Fluxos de tela são testados à mão na pré-visualização (decisão 0050). Os testes espelham o código: `tests/rules/<arquivo>.test.ts` para `src/server/rules/`, `tests/validation/<módulo>.test.ts` para `src/shared/validation/` `tests/http/<arquivo>.test.ts` para `src/server/http/` e `tests/lib/<arquivo>.test.ts` para `src/lib/`.
+O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calculos.md`), os esquemas de `src/shared/validation`, o tratamento único das requisições (`src/server/http`), este com `Request` e `Response` padrão, sem servidor, o cliente da API (`src/lib/api-client.ts`), com `fetch` e `location` simulados, as funções de exibição de `src/shared/format` e a decisão de acesso às páginas (`src/server/auth/page-access.ts`). Fluxos de tela são testados à mão na pré-visualização (decisão 0052). Os testes espelham o código: `tests/rules/<arquivo>.test.ts` para `src/server/rules/`, `tests/validation/<módulo>.test.ts` para `src/shared/validation/` `tests/http/<arquivo>.test.ts` para `src/server/http/`, `tests/lib/<arquivo>.test.ts` para `src/lib/`, `tests/format/<arquivo>.test.ts` para `src/shared/format/` e `tests/auth/<arquivo>.test.ts` para as funções puras de `src/server/auth/`.
 
 | Módulo | Casos que os testes devem cobrir |
 |---|---|
@@ -21,6 +21,8 @@ O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calc
 | Validação e formatos | nomes com partículas, e-mail, celular, placa nos dois padrões, ano, CNPJ, senha, descarte de campos não previstos (RN035) |
 | Tratamento único | Problem Details de `AppError`, de erro de validação e de erro inesperado; recusa por formato, tamanho e origem sem chegar à rota; registro sem senha, token, cookie, cabeçalho de autorização nem corpo; resposta fora de cache; usuário em toda linha do registro (RS014, RS017, RS018) |
 | Cliente da API | JSON e Problem Details; 401 `UNAUTHENTICATED` leva a `/login` com a página atual, os outros 401 voltam à tela, e o da carga da sessão não sai da página; 403 `PASSWORD_CHANGE_REQUIRED` leva a `/set-password`; nenhuma chamada repetida; falha de rede e resposta fora do formato |
+| Proteção das páginas | visitante, troca pendente, cliente, funcionário com e sem a permissão, sem nenhuma permissão e admin, em cada tipo de página; `next` de outro site, da API e das telas de acesso (RF010, RN025, RS004, RS010) |
+| Formatação | telefone celular e fixo, durante a digitação e já formatado (RN035) |
 
 Todo caso desta tabela tem ao menos um teste, e o revisor confere a correspondência no pull request.
 

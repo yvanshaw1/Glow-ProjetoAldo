@@ -2,7 +2,7 @@
 titulo: Autenticação, perfis e autorização
 assunto: acesso
 origem: Documentação de Arquitetura de Software, seções 3.2 (Quadro 5), 4.3 (Quadros 9 e 10) e 5.2 (Quadro 28)
-relacionados: [RN022, RN023, RN024, RN025, RN026, RN027, RN029, RS001, RS004, RS005, RS006, RS007, RS008, RS009, RS010, RS011, 0046, 0047, 0048]
+relacionados: [RN022, RN023, RN024, RN025, RN026, RN027, RN029, RS001, RS004, RS005, RS006, RS007, RS008, RS009, RS010, RS011, 0046, 0047, 0048, 0051]
 ---
 
 # Autenticação, perfis e autorização
@@ -53,16 +53,6 @@ Desativada depois do login, a conta recebe 403 `ACCOUNT_INACTIVE` em toda rota c
 | `staff` | `/admin/staff` | `/api/admin/staff` e `/api/admin/roles` |
 | `settings` | `/admin/settings` | `/api/admin/settings` |
 
-## Proteção das páginas (`src/proxy.ts`)
+## Proteção das páginas
 
-No Next.js 16 o arquivo é `src/proxy.ts` (decisão 0032). Ele valida a sessão, renova os cookies quando preciso e consulta o perfil. Organiza a navegação; quem decide o acesso aos dados é sempre a API.
-
-| Situação | Comportamento |
-|---|---|
-| Visitante em `/profile`, `/booking`, `/appointments` ou `/admin*` | vai a `/login?next=<página pedida>` e, autenticado, volta a ela se o perfil puder (RF010); o `next` só vale com caminho interno |
-| Login em `/login` | cliente vai ao portal; funcionário e admin, à primeira página permitida do painel |
-| Cliente em `/admin*` | vai à página inicial do portal (RS010) |
-| Funcionário em página exclusiva de cliente | vai ao painel |
-| Funcionário sem a permissão da página | vai à primeira página permitida (RN025) |
-| Troca de senha pendente em qualquer página restrita | vai a `/set-password` (RS004) |
-| Usuário autenticado em `/login` ou `/register` | vai à página inicial da sua área |
+O `src/proxy.ts` leva cada pessoa às páginas do seu perfil, das suas permissões e da troca de senha pendente: [protecao-das-paginas.md](protecao-das-paginas.md).

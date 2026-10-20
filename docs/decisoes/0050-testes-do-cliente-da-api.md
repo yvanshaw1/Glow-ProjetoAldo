@@ -1,7 +1,7 @@
 ---
 id: 0050
 titulo: Testes automatizados das regras, dos esquemas, do tratamento único e do cliente da API
-status: aceita
+status: substituída por 0052
 data: 2026-10-19
 origem: issue #25, memoria/tarefas/25-base-do-frontend/01_plano.md (Decisões técnicas)
 relacionados: [RS014, RS017, RS018, 0035, 0045]

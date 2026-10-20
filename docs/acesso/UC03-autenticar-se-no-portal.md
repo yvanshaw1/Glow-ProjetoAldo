@@ -26,7 +26,7 @@ regras: [RN001, RN023, RN029]
 2. O sistema exibe o formulário de autenticação, com a opção de cadastro para quem ainda não possui conta.
 3. O cliente informa e-mail e senha e confirma.
 4. O sistema valida as credenciais.
-5. O sistema inicia a sessão, identifica o perfil da conta e exibe a área restrita ao cliente (RS007, RN029).
+5. O sistema inicia a sessão, identifica o perfil da conta e exibe a página inicial do portal, com as opções restritas ao cliente (RS007, RN029).
 
 ## Fluxos alternativos
 
