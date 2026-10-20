@@ -45,11 +45,11 @@ Estrutura, layouts e textos fixos são componentes de servidor. As partes que ex
 - Cada componente busca os dados que exibe, sem repassar propriedades por muitos níveis.
 - Formulários com React Hook Form e os esquemas Zod de `src/shared/validation` (`zodResolver`), pelos componentes `Field` do shadcn/ui com o `Controller` (decisão 0049); validação campo a campo; máscaras de telefone, CNPJ, placa e valores, aplicadas na digitação pelas mesmas funções de exibição de `src/shared/format`, sem biblioteca de máscara (RN035). A validação da página orienta; a que vale é a do servidor.
 - Campos de senha com o botão de ícone "Mostrar senha" (`aria-pressed`). Onde a senha é definida (cadastro e troca de senha), um campo de confirmação logo abaixo, conferido só na tela, pelo esquema do formulário em `src/shared/validation`; a API não recebe a confirmação. `autocomplete` `current-password` na senha que se confere e `new-password` na que se define e na confirmação.
-- Formulários extensos em etapas, com indicação da etapa e volta sem perder dados (RNF002).
+- Formulários extensos em etapas, com indicação da etapa e volta sem perder dados (RNF002). Listagem, diálogos, formulário em etapas e campo monetário: [componentes.md](componentes.md).
 
 ## Textos e formatos
 
-Interface em português do Brasil, valores em `R$ 1.250,00` e datas `dd/mm/aaaa` (RNF016), formatados com `Intl` em `src/shared/format`, sem biblioteca de datas. Mensagens claras, junto ao elemento (RNF003).
+Interface em português do Brasil, valores em `R$ 1.250,00` e datas `dd/mm/aaaa` (RNF016), formatados com `Intl` em `src/shared/format`, sem biblioteca de datas. Datas e horários aparecem no fuso da empresa (`COMPANY_TIME_ZONE`, decisão 0053), qualquer que seja o do aparelho; a data de calendário (`aaaa-mm-dd`) aparece como está. Mensagens claras, junto ao elemento (RNF003).
 
 ## Desempenho (RNF006)
 

@@ -1,6 +1,6 @@
 # `src/lib/` – Infraestrutura do cliente
 
-`api-client.ts`, o único cliente HTTP das páginas (JSON, cookie de sessão, Problem Details, 401, 403 de troca de senha e 409 de conflito), e `utils.ts`, com o `cn()` do shadcn.
+`api-client.ts`, o único cliente HTTP das páginas (JSON, cookie de sessão, Problem Details, 401, 403 de troca de senha e 409 de conflito) e a montagem dos parâmetros de consulta (`withQuery`), e `utils.ts`, com o `cn()` do shadcn.
 
 ## Vai aqui
 

@@ -20,9 +20,9 @@ O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calc
 | Regras de edição | cliente só posterga; funcionário adianta ou posterga; data incompatível com o status é recusada (RN032, RN033) |
 | Validação e formatos | nomes com partículas, e-mail, celular, placa nos dois padrões, ano, CNPJ, senha, descarte de campos não previstos (RN035) |
 | Tratamento único | Problem Details de `AppError`, de erro de validação e de erro inesperado; recusa por formato, tamanho e origem sem chegar à rota; registro sem senha, token, cookie, cabeçalho de autorização nem corpo; resposta fora de cache; usuário em toda linha do registro (RS014, RS017, RS018) |
-| Cliente da API | JSON e Problem Details; 401 `UNAUTHENTICATED` leva a `/login` com a página atual, os outros 401 voltam à tela, e o da carga da sessão não sai da página; 403 `PASSWORD_CHANGE_REQUIRED` leva a `/set-password`; nenhuma chamada repetida; falha de rede e resposta fora do formato |
+| Cliente da API | JSON e Problem Details; 401 `UNAUTHENTICATED` leva a `/login` com a página atual, os outros 401 voltam à tela, e o da carga da sessão não sai da página; 403 `PASSWORD_CHANGE_REQUIRED` leva a `/set-password`; nenhuma chamada repetida; falha de rede e resposta fora do formato; parâmetros de consulta, sem os vazios |
 | Proteção das páginas | visitante, troca pendente, cliente, funcionário com e sem a permissão, sem nenhuma permissão e admin, em cada tipo de página; `next` de outro site, da API e das telas de acesso (RF010, RN025, RS004, RS010) |
-| Formatação | telefone celular e fixo, durante a digitação e já formatado (RN035) |
+| Formatação | telefone celular e fixo, durante a digitação e já formatado; moeda, inclusive zero, e a leitura do campo monetário; data de um instante no fuso da empresa, perto da meia-noite, e data de calendário; data e hora; duração com e sem horas ou minutos (RN035, RNF016) |
 
 Todo caso desta tabela tem ao menos um teste, e o revisor confere a correspondência no pull request.
 

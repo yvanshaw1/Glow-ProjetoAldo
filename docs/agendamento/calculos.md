@@ -7,7 +7,7 @@ relacionados: [RN005, RN006, RN009, RN010, RN012, RN013, RN015, RN016, RN017, RN
 
 # Funções puras do agendamento
 
-Quatro conjuntos de regras do módulo `appointments` são funções puras, sem banco, desenvolvidas com TDD (`docs/padroes/testes.md`). Recebem por parâmetro tudo de que precisam: itens do catálogo vigente, porte do veículo, percentual da forma de pagamento, disponibilidade (`business_hours`), fuso da empresa (`APP_TIMEZONE`, `America/Maceio`) e o instante atual (`now`). Nunca leem relógio, banco ou variáveis de ambiente. O serviço `appointments` busca esses dados, chama as funções e grava o resultado.
+Quatro conjuntos de regras do módulo `appointments` são funções puras, sem banco, desenvolvidas com TDD (`docs/padroes/testes.md`). Recebem por parâmetro tudo de que precisam: itens do catálogo vigente, porte do veículo, percentual da forma de pagamento, disponibilidade (`business_hours`), fuso da empresa (`COMPANY_TIME_ZONE`, `America/Maceio`) e o instante atual (`now`). Nunca leem relógio, banco ou variáveis de ambiente. O serviço `appointments` busca esses dados, chama as funções e grava o resultado.
 
 | Seção | Arquivo | Teste |
 |---|---|---|

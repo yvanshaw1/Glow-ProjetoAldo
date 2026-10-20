@@ -116,6 +116,10 @@ Sombras duplas, sempre com a sombra escura em +x +y e o realce em -x -y: `shadow
 | Link de texto | `--link`, sublinhado sob o cursor |
 | Item atual da navegação | rebaixado, com o texto em `--link` e `aria-current` |
 | Botão só com ícone | `aria-label`; a dica flutuante, quando houver, não substitui o rótulo |
+| Janela (diálogo) | superfície com `shadow-neu-lg` e `rounded-2xl`, centralizada; abaixo de 640 px, ancorada embaixo, com a largura da tela |
+| Abas | lista rebaixada; a aba atual em relevo, com o texto em `--link` e `aria-selected` |
+| Caixa de seleção e chave | borda de 1 px em `--input`, também quando marcadas; a caixa marcada, preenchida de `--primary`, com a marca em `--primary-foreground`; a chave com o trilho rebaixado e o botão em `--input`, que, ligada, passa a `--primary-foreground` sobre o trilho em `--primary` |
+| Etiqueta | `rounded-lg`, 12 px, peso 600; o significado sempre escrito, nunca só pela cor |
 
 As variantes dos componentes de `src/components/ui/` seguem estas tabelas. Uma atualização deles pela CLI do shadcn sobrescreve os ajustes, que precisam ser refeitos.
 

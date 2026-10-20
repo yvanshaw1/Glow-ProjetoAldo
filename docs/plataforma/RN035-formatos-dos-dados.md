@@ -28,7 +28,7 @@ Em todos os campos de texto, exceto a senha, a tabulação e a quebra de linha v
 | Ano do veículo | Número inteiro de 1886, ano do primeiro automóvel, até o ano seguinte ao corrente, para aceitar o ano-modelo de um veículo novo. O ano corrente é o do fuso da empresa. | 2024 |
 | Valores em reais | Maiores que zero e até R$ 99.999,99, com duas casas decimais. Os valores calculados pelo sistema são arredondados ao centavo. | R$ 1.250,00 |
 | Percentual da forma de pagamento | De 0 a 100, com até duas casas decimais. | 5,00% |
-| Duração média do serviço | Número inteiro de minutos, de 5 a 2.400, ou seja, até 40 horas de trabalho. | 1 h 30 min |
+| Duração média do serviço | Número inteiro de minutos, de 5 a 2.400, ou seja, até 40 horas de trabalho. | 1 h 30 min; 45 min; 2 h |
 | Data e horário do agendamento | Em intervalos de 30 minutos, dentro da disponibilidade da empresa (RN013). | 15/10/2026 às 09:30 |
 | CNPJ | Catorze caracteres: os doze primeiros algarismos ou letras, já que a Receita Federal emite CNPJ alfanumérico desde julho de 2026, e os dois últimos algarismos, com dígitos verificadores válidos. Não pode ter os catorze caracteres iguais. Gravado sem a máscara, com as letras em maiúsculas. | 12.345.678/0001-95 |
 | Endereços do Instagram e do Facebook | Endereço iniciado por https://, no domínio da respectiva rede social (instagram.com ou facebook.com) ou num subdomínio dele, como www.instagram.com e m.facebook.com, seguido do caminho do perfil, com até 200 caracteres. | https://instagram.com/glow |
