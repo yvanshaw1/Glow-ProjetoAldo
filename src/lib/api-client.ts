@@ -16,6 +16,8 @@ export type ApiRequestOptions = {
   isSessionLoad?: boolean;
 };
 
+export type QueryParams = Record<string, string | number | boolean | undefined>;
+
 type ApiErrorDetails = Pick<ProblemDetails, "status" | "code" | "detail"> &
   Partial<Pick<ProblemDetails, "fields" | "requestId">>;
 
@@ -64,6 +66,17 @@ export async function apiRequest<T>(
     return new Promise<never>(() => {});
   }
   throw error;
+}
+
+// The query of a listing: page, pageSize, the search and the filters
+// (docs/padroes/api.md, Paginação). An empty search or filter is left out.
+export function withQuery(path: string, params: QueryParams): string {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([name, value]) => {
+    if (value !== undefined && value !== "") query.set(name, String(value));
+  });
+  const queryText = query.toString();
+  return queryText === "" ? path : `${path}?${queryText}`;
 }
 
 async function send(
