@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { idSchema, paginationSchema } from "@/shared/validation/params";
+import {
+  idSchema,
+  paginationSchema,
+  updatedAtSchema,
+} from "@/shared/validation/params";
 
 // Message from docs/plataforma/mensagens-de-validacao.md.
 const PAGINATION = "Informe um número inteiro a partir de 1.";
@@ -59,5 +63,26 @@ describe("paginationSchema", () => {
       page: 1,
       pageSize: DEFAULT_PAGE_SIZE,
     });
+  });
+});
+
+describe("updatedAtSchema", () => {
+  // Message of docs/plataforma/mensagens-de-validacao.md (L6 of #37).
+  const STALE_VERSION = "Atualize a página e tente novamente.";
+
+  function versionMessageOf(value: unknown): string | undefined {
+    const result = updatedAtSchema.safeParse(value);
+    return result.success ? undefined : result.error.issues[0]?.message;
+  }
+
+  it("accepts the updatedAt as the database sends it", () => {
+    const updatedAt = "2026-10-20T13:45:12.345678+00:00";
+    expect(updatedAtSchema.parse(updatedAt)).toBe(updatedAt);
+  });
+
+  it("rejects an absent or malformed updatedAt", () => {
+    for (const value of [undefined, "", "20/10/2026", "abc"]) {
+      expect(versionMessageOf(value)).toBe(STALE_VERSION);
+    }
   });
 });
