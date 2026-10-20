@@ -1,6 +1,6 @@
 ---
 issue: 26
-pull_request: <número>
+pull_request: 34
 ---
 
 # Relatório: Telas de acesso e proteção das páginas: /register, /login, /set-password e src/proxy.ts
