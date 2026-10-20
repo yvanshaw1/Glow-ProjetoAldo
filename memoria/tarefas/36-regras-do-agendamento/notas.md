@@ -65,3 +65,7 @@ Verificação: `npm run check` sem erros nem avisos, com 345 testes (16 arquivos
 ## 2026-10-20 – decisão
 
 O Yvan decidiu manter a #36 num PR só, apesar das 581 linhas em `src/`. Etapa 03: a `origin/main` continua em 8e8480e, então não houve merge; relatório gravado e plano em `concluido`. Antes do PR, falta o Yvan aplicar no worktree desta tarefa os dois commits da pendência (`.env.example` sem `APP_URL=` e o ano de `aprovado_em` no plano da #21).
+
+## 2026-10-20 – decisão
+
+O Yvan editou no worktree desta tarefa o `.env.example`, sem a linha `APP_URL=`, e o plano da #21, com `aprovado_em: 00:04 19/10/2026`, e pediu ao agente só os commits. Conferências: o `.env.example` por hash do Git, sem abrir o arquivo (`a6c4d82`, igual ao da `main` sem a linha 4 e sem quebra de linha no fim); o plano da #21 pelo diff, só a linha do ano. Commits 3228a8a e d252f2d. Ramificação enviada e PR #53 aberto, com `Closes #36`.
