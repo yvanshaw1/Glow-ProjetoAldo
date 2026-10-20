@@ -1,6 +1,6 @@
 ---
 issue: 35
-pull_request:
+pull_request: 52
 ---
 
 # Relatório: Base das telas do painel: listagem paginada, diálogos, formulário em etapas e formatos de moeda e data
