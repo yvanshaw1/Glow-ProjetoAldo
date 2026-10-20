@@ -15,32 +15,35 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 
-export type FieldInputProps<T extends FieldValues> = ControllerRenderProps<
-  T,
-  FieldPath<T>
-> & {
+// The props of the input of one field: its value has the type of that field.
+export type FieldInputProps<
+  T extends FieldValues,
+  N extends FieldPath<T> = FieldPath<T>,
+> = ControllerRenderProps<T, N> & {
   id: string;
   "aria-invalid": boolean;
   "aria-describedby": string | undefined;
 };
 
-type FormFieldProps<T extends FieldValues> = {
-  control: Control<T>;
-  name: FieldPath<T>;
+type FormFieldProps<
+  T extends FieldValues,
+  N extends FieldPath<T>,
+  R extends FieldValues,
+> = {
+  control: Control<T, unknown, R>;
+  name: N;
   label: string;
   description?: string;
-  renderInput: (props: FieldInputProps<T>) => ReactNode;
+  renderInput: (props: FieldInputProps<T, N>) => ReactNode;
 };
 
 // One form field: the label, the input, the description and
 // the message of the field, tied to the input (RNF003, RNF005).
-export function FormField<T extends FieldValues>({
-  control,
-  name,
-  label,
-  description,
-  renderInput,
-}: FormFieldProps<T>) {
+export function FormField<
+  T extends FieldValues,
+  N extends FieldPath<T>,
+  R extends FieldValues = T,
+>({ control, name, label, description, renderInput }: FormFieldProps<T, N, R>) {
   const id = useId();
   const descriptionId = `${id}-description`;
   const errorId = `${id}-error`;
