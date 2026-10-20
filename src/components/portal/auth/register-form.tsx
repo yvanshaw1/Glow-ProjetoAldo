@@ -82,7 +82,7 @@ export function RegisterForm({ next }: { next: string | null }) {
       )}
       <form
         noValidate
-        onSubmit={handleSubmit(submit)}
+        onSubmit={handleSubmit(submit, clearFailure)}
         className="flex flex-col gap-5"
       >
         <div className="grid gap-5 sm:grid-cols-2">

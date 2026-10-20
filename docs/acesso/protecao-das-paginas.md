@@ -45,4 +45,4 @@ A pessoa autenticada vai ao `next` se o perfil puder abrir a página (página p�
 
 ## Aviso de acesso negado
 
-Quando leva a pessoa a outra página por falta de permissão (cliente no painel, funcionário em página do cliente ou sem a permissão da página, funcionário sem nenhuma permissão), o proxy acrescenta `denied=1` ao destino. Os layouts do portal e do painel mostram então, no topo do conteúdo, o aviso "Você não tem permissão para acessar essa página."; o parâmetro sai do endereço, e o aviso some na navegação seguinte (UC08 FE03, RS008). O visitante vai ao login sem aviso.
+Quando leva a pessoa a outra página por falta de permissão (cliente no painel, funcionário em página do cliente ou sem a permissão da página, funcionário sem nenhuma permissão), o proxy acrescenta `denied=1` ao destino. Os layouts do portal e do painel mostram então, no topo do conteúdo, o aviso "Você não tem permissão para acessar essa página."; o parâmetro sai do endereço, e o aviso some quando a pessoa vai a outra página (UC08 FE03, RS008). O visitante vai ao login sem aviso.

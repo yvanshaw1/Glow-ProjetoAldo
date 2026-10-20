@@ -64,7 +64,7 @@ export function LoginForm({ next, isRegistered }: LoginFormProps) {
       )}
       <form
         noValidate
-        onSubmit={handleSubmit(submit)}
+        onSubmit={handleSubmit(submit, clearFailure)}
         className="flex flex-col gap-5"
       >
         <FormField

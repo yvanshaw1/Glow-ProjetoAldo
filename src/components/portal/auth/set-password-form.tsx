@@ -55,7 +55,7 @@ export function SetPasswordForm() {
       )}
       <form
         noValidate
-        onSubmit={handleSubmit(submit)}
+        onSubmit={handleSubmit(submit, clearFailure)}
         className="flex flex-col gap-5"
       >
         <FormField

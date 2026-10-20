@@ -8,7 +8,7 @@ const DENIED_PARAM = "denied";
 
 // UC08 FE03, RS008: src/proxy.ts sent the person here from a page the
 // profile does not open (docs/acesso/protecao-das-paginas.md). The notice
-// stays on this page until the next navigation, and the parameter leaves the
+// stays until the person goes to another page, and the parameter leaves the
 // address, so a reload does not bring it back.
 export function AccessDeniedNotice() {
   const pathname = usePathname();
