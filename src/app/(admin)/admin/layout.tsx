@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { AdminNav } from "@/components/admin/layout/admin-nav";
 import { AdminTopBar } from "@/components/admin/layout/admin-top-bar";
+import { AccessDeniedNotice } from "@/components/shared/access-denied-notice";
 
 // From 1024 px the navigation is a fixed bar on the left; below it, the top
 // bar opens it in a side menu.
@@ -10,7 +12,14 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
         <AdminNav />
       </aside>
       <AdminTopBar />
-      <main id="conteudo" className="mx-auto max-w-page px-6 py-8 lg:px-8">
+      <main
+        id="conteudo"
+        className="mx-auto flex max-w-page flex-col gap-8 px-6 py-8 lg:px-8"
+      >
+        {/* It reads the address, so it renders apart from the static page. */}
+        <Suspense fallback={null}>
+          <AccessDeniedNotice />
+        </Suspense>
         {children}
       </main>
     </div>
