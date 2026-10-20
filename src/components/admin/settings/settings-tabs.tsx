@@ -28,9 +28,11 @@ export function SettingsTabs() {
           </TabsTrigger>
         ))}
       </TabsList>
-      {/* Kept mounted, so changing the tab keeps what was typed. */}
+      {/* Kept mounted, so changing the tab keeps what was typed. The panel
+          starts with fields, so Tab goes from the tab to the first one
+          instead of stopping on the panel (WAI-ARIA tabs pattern). */}
       {SETTINGS_SECTIONS.map(({ value, Content }) => (
-        <TabsContent key={value} value={value} keepMounted>
+        <TabsContent key={value} value={value} keepMounted tabIndex={-1}>
           <Content />
         </TabsContent>
       ))}
