@@ -46,7 +46,7 @@ export const ERROR_CATALOG = {
   VERSION_CONFLICT: {
     status: 409,
     message:
-      "Estes dados foram alterados por outra pessoa. Atualize a página e tente novamente.",
+      "Estes dados foram alterados por outra pessoa. Confira os dados atualizados e tente novamente.",
   },
   NAME_IN_USE: {
     status: 409,

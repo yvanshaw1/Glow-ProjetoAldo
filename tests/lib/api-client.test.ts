@@ -252,7 +252,7 @@ describe("apiRequest", () => {
       problemResponse(
         409,
         "VERSION_CONFLICT",
-        "Estes dados foram alterados por outra pessoa. Atualize a página e tente novamente.",
+        "Estes dados foram alterados por outra pessoa. Confira os dados atualizados e tente novamente.",
       ),
     );
 
@@ -262,7 +262,7 @@ describe("apiRequest", () => {
 
     expect(error.code).toBe("VERSION_CONFLICT");
     expect(error.message).toBe(
-      "Estes dados foram alterados por outra pessoa. Atualize a página e tente novamente.",
+      "Estes dados foram alterados por outra pessoa. Confira os dados atualizados e tente novamente.",
     );
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });

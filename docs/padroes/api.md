@@ -78,7 +78,7 @@ Em `fields`, cada campo aparece uma vez, com a primeira mensagem; o campo dentro
 | 404 | `NOT_FOUND` | Não encontramos o que você procura. |
 | 409 | `EMAIL_IN_USE` | Este e-mail não pode ser usado. Se você já tem conta, entre com ela. |
 | 409 | `INVALID_STATUS` | Esta ação não está disponível para a situação atual do agendamento. |
-| 409 | `VERSION_CONFLICT` | Estes dados foram alterados por outra pessoa. Atualize a página e tente novamente. |
+| 409 | `VERSION_CONFLICT` | Estes dados foram alterados por outra pessoa. Confira os dados atualizados e tente novamente. |
 | 409 | `NAME_IN_USE` | Já existe um cadastro com este nome. |
 | 409 | `PLATE_IN_USE` | Esta placa já está cadastrada em outro veículo. |
 | 409 | `VEHICLE_ALREADY_LINKED` | Este veículo já está na sua conta. |

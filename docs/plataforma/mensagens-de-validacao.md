@@ -32,6 +32,7 @@ Mensagens exibidas junto ao campo quando a entrada não segue RN035 ([RN035-form
 | Nomes de serviço, categoria e cargo; descrição do cargo ocupado | Use de 2 a 60 caracteres. |
 | Horário | Escolha um horário em hora cheia ou meia hora. |
 | Nome da empresa, endereço, descrições e termo de busca | Use até <limite> caracteres. |
+| Versão do registro (`updatedAt`) ausente ou fora do formato | Atualize a página e tente novamente. |
 | `page` e `pageSize` | Informe um número inteiro a partir de 1. |
 
 ## Onde se aplica
