@@ -8,7 +8,7 @@ relacionados: [RF005, RF036, RN025, RN027, RN028, RS008, UC01, UC03, UC08]
 
 Parte de [frontend.md](frontend.md). Estilo: [design.md](design.md).
 
-A navegação só orienta: quem decide o acesso é a API (RS008). Enquanto a sessão carrega, as ações ficam reservadas, sem deslocar a página.
+A navegação só orienta: quem decide o acesso é a API (RS008). Os dois layouts mostram no topo do conteúdo o aviso de acesso negado, quando o `proxy.ts` leva a pessoa até ali ([../acesso/protecao-das-paginas.md](../acesso/protecao-das-paginas.md)). Enquanto a sessão carrega, as ações ficam reservadas, sem deslocar a página.
 
 Portal (`src/app/(portal)/layout.tsx`, também em `/login`, `/register` e `/set-password`, RF005):
 

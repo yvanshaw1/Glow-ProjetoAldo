@@ -59,7 +59,7 @@ regras: [RN023, RN024, RN026, RN027, RN029]
 
 ### FE03 – Acesso a página sem permissão
 
-1. O funcionário tenta acessar uma página não permitida pelo seu cargo; o sistema nega o acesso e informa a restrição (RS008).
+1. O funcionário tenta acessar uma página não permitida pelo seu cargo; o sistema nega o acesso, exibe a primeira página permitida e informa a restrição (RS008, RN025).
 
 ### FE04 – Nova senha inválida (FA01)
 

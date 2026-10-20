@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { z } from "zod";
 import {
+  changePasswordFormSchema,
   changePasswordSchema,
   loginSchema,
+  registerFormSchema,
   registerSchema,
 } from "@/shared/validation/auth";
 
@@ -17,6 +19,7 @@ const MOBILE_PHONE = "Informe um celular com DDD, como (82) 99999-8888.";
 const PASSWORD =
   "A senha deve ter de 8 a 72 caracteres, com letra maiúscula, número e caractere especial.";
 const SAME_PASSWORD = "A nova senha precisa ser diferente da atual.";
+const PASSWORD_MISMATCH = "As senhas não conferem.";
 
 const VALID_REGISTRATION = {
   firstName: "Maria",
@@ -244,5 +247,91 @@ describe("changePasswordSchema", () => {
       currentPassword: "Senha atual 1!",
       newPassword: "Nova senha 2!",
     });
+  });
+});
+
+// Forms of /register and /set-password: the API schemas plus the password
+// confirmation, checked only on the screen (docs/padroes/frontend.md).
+describe("registerFormSchema", () => {
+  const VALID_FORM = {
+    ...VALID_REGISTRATION,
+    passwordConfirmation: VALID_REGISTRATION.password,
+  };
+
+  it("rejects a password confirmation that differs from the password", () => {
+    expect(
+      fieldMessages(registerFormSchema, {
+        ...VALID_FORM,
+        passwordConfirmation: "Senha forte 2!",
+      }),
+    ).toEqual({ passwordConfirmation: PASSWORD_MISMATCH });
+  });
+
+  it("compares the confirmation as typed (RN035)", () => {
+    expect(
+      fieldMessages(registerFormSchema, {
+        ...VALID_FORM,
+        passwordConfirmation: "Senha forte 1! ",
+      }),
+    ).toEqual({ passwordConfirmation: PASSWORD_MISMATCH });
+  });
+
+  it("requires the confirmation", () => {
+    expect(
+      fieldMessages(registerFormSchema, {
+        ...VALID_REGISTRATION,
+      }),
+    ).toEqual({ passwordConfirmation: REQUIRED });
+    expect(
+      fieldMessages(registerFormSchema, {
+        ...VALID_FORM,
+        passwordConfirmation: "",
+      }),
+    ).toEqual({ passwordConfirmation: REQUIRED });
+  });
+
+  it("reports the mismatch even when another field is invalid", () => {
+    expect(
+      fieldMessages(registerFormSchema, {
+        ...VALID_FORM,
+        firstName: "Maria2",
+        passwordConfirmation: "Senha forte 2!",
+      }),
+    ).toEqual({
+      firstName: PERSON_NAME,
+      passwordConfirmation: PASSWORD_MISMATCH,
+    });
+  });
+
+  it("accepts a confirmation equal to the password", () => {
+    expect(
+      registerFormSchema.parse({
+        ...VALID_FORM,
+        firstName: "  maria ",
+        phone: "(82) 99999-8888",
+      }),
+    ).toEqual({ ...VALID_FORM, firstName: "Maria" });
+  });
+});
+
+describe("changePasswordFormSchema", () => {
+  it("rejects a new password confirmation that differs from the new password", () => {
+    expect(
+      fieldMessages(changePasswordFormSchema, {
+        currentPassword: "Senha atual 1!",
+        newPassword: "Nova senha 2!",
+        newPasswordConfirmation: "Nova senha 3!",
+      }),
+    ).toEqual({ newPasswordConfirmation: PASSWORD_MISMATCH });
+  });
+
+  it("keeps the rule of the new password different from the current one (RN023)", () => {
+    expect(
+      fieldMessages(changePasswordFormSchema, {
+        currentPassword: "Senha forte 1!",
+        newPassword: "Senha forte 1!",
+        newPasswordConfirmation: "Senha forte 1!",
+      }),
+    ).toEqual({ newPassword: SAME_PASSWORD });
   });
 });

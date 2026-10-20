@@ -19,4 +19,4 @@ Toda a aplicação Next.js: páginas, API, componentes e código compartilhado. 
 ## Referências
 
 - `docs/plataforma/estrutura-de-pastas.md`
-- `docs/acesso/autenticacao.md` (regras do `proxy.ts`)
+- `docs/acesso/protecao-das-paginas.md` (regras do `proxy.ts`)

@@ -4,7 +4,7 @@ Funções que transformam valores gravados em texto para a tela, com a API `Intl
 
 ## Vai aqui
 
-- funções puras de exibição, sem dependências externas
+- funções puras de exibição, sem dependências externas; os campos também as usam como máscara na digitação
 
 ## Não vai aqui
 

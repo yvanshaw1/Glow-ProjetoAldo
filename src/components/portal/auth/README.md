@@ -6,6 +6,7 @@ Formulários de cadastro, login único e troca de senha no primeiro acesso.
 
 - componentes `.tsx` deste módulo nesta interface, em `kebab-case` (ex.: `auth-form.tsx`)
 - formulários com React Hook Form e os esquemas de `src/shared/validation/`
+- `next-param.ts`: leitura e repasse do parâmetro `next` entre as telas, conferido só pelo `src/proxy.ts`
 
 ## Não vai aqui
 

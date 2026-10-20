@@ -43,7 +43,8 @@ Estrutura, layouts e textos fixos são componentes de servidor. As partes que ex
 
 - Estado no componente que o usa; sem biblioteca de estado global. Único estado compartilhado: a sessão (perfil e permissões), num contexto React carregado de `GET /api/auth/me` a cada carga de página e trocado só no login e no logout. Sem sessão (401), o contexto é de visitante; com a conta desativada (403 `ACCOUNT_INACTIVE`), o contexto chama o logout e fica de visitante; na falha, o portal mostra as opções de visitante, e o painel, o aviso com "Tentar novamente".
 - Cada componente busca os dados que exibe, sem repassar propriedades por muitos níveis.
-- Formulários com React Hook Form e os esquemas Zod de `src/shared/validation` (`zodResolver`), pelos componentes `Field` do shadcn/ui com o `Controller` (decisão 0049); validação campo a campo; máscaras de telefone, CNPJ, placa e valores; exibição com `src/shared/format` (RN035). A validação da página orienta; a que vale é a do servidor.
+- Formulários com React Hook Form e os esquemas Zod de `src/shared/validation` (`zodResolver`), pelos componentes `Field` do shadcn/ui com o `Controller` (decisão 0049); validação campo a campo; máscaras de telefone, CNPJ, placa e valores, aplicadas na digitação pelas mesmas funções de exibição de `src/shared/format`, sem biblioteca de máscara (RN035). A validação da página orienta; a que vale é a do servidor.
+- Campos de senha com o botão de ícone "Mostrar senha" (`aria-pressed`). Onde a senha é definida (cadastro e troca de senha), um campo de confirmação logo abaixo, conferido só na tela, pelo esquema do formulário em `src/shared/validation`; a API não recebe a confirmação. `autocomplete` `current-password` na senha que se confere e `new-password` na que se define e na confirmação.
 - Formulários extensos em etapas, com indicação da etapa e volta sem perder dados (RNF002).
 
 ## Textos e formatos

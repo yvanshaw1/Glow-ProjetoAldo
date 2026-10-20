@@ -40,7 +40,7 @@ App/
 │   │   ├── constants/               enums como listas `as const`, rótulos em português, limites
 │   │   └── api/                     tipos das respostas e da paginação
 │   ├── server/                      só servidor: todo arquivo começa com import 'server-only'
-│   │   ├── auth/                    session.ts · guards.ts · login-attempts.ts · accounts.ts
+│   │   ├── auth/                    session.ts · guards.ts · login-attempts.ts · accounts.ts · page-access.ts
 │   │   ├── http/                    handler.ts · logger.ts · respond.ts
 │   │   ├── rules/                   funções puras: pricing, status-transitions, scheduling, editing
 │   │   ├── services/                um arquivo por módulo: busca, chama as regras, grava
@@ -54,6 +54,8 @@ App/
 │   ├── seed-demo.sql                dados fictícios de demonstração (opcional)
 │   └── scripts/create-admin.mjs     conta de administrador, com SEED_ADMIN_* do ambiente
 ├── tests/
+│   ├── auth/                        espelha as funções puras de src/server/auth (proteção das páginas)
+│   ├── format/                      espelha src/shared/format
 │   ├── http/                        espelha src/server/http
 │   ├── lib/                         espelha src/lib (cliente da API)
 │   ├── rules/                       espelha src/server/rules

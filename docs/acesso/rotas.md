@@ -16,7 +16,17 @@ Valem para todas as rotas, sem repetição abaixo ([../padroes/api.md](../padroe
 | `/login` | Login único, de clientes e de funcionários | Visitante | UC03, UC08 |
 | `/set-password` | Troca de senha no primeiro acesso | Cliente ou funcionário com senha inicial | UC03, UC08 |
 
-Proteção das páginas: [../acesso/autenticacao.md](../acesso/autenticacao.md).
+Proteção das páginas: [protecao-das-paginas.md](protecao-das-paginas.md).
+
+### Conteúdo das telas
+
+| Tela | Campos | Atalhos e avisos |
+|---|---|---|
+| `/register` | Nome, Sobrenome, E-mail, Celular (com máscara), Senha e Confirmar senha | "Já tem conta? Entrar". E-mail em uso: o aviso de `EMAIL_IN_USE`, com o atalho "Entrar". Conta criada: leva a `/login?registered=1` |
+| `/login` | E-mail e Senha | "Ainda não tem conta? Criar conta", sempre visível (UC03 FE01). Com `registered=1`: "Conta criada. Agora entre com o seu e-mail e a sua senha." |
+| `/set-password` | Senha inicial, Nova senha e Confirmar nova senha | – |
+
+Os atalhos levam o `next` recebido ([protecao-das-paginas.md](protecao-das-paginas.md)). Erros: o `detail` no aviso do topo e `fields` junto a cada campo ([../padroes/frontend.md](../padroes/frontend.md)).
 
 ## API
 

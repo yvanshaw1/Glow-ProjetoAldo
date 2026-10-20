@@ -57,4 +57,6 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0047](0047-tentativa-de-login-reservada.md) | Tentativa de login reservada por função SQL antes de conferir a senha |
 | [0048](0048-senha-atual-conferida-por-nova-entrada.md) | Senha atual conferida por nova entrada no Supabase Auth, que renova a sessão do navegador |
 | [0049](0049-shadcn-sobre-base-ui.md) | shadcn/ui sobre Base UI, com os pacotes só de CSS em devDependencies |
-| [0050](0050-testes-do-cliente-da-api.md) | Testes automatizados das regras, dos esquemas, do tratamento único e do cliente da API |
+| [0050](0050-testes-do-cliente-da-api.md) | Testes automatizados das regras, dos esquemas, do tratamento único e do cliente da API (substituída por 0052) |
+| [0051](0051-protecao-das-paginas-no-proxy.md) | Proteção das páginas com a sessão e a conta conferidas no proxy.ts, que também decide o destino depois do login |
+| [0052](0052-testes-da-formatacao-e-da-protecao-das-paginas.md) | Testes automatizados das regras, dos esquemas, do tratamento único, do cliente da API, da formatação e da proteção das páginas |

@@ -63,8 +63,8 @@ export async function createSessionClient(): Promise<SupabaseClient> {
         getAll: () => cookieStore.getAll(),
         // The no-cache headers that come with the cookies are left aside:
         // the single handler sends Cache-Control: no-store with every API
-        // response (docs/padroes/api.md). The pages need them in
-        // src/proxy.ts (#26).
+        // response (docs/padroes/api.md), and src/proxy.ts with every page
+        // it checks (decision 0051).
         setAll: (cookiesToSet) => {
           cookiesToSet.forEach(({ name, value, options }) =>
             cookieStore.set(name, value, options),
