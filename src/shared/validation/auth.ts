@@ -44,3 +44,48 @@ export const changePasswordSchema = z
   );
 
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+
+// Forms of /register and /set-password: the bodies above plus the password
+// confirmation, checked only on the screen and never sent to the API
+// (docs/padroes/frontend.md).
+
+const PASSWORD_MISMATCH_MESSAGE = "As senhas não conferem.";
+
+// The confirmation is only required, like the password typed at the login;
+// whether it matches is the refinement below.
+const passwordConfirmationSchema = signInPasswordSchema;
+
+// RN035: compared as typed. It runs as soon as the password and its
+// confirmation are valid, even when another field is not, so the message
+// shows while the form is filled.
+function whenFieldsAreValid(...fields: string[]) {
+  return ({ issues }: z.core.ParsePayload) =>
+    !issues.some(({ path = [] }) => fields.includes(String(path[0])));
+}
+
+export const registerFormSchema = registerSchema
+  .extend({ passwordConfirmation: passwordConfirmationSchema })
+  .refine(
+    ({ password, passwordConfirmation }) => password === passwordConfirmation,
+    {
+      error: PASSWORD_MISMATCH_MESSAGE,
+      path: ["passwordConfirmation"],
+      when: whenFieldsAreValid("password", "passwordConfirmation"),
+    },
+  );
+
+export type RegisterFormInput = z.input<typeof registerFormSchema>;
+
+export const changePasswordFormSchema = changePasswordSchema
+  .safeExtend({ newPasswordConfirmation: passwordConfirmationSchema })
+  .refine(
+    ({ newPassword, newPasswordConfirmation }) =>
+      newPassword === newPasswordConfirmation,
+    {
+      error: PASSWORD_MISMATCH_MESSAGE,
+      path: ["newPasswordConfirmation"],
+      when: whenFieldsAreValid("newPassword", "newPasswordConfirmation"),
+    },
+  );
+
+export type ChangePasswordFormInput = z.input<typeof changePasswordFormSchema>;
