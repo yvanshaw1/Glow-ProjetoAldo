@@ -10,7 +10,7 @@ Comandos e passos: `workflows/procedimentos/testes.md`.
 
 ## O que é testado automaticamente
 
-O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calculos.md`), os esquemas de `src/shared/validation` e o tratamento único das requisições (`src/server/http`), este com `Request` e `Response` padrão, sem servidor. Fluxos de tela são testados à mão na pré-visualização (decisão 0045). Os testes espelham o código: `tests/rules/<arquivo>.test.ts` para `src/server/rules/`, `tests/validation/<módulo>.test.ts` para `src/shared/validation/` e `tests/http/<arquivo>.test.ts` para `src/server/http/`.
+O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calculos.md`), os esquemas de `src/shared/validation`, o tratamento único das requisições (`src/server/http`), este com `Request` e `Response` padrão, sem servidor, e o cliente da API (`src/lib/api-client.ts`), com `fetch` e `location` simulados. Fluxos de tela são testados à mão na pré-visualização (decisão 0050). Os testes espelham o código: `tests/rules/<arquivo>.test.ts` para `src/server/rules/`, `tests/validation/<módulo>.test.ts` para `src/shared/validation/` `tests/http/<arquivo>.test.ts` para `src/server/http/` e `tests/lib/<arquivo>.test.ts` para `src/lib/`.
 
 | Módulo | Casos que os testes devem cobrir |
 |---|---|
@@ -20,6 +20,7 @@ O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calc
 | Regras de edição | cliente só posterga; funcionário adianta ou posterga; data incompatível com o status é recusada (RN032, RN033) |
 | Validação e formatos | nomes com partículas, e-mail, celular, placa nos dois padrões, ano, CNPJ, senha, descarte de campos não previstos (RN035) |
 | Tratamento único | Problem Details de `AppError`, de erro de validação e de erro inesperado; recusa por formato, tamanho e origem sem chegar à rota; registro sem senha, token, cookie, cabeçalho de autorização nem corpo; resposta fora de cache; usuário em toda linha do registro (RS014, RS017, RS018) |
+| Cliente da API | JSON e Problem Details; 401 `UNAUTHENTICATED` leva a `/login` com a página atual, os outros 401 voltam à tela, e o da carga da sessão não sai da página; 403 `PASSWORD_CHANGE_REQUIRED` leva a `/set-password`; nenhuma chamada repetida; falha de rede e resposta fora do formato |
 
 Todo caso desta tabela tem ao menos um teste, e o revisor confere a correspondência no pull request.
 

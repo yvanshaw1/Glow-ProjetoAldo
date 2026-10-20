@@ -38,7 +38,7 @@ Todo veículo é hatch, sedan, SUV ou picape; pagamento presencial por crédito,
 | Framework | Next.js (App Router) com React | 16.4 e 19.3 |
 | Execução | Node.js | 24 LTS |
 | Contêineres | Docker e Docker Compose | 29 e 5 |
-| Interface | Tailwind CSS e shadcn/ui | 4.3 |
+| Interface | Tailwind CSS e shadcn/ui sobre Base UI | 4.3 |
 | Gráficos | Recharts | 3.10 |
 | Validação | Zod | 4.6 |
 | Formulários | React Hook Form | 7.90 |

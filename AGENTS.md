@@ -2,7 +2,7 @@
 
 Sistema web de uma empresa de estética automotiva: portal público e do cliente (catálogo, conta, veículos, agendamento e acompanhamento) e painel administrativo (dashboard, agendamentos, serviços, clientes, equipe e configurações). MVP acadêmico, com entrega final na AV3 (início de dezembro de 2026).
 
-Stack: Next.js 16.4 (App Router) e React 19.3 em TypeScript 6.0, Tailwind CSS 4.3 com shadcn/ui, Zod 4.6, React Hook Form 7.90, Supabase (PostgreSQL, Auth e Storage) via supabase-js 2.117 e @supabase/ssr 0.12, com a CLI do Supabase 2.120 para as migrations, Vitest 5, ESLint 9, Prettier 3.9, Node.js 24 LTS e Vercel; Docker 29 e Docker Compose 5 para executar a aplicação em contêiner.
+Stack: Next.js 16.4 (App Router) e React 19.3 em TypeScript 6.0, Tailwind CSS 4.3 com shadcn/ui sobre Base UI, Zod 4.6, React Hook Form 7.90, Supabase (PostgreSQL, Auth e Storage) via supabase-js 2.117 e @supabase/ssr 0.12, com a CLI do Supabase 2.120 para as migrations, Vitest 5, ESLint 9, Prettier 3.9, Node.js 24 LTS e Vercel; Docker 29 e Docker Compose 5 para executar a aplicação em contêiner.
 
 ## Antes de qualquer tarefa
 
@@ -16,7 +16,7 @@ Leia `guia/CONTEXT.md` e siga a rota do tipo de tarefa. Carregue só o que a rot
 | `workflows/` | ciclo da tarefa: `01_planejar` → `02_construir` → `03_entregar` → `04_encerrar`, e `procedimentos/` |
 | `docs/` | referências por assunto (requisitos, regras `RNxxx`, casos de uso `UCxx`, dados e rotas), `padroes/` e `decisoes/` |
 | `documentos-formais/` | os três documentos formais em Word (`.docx`), exigidos pela disciplina; a IA usa `docs/` e só abre os `.docx` quando o desenvolvedor pede para lê-los ou alterá-los |
-| `wireframes/` | telas de outro sistema, em PDF, como referência de esqueleto e componentes das páginas; o que a página tem vem de `docs/` e as cores, do tema (`README.md` da pasta) |
+| `wireframes/` | telas de outro sistema, em PDF, como referência de esqueleto e componentes das páginas; o que a página tem vem de `docs/`, e o estilo visual, de `docs/padroes/design.md` (`README.md` da pasta) |
 | `memoria/tarefas/` | plano, relatório e notas de cada tarefa |
 | `_templates/` | moldes de plano, relatório, notas, módulo e decisão |
 | `setup/` · `tools/` | questionário da estrutura · scripts mecânicos, sem IA |

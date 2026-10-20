@@ -52,7 +52,9 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0042](0042-banco-sem-privilegios-publicos.md) | Banco sem privilégios para as chaves públicas |
 | [0043](0043-cli-e-banco-local-do-supabase.md) | CLI do Supabase fixada no projeto e banco local para conferir as migrations |
 | [0044](0044-preparacao-sem-painel.md) | Preparação do Supabase sem configuração manual no painel |
-| [0045](0045-testes-do-tratamento-unico.md) | Testes automatizados das regras, dos esquemas e do tratamento único das requisições |
+| [0045](0045-testes-do-tratamento-unico.md) | Testes automatizados das regras, dos esquemas e do tratamento único das requisições (substituída por 0050) |
 | [0046](0046-sessao-conferida-no-supabase-auth.md) | Sessão conferida no Supabase Auth a cada requisição |
 | [0047](0047-tentativa-de-login-reservada.md) | Tentativa de login reservada por função SQL antes de conferir a senha |
 | [0048](0048-senha-atual-conferida-por-nova-entrada.md) | Senha atual conferida por nova entrada no Supabase Auth, que renova a sessão do navegador |
+| [0049](0049-shadcn-sobre-base-ui.md) | shadcn/ui sobre Base UI, com os pacotes só de CSS em devDependencies |
+| [0050](0050-testes-do-cliente-da-api.md) | Testes automatizados das regras, dos esquemas, do tratamento único e do cliente da API |

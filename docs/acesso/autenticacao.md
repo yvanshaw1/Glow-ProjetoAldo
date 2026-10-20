@@ -59,7 +59,7 @@ No Next.js 16 o arquivo é `src/proxy.ts` (decisão 0032). Ele valida a sessão,
 
 | Situação | Comportamento |
 |---|---|
-| Visitante em `/profile`, `/booking`, `/appointments` ou `/admin*` | vai a `/login` e, autenticado, volta à página pedida se o perfil puder (RF010) |
+| Visitante em `/profile`, `/booking`, `/appointments` ou `/admin*` | vai a `/login?next=<página pedida>` e, autenticado, volta a ela se o perfil puder (RF010); o `next` só vale com caminho interno |
 | Login em `/login` | cliente vai ao portal; funcionário e admin, à primeira página permitida do painel |
 | Cliente em `/admin*` | vai à página inicial do portal (RS010) |
 | Funcionário em página exclusiva de cliente | vai ao painel |

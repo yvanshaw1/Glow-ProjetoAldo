@@ -1,1 +1,150 @@
+/*
+ * Entry of the CSS, imported only by the root layout: the imports, the global
+ * variables of the theme and the base rules that apply them. Values and
+ * contrasts: docs/padroes/design.md.
+ */
+
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "./reset.css" layer(base);
+
+/* Light theme; the dark one follows the system (prefers-color-scheme). */
+:root {
+  color-scheme: light dark;
+
+  --background: #f3e6d8;
+  --foreground: #2e2318;
+  --muted: #c9b49a;
+  --muted-foreground: #745f46;
+  --primary: #ff8c42;
+  --primary-foreground: #2e2318;
+  --primary-hover: #ffb38a;
+  --link: #a34a26;
+  --ring: #c55a2e;
+  --input: #8a7966;
+  --border: #c9b49a;
+  --accent: #faf3eb;
+  --destructive: #a8231c;
+  --shadow-dark: #c9b49a;
+  --shadow-light: #faf3eb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #2e2e24;
+    --foreground: #f2ede4;
+    --muted: #1f1f18;
+    --muted-foreground: #a89878;
+    --primary: #ff9a56;
+    --primary-foreground: #2e2e24;
+    --primary-hover: #ffb38a;
+    --link: #ff9a56;
+    --ring: #e87430;
+    --input: #808075;
+    --border: #3e3e32;
+    --accent: #3e3e32;
+    --destructive: #ff9b8f;
+    --shadow-dark: #1f1f18;
+    --shadow-light: #3e3e32;
+  }
+}
+
+/* Neumorphism: surfaces have the color of the background. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--background);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--background);
+  --color-popover-foreground: var(--foreground);
+  --color-secondary: var(--background);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-link: var(--link);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--foreground);
+  --color-destructive: var(--destructive);
+
+  /* Nunito comes from next/font in layout.tsx; the system fonts are the fallback. */
+  --font-sans:
+    var(--font-nunito), ui-sans-serif, system-ui, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-heading: var(--font-sans);
+}
+
+/* Scales derived from φ = 1.618 (docs/padroes/design.md). */
+@theme {
+  --radius: 0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.8125rem;
+  --radius-2xl: 1.3125rem;
+  --radius-3xl: 2.125rem;
+
+  /* Dark shadow at +x +y and highlight at -x -y: the light comes from the top left. */
+  --shadow-neu-sm:
+    4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+  --shadow-neu-md:
+    6px 6px 13px var(--shadow-dark), -6px -6px 13px var(--shadow-light);
+  --shadow-neu-lg:
+    10px 10px 21px var(--shadow-dark), -10px -10px 21px var(--shadow-light);
+  --inset-shadow-neu-sm:
+    inset 4px 4px 8px var(--shadow-dark),
+    inset -4px -4px 8px var(--shadow-light);
+  --inset-shadow-neu-md:
+    inset 6px 6px 13px var(--shadow-dark),
+    inset -6px -6px 13px var(--shadow-light);
+
+  --text-base--line-height: 1.618;
+  --text-sm--line-height: 1.5;
+  --text-xs--line-height: 1.5;
+  --text-h3: 1.625rem;
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.02em;
+  --text-h2: 2.625rem;
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h1: 4.25rem;
+  --text-h1--line-height: 1.2;
+  --text-h1--letter-spacing: -0.03em;
+  --text-display: 6.875rem;
+  --text-display--line-height: 1.2;
+  --text-display--letter-spacing: -0.03em;
+
+  --container-page: 77.5rem;
+  --spacing-header: 4rem;
+  --spacing-sidebar: 16rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background font-sans text-base text-foreground;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+
+  /* The skip link does not hide the start of the content under the header. */
+  :target {
+    scroll-margin-top: var(--spacing-header);
+  }
+
+  svg.lucide {
+    stroke-width: 1.5;
+  }
+}

@@ -1,7 +1,7 @@
 ---
 id: 0045
 titulo: Testes automatizados das regras, dos esquemas e do tratamento único das requisições
-status: aceita
+status: substituída por 0050
 data: 2026-10-19
 origem: issue #22, memoria/tarefas/22-base-do-servidor/01_plano.md (L1)
 relacionados: [RS014, RS017, RS018, 0024, 0035]

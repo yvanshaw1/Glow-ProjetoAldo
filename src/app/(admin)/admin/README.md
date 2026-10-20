@@ -4,6 +4,7 @@ Prefixo `/admin`. O `layout.tsx` monta a navegação com as permissões do funci
 
 ## Vai aqui
 
+- `layout.tsx`: componente de servidor com a barra de navegação fixa (a partir de 1024 px) e a barra do celular, com o menu lateral, de `src/components/admin/layout/`
 - `page.tsx`: componente de servidor que monta a tela com os componentes de `src/components/admin/layout/` e `src/components/admin/dashboard/`; as partes com dados e interação são componentes de cliente
 - `loading.tsx` e `error.tsx`, se a tela precisar de estados próprios de carregamento e erro
 

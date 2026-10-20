@@ -1,6 +1,6 @@
 # `tests/http/` – Testes do tratamento único
 
-Testes do tratamento único das requisições (`src/server/http/`): Problem Details, recusa por formato, tamanho e origem, e registro sem dados sensíveis. Montam a requisição e a rota no próprio teste, sem servidor, banco ou rede (decisão 0045).
+Testes do tratamento único das requisições (`src/server/http/`): Problem Details, recusa por formato, tamanho e origem, e registro sem dados sensíveis. Montam a requisição e a rota no próprio teste, sem servidor, banco ou rede (decisão 0050).
 
 ## Vai aqui
 

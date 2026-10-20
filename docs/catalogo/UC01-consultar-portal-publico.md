@@ -31,7 +31,7 @@ regras: [RN008, RN028]
 
 ### FA01 – Acesso por cliente autenticado (passo 1)
 
-1. O cliente autenticado acessa as páginas públicas da mesma forma, com a barra de navegação exibindo também as opções restritas ao cliente.
+1. O cliente autenticado acessa as páginas públicas da mesma forma, com a barra de navegação exibindo também as opções restritas ao cliente (Agendar, Meus agendamentos e Minha conta) e a opção de sair.
 
 ## Fluxos de exceção
 

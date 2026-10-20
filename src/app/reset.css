@@ -1,0 +1,48 @@
+/*
+ * Complements the Preflight of Tailwind, the reset that comes with
+ * @import "tailwindcss" (docs/padroes/frontend.md): only what it does not
+ * cover, with no colors, fonts or theme variables. globals.css imports this
+ * file in the base layer, so the utility classes still win over it.
+ */
+
+body {
+  min-height: 100dvh;
+  /* Base UI: dialog backdrops cover the whole screen on iOS 26 Safari. */
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+  /* A long word does not overflow a 360 px screen (RNF001). */
+  overflow-wrap: break-word;
+}
+
+p,
+li,
+dd,
+figcaption {
+  text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+
+/*
+ * Whoever asks the system for less motion gets none (docs/padroes/design.md).
+ * !important is the usual form of this rule, so it also wins over the
+ * utility classes.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

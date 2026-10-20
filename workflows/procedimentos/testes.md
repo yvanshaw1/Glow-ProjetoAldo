@@ -34,6 +34,14 @@ docker compose down            encerra e remove o contêiner
 3. Sem o `.env.local`, o agente não o cria: pede ao desenvolvedor que copie o `.env.example`. Sem o Docker na máquina, o teste vira passo manual de um integrante que o tenha, registrado no plano.
 4. Registrar o resultado em `notas.md` e no relatório.
 
+## Interface
+
+Quando a tarefa cria ou muda uma tela, um layout ou o tema (`docs/padroes/design.md`):
+
+1. Local: a aplicação compilada (`npx next build` e `npx next start`), no navegador do app, em 360 × 800 e 1440 × 900, nos temas claro e escuro (emulação de `prefers-color-scheme`). Em cada página da tarefa, nada transborda (`document.documentElement.scrollWidth` igual a `innerWidth`), tudo funciona pelo teclado e o foco fica visível.
+2. Local: `npx -y lighthouse@13.5.0 <endereço> --only-categories=accessibility`, nos modos celular e computador (`--preset=desktop`) e nos dois temas, sem auditoria reprovada.
+3. Pré-visualização, pelo desenvolvedor: o Lighthouse das ferramentas do navegador (Acessibilidade, celular e computador) e as duas larguras no modo de dispositivo, com a captura de tela no PR.
+
 ## Manuais (pré-visualização)
 
 1. Abrir a pré-visualização da Vercel indicada no pull request.
