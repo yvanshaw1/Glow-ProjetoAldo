@@ -413,9 +413,11 @@ export const searchTermSchema = z
 // RN035: an optional field left absent, null or empty, spaces included, has no
 // value (null), and on a PUT or PATCH it erases the stored one
 // (docs/padroes/api.md). A filled one follows its format, with its message.
+// It is optional so that an object accepts the absent key too.
 export function optionalFormat<Output>(format: z.ZodType<Output, string>) {
   return z
     .custom<string | null | undefined>()
+    .optional()
     .transform((value, context): Output | null => {
       if (isMissing(value) || isBlank(value)) return null;
       const result = format.safeParse(value);

@@ -86,6 +86,25 @@ describe("companySettingsSchema", () => {
     }
   });
 
+  it("accepts the company name alone, with the optional fields absent", () => {
+    expect(
+      companySettingsSchema.parse({
+        companyName: "Glow",
+        updatedAt: UPDATED_AT,
+      }),
+    ).toEqual({
+      companyName: "Glow",
+      cnpj: null,
+      email: null,
+      phone: null,
+      address: null,
+      instagramUrl: null,
+      facebookUrl: null,
+      whatsapp: null,
+      updatedAt: UPDATED_AT,
+    });
+  });
+
   it("requires the company name", () => {
     for (const companyName of ["", "   ", undefined]) {
       expect(messagesOf({ ...filledInput, companyName }).companyName).toBe(
