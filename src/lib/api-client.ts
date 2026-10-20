@@ -68,6 +68,12 @@ export async function apiRequest<T>(
   throw error;
 }
 
+// A failure that is not an ApiError, like an error in the screen's own code,
+// shows as the internal error of the catalog.
+export function toApiError(error: unknown): ApiError {
+  return error instanceof ApiError ? error : catalogError("INTERNAL_ERROR");
+}
+
 // The query of a listing: page, pageSize, the search and the filters
 // (docs/padroes/api.md, Paginação). An empty search or filter is left out.
 export function withQuery(path: string, params: QueryParams): string {
