@@ -6,7 +6,7 @@ tipo: funcionalidade
 requisitos: [RN035, RS003, RS013, RS017, RNF008]
 status: concluido
 aprovado_por: yvan  
-aprovado_em: 00:04 19/10/2024
+aprovado_em: 00:04 19/10/2026
 ---
 
 # Plano: Formatos de dados (RN035), catálogo de erros e tipos comuns da API em src/shared
