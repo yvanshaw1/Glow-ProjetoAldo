@@ -1,6 +1,6 @@
 ---
 issue: 25
-pull_request: <número>
+pull_request: 33
 ---
 
 # Relatório: Base do frontend: shadcn/ui, tema, cliente da API, sessão e layouts
