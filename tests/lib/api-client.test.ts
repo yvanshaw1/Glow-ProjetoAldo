@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Mock } from "vitest";
-import { ApiError, apiRequest } from "@/lib/api-client";
+import { ApiError, apiRequest, withQuery } from "@/lib/api-client";
 import type { SessionUser } from "@/shared/api/auth";
 import type { ProblemDetails } from "@/shared/api/problem";
 import type { ErrorCode } from "@/shared/errors/catalog";
@@ -314,5 +314,36 @@ describe("apiRequest", () => {
 
     expect(reason).not.toBeInstanceOf(ApiError);
     expect(reason).toHaveProperty("name", "AbortError");
+  });
+});
+
+// The listings send page, pageSize, the search and the filters in the query
+// (docs/padroes/api.md, Paginação; docs/padroes/componentes.md).
+describe("withQuery", () => {
+  const CLIENTS_PATH = "/api/admin/clients";
+
+  it("adds the query parameters to the path", () => {
+    expect(
+      withQuery(CLIENTS_PATH, { page: 2, pageSize: 20, search: "Maria José" }),
+    ).toBe("/api/admin/clients?page=2&pageSize=20&search=Maria+Jos%C3%A9");
+  });
+
+  it("leaves out the empty parameters", () => {
+    expect(
+      withQuery(CLIENTS_PATH, { page: 1, search: "", status: undefined }),
+    ).toBe("/api/admin/clients?page=1");
+  });
+
+  it("writes booleans as true or false", () => {
+    expect(withQuery(CLIENTS_PATH, { includeInactive: true })).toBe(
+      "/api/admin/clients?includeInactive=true",
+    );
+    expect(withQuery(CLIENTS_PATH, { includeInactive: false })).toBe(
+      "/api/admin/clients?includeInactive=false",
+    );
+  });
+
+  it("returns the path alone without parameters", () => {
+    expect(withQuery(CLIENTS_PATH, {})).toBe(CLIENTS_PATH);
   });
 });
