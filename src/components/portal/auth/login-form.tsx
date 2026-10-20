@@ -4,13 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FormAlert, useFormFailure } from "@/components/portal/auth/form-alert";
-import { FormField } from "@/components/portal/auth/form-field";
 import { withNext } from "@/components/portal/auth/next-param";
-import { PasswordInput } from "@/components/portal/auth/password-input";
-import { SubmitButton } from "@/components/portal/auth/submit-button";
+import { FormAlert } from "@/components/shared/form-alert";
+import { FormField } from "@/components/shared/form-field";
+import { PasswordInput } from "@/components/shared/password-input";
+import { SubmitButton } from "@/components/shared/submit-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
+import { useFormFailure } from "@/hooks/use-form-failure";
 import { useSession } from "@/hooks/use-session";
 import { apiRequest } from "@/lib/api-client";
 import type { SessionUser } from "@/shared/api/auth";
@@ -90,6 +91,8 @@ export function LoginForm({ next, isRegistered }: LoginFormProps) {
           )}
         />
         <SubmitButton
+          size="lg"
+          className="w-full"
           isLoading={formState.isSubmitting || isLeaving}
           loadingLabel="Entrando…"
         >

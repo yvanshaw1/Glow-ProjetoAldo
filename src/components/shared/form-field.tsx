@@ -32,7 +32,7 @@ type FormFieldProps<T extends FieldValues> = {
   renderInput: (props: FieldInputProps<T>) => ReactNode;
 };
 
-// One field of the access forms: the label, the input, the description and
+// One form field: the label, the input, the description and
 // the message of the field, tied to the input (RNF003, RNF005).
 export function FormField<T extends FieldValues>({
   control,

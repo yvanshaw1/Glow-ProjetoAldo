@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useState } from "react";
 import type { FieldPath, FieldValues, UseFormSetError } from "react-hook-form";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ApiError } from "@/lib/api-client";
 import { ERROR_CATALOG } from "@/shared/errors/catalog";
 
@@ -47,18 +40,4 @@ export function useFormFailure<T extends FieldValues>(
   const clearFailure = useCallback(() => setFailure(null), []);
 
   return { failure, showFailure, clearFailure };
-}
-
-// RNF003, RNF005: the notice takes the focus when it appears, so a keyboard
-// or screen reader user hears it right away.
-export function FormAlert({ children }: { children: ReactNode }) {
-  const alertRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    alertRef.current?.focus();
-  }, []);
-  return (
-    <Alert ref={alertRef} tabIndex={-1} variant="destructive">
-      <AlertDescription>{children}</AlertDescription>
-    </Alert>
-  );
 }

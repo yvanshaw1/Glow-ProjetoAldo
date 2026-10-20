@@ -4,10 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { FormAlert, useFormFailure } from "@/components/portal/auth/form-alert";
-import { FormField } from "@/components/portal/auth/form-field";
-import { PasswordInput } from "@/components/portal/auth/password-input";
-import { SubmitButton } from "@/components/portal/auth/submit-button";
+import { FormAlert } from "@/components/shared/form-alert";
+import { FormField } from "@/components/shared/form-field";
+import { PasswordInput } from "@/components/shared/password-input";
+import { SubmitButton } from "@/components/shared/submit-button";
+import { useFormFailure } from "@/hooks/use-form-failure";
 import { apiRequest } from "@/lib/api-client";
 import { changePasswordFormSchema } from "@/shared/validation/auth";
 
@@ -84,6 +85,8 @@ export function SetPasswordForm() {
           )}
         />
         <SubmitButton
+          size="lg"
+          className="w-full"
           isLoading={formState.isSubmitting || isLeaving}
           loadingLabel="Salvando…"
         >

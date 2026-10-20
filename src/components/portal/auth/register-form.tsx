@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
-import { FormAlert, useFormFailure } from "@/components/portal/auth/form-alert";
-import { FormField } from "@/components/portal/auth/form-field";
 import { withNext } from "@/components/portal/auth/next-param";
-import { PasswordInput } from "@/components/portal/auth/password-input";
-import { SubmitButton } from "@/components/portal/auth/submit-button";
+import { FormAlert } from "@/components/shared/form-alert";
+import { FormField } from "@/components/shared/form-field";
+import { PasswordInput } from "@/components/shared/password-input";
+import { SubmitButton } from "@/components/shared/submit-button";
 import { Input } from "@/components/ui/input";
+import { useFormFailure } from "@/hooks/use-form-failure";
 import { apiRequest } from "@/lib/api-client";
 import type { RegisteredClient } from "@/shared/api/auth";
 import { formatPhone } from "@/shared/format/phone";
@@ -152,6 +153,8 @@ export function RegisterForm({ next }: { next: string | null }) {
           )}
         />
         <SubmitButton
+          size="lg"
+          className="w-full"
           isLoading={formState.isSubmitting || isLeaving}
           loadingLabel="Criando conta…"
         >

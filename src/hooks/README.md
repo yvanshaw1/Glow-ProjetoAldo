@@ -1,6 +1,6 @@
 # `src/hooks/` – Hooks reutilizáveis
 
-Hooks de cliente usados por vários componentes, como a listagem paginada com busca e filtros, a chamada à API com estado de carregamento e o acesso à sessão.
+Hooks de cliente usados por vários componentes, como a listagem paginada com busca e filtros, a chamada à API com estado de carregamento, a falha dos formulários (`use-form-failure.ts`) e o acesso à sessão.
 
 ## Vai aqui
 
