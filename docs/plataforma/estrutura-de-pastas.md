@@ -35,7 +35,7 @@ App/
 │   ├── lib/                         api-client.ts · utils.ts (cn() do shadcn)
 │   ├── shared/                      roda no navegador e no servidor
 │   │   ├── validation/              formatos de RN035 (formats.ts), id e paginação (params.ts) e esquemas por módulo
-│   │   ├── format/                  exibição de moeda, telefone, placa, CNPJ e datas (Intl)
+│   │   ├── format/                  exibição de moeda, telefone, placa, CNPJ, datas e duração (Intl)
 │   │   ├── errors/                  catálogo de códigos e mensagens
 │   │   ├── constants/               enums como listas `as const`, rótulos em português, limites
 │   │   └── api/                     tipos das respostas e da paginação

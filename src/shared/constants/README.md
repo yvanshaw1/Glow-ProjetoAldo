@@ -6,6 +6,7 @@ Os valores de enum como listas `as const` (status, permissões, formas de pagame
 
 - listas `as const` que são a fonte dos esquemas Zod e da interface
 - rótulos de exibição dos enums e limites nomeados
+- o fuso da empresa (`time-zone.ts`), usado pelos formatos e pelas regras do agendamento
 
 ## Não vai aqui
 

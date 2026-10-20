@@ -11,7 +11,7 @@ Os módulos reproduzem, por assunto, os três documentos formais do projeto (An�
 | `equipe/` | funcionários, cargos, permissões, administrador |
 | `configuracoes/` | dados da empresa, disponibilidade, formas de pagamento |
 | `plataforma/` | visão geral e stack, requisitos não funcionais, segurança, formatos dos dados, exclusão lógica, infraestrutura |
-| `padroes/` | como programar: `codigo.md` (todas as áreas), `frontend.md` e `layouts.md`, `design.md` e `design-midia.md` (estilo visual), `backend.md`, `api.md`, `banco.md`, `testes.md` |
+| `padroes/` | como programar: `codigo.md` (todas as áreas), `frontend.md`, `layouts.md` e `componentes.md`, `design.md` e `design-midia.md` (estilo visual), `backend.md`, `api.md`, `banco.md`, `testes.md` |
 | `decisoes/` | registros de decisão; índice em `decisoes/CONTEXT.md` |
 
 Cada assunto tem um `CONTEXT.md` com a lista dos seus arquivos. Comece por ele.

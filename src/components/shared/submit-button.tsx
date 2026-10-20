@@ -1,8 +1,12 @@
 import { LoaderCircleIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-type SubmitButtonProps = {
+type SubmitButtonProps = Pick<
+  ComponentProps<typeof Button>,
+  "size" | "className"
+> & {
   isLoading: boolean;
   loadingLabel: string;
   children: ReactNode;
@@ -14,14 +18,16 @@ export function SubmitButton({
   isLoading,
   loadingLabel,
   children,
+  size,
+  className,
 }: SubmitButtonProps) {
   return (
     <Button
       type="submit"
-      size="lg"
+      size={size}
       disabled={isLoading}
       focusableWhenDisabled
-      className="w-full disabled:cursor-progress disabled:opacity-70"
+      className={cn("disabled:cursor-progress disabled:opacity-70", className)}
     >
       {isLoading && (
         <LoaderCircleIcon aria-hidden className="animate-spin text-link" />
