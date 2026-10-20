@@ -1,7 +1,7 @@
 ---
 titulo: Padrões de testes e qualidade
 origem: Documentação de Desenvolvimento com IA, seção 8; Documentação de Arquitetura de Software, seção 9
-relacionados: [RN009, RN010, RN012, RN013, RN017, RN018, RN019, RN020, RN032, RN033, RN034, RN035]
+relacionados: [RN005, RN006, RN009, RN010, RN012, RN013, RN014, RN015, RN017, RN018, RN019, RN020, RN032, RN033, RN034, RN035]
 ---
 
 # Padrões de testes e qualidade
@@ -14,10 +14,10 @@ O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calc
 
 | Módulo | Casos que os testes devem cobrir |
 |---|---|
-| Cálculo de preço | valor por porte e fixo, soma dos itens, acréscimo, desconto, desconto de 100%, arredondamento ao centavo (RN009, RN010, RN012) |
+| Cálculo de preço | valor por porte e fixo, soma dos itens, acréscimo, desconto, desconto de 100%, arredondamento ao centavo, inclusive o meio centavo; composição dos serviços (RN005, RN006, RN009, RN010, RN012) |
 | Transições de status | sequência completa, conclusão com troca da forma de pagamento, cancelamento pelo cliente e pelo funcionário, reagendamento único (RN017, RN018, RN019, RN020) |
-| Datas e previsão | fora do expediente, na pausa, em dia fechado, no passado; previsão atravessando a pausa, a noite e dias fechados (RN013, RN034) |
-| Regras de edição | cliente só posterga; funcionário adianta ou posterga; data incompatível com o status é recusada (RN032, RN033) |
+| Datas e previsão | duração estimada; fora do expediente, na pausa, em dia fechado, fora dos intervalos de 30 minutos, no passado; previsão atravessando a pausa, a noite e dias fechados e terminando no encerramento (RN013, RN014, RN015, RN034) |
+| Regras de edição | quem edita em cada status; cliente só posterga; funcionário adianta ou posterga; data incompatível com o status é recusada; data mantida (RN032, RN033) |
 | Validação e formatos | nomes com partículas, e-mail, celular, placa nos dois padrões, ano, CNPJ, senha, descarte de campos não previstos (RN035) |
 | Tratamento único | Problem Details de `AppError`, de erro de validação e de erro inesperado; recusa por formato, tamanho e origem sem chegar à rota; registro sem senha, token, cookie, cabeçalho de autorização nem corpo; resposta fora de cache; usuário em toda linha do registro (RS014, RS017, RS018) |
 | Cliente da API | JSON e Problem Details; 401 `UNAUTHENTICATED` leva a `/login` com a página atual, os outros 401 voltam à tela, e o da carga da sessão não sai da página; 403 `PASSWORD_CHANGE_REQUIRED` leva a `/set-password`; nenhuma chamada repetida; falha de rede e resposta fora do formato; parâmetros de consulta, sem os vazios |

@@ -22,7 +22,7 @@ Os indicadores (seção 5) não ficam em `rules/`: são agregações por períod
 
 - Valor do item: `by_size` usa o preço do porte do veículo; `fixed` usa `fixed_price`; adicional é sempre fixo.
 - Subtotal: soma dos itens. Total: subtotal ajustado pelo percentual da forma (positivo acréscimo, negativo desconto). Desconto de 100% dá total zero.
-- Cálculo em centavos inteiros, arredondado ao centavo mais próximo. A regra de desempate (meio centavo) não está definida: decidir no plano e cobrir com teste.
+- Cálculo em centavos inteiros: as funções recebem e devolvem reais, como o banco, a API e as telas, e convertem para centavos por dentro. Só o total é arredondado, uma vez, ao centavo mais próximo, e o meio centavo sobe: R$ 150,10 com acréscimo de 5% (R$ 157,605) dá R$ 157,61, e com desconto de 5% (R$ 142,595), R$ 142,60. Como o total nunca é negativo, é o mesmo resultado do `round` do PostgreSQL.
 - Composição: ao menos um serviço principal ou complementar (RN005); adicional só com o principal a que está vinculado (RN006).
 - A mesma função serve ao novo agendamento, à edição, ao reagendamento (sempre pelo catálogo atual, RN020) e à conclusão com troca da forma de pagamento (RN018).
 
@@ -42,14 +42,15 @@ Os indicadores (seção 5) não ficam em `rules/`: são agregações por períod
 
 ## 3. Datas e horários (RN013, RN015, RN016, RN034)
 
-- Início válido: dia aberto, entre `opens_at` (inclusive) e `closes_at`, fora da pausa, em múltiplo de 30 minutos e não anterior a `now`.
-- Previsão de conclusão: distribuir a duração estimada pelos períodos de funcionamento a partir do início, pulando pausa, horário fora do expediente e dias fechados. Exemplo: dia das 8h às 18h com pausa das 12h às 13h, início às 16h e 4 horas de serviço → 2 horas no dia, 2 horas no próximo dia aberto → previsão às 10h desse dia.
+- Início válido: dia aberto, de `opens_at` (inclusive) a `closes_at` (exclusive), fora da pausa, de `break_starts_at` (inclusive) a `break_ends_at` (exclusive), em múltiplo de 30 minutos e não anterior a `now`. Com expediente das 8h às 18h e pausa das 12h às 13h, 8h, 13h e 17h30 são aceitos, e 12h, 12h30 e 18h, recusados.
+- Previsão de conclusão: distribuir a duração estimada pelos períodos de funcionamento a partir do início, pulando pausa, horário fora do expediente e dias fechados. Exemplo: dia das 8h às 18h com pausa das 12h às 13h, início às 16h e 4 horas de serviço → 2 horas no dia, 2 horas no próximo dia aberto → previsão às 10h desse dia. O trabalho que termina exatamente no encerramento ou no início da pausa tem a previsão nesse horário: início às 16h com 2 horas → 18h do mesmo dia.
 - Sem controle de capacidade nem de conflito entre agendamentos (RN016). O cliente pode registrar a qualquer momento (RNF012); a disponibilidade restringe o horário marcado, não o momento do registro.
 
 ## 4. Edição (RN032, RN033)
 
 - Cliente: só em `scheduled`, e só posterga: a nova data e o novo horário são posteriores aos marcados e no futuro.
-- Funcionário: qualquer status; em `scheduled`, nunca no passado; de `checked_in` em diante, nunca depois do momento da alteração.
+- Funcionário: qualquer status; em `scheduled`, nunca no passado; em `checked_in`, `in_progress`, `awaiting_payment`, `completed` e `rescheduled`, nunca depois do momento da alteração; em `cancelled`, só a disponibilidade.
+- As conferências de data só valem quando a data ou o horário mudam. A previsão é recalculada a partir da data marcada; se ela ficou fora do funcionamento, a contagem começa no próximo período.
 - A edição nunca muda o status.
 - Troca de veículo ou serviços recalcula todos os itens pelo catálogo atual; troca da forma aplica o percentual vigente; subtotal, total, duração e previsão são sempre recalculados, e a cópia dos dados é refeita (RN037).
 
