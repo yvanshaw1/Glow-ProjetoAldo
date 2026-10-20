@@ -4,6 +4,8 @@ import { MAX_PAGE_SIZE } from "@/shared/constants/pagination";
 // Parameters common to the API routes (docs/padroes/api.md, Validação).
 
 const PAGINATION_MESSAGE = "Informe um número inteiro a partir de 1.";
+// The version is never typed: it is wrong only on a screen left open.
+const STALE_VERSION_MESSAGE = "Atualize a página e tente novamente.";
 const FIRST_PAGE = 1;
 
 // Any 8-4-4-4-12 hexadecimal id, as the PostgreSQL uuid type accepts: the ids
@@ -26,3 +28,11 @@ export function paginationSchema(defaultPageSize: number) {
       .transform((pageSize) => Math.min(pageSize, MAX_PAGE_SIZE)),
   });
 }
+
+// RNF011: the updatedAt read with the record, sent back on every PATCH and PUT
+// as the database wrote it, such as 2026-10-20T13:45:12.345678+00:00
+// (docs/padroes/api.md, Concorrência).
+export const updatedAtSchema = z.iso.datetime({
+  offset: true,
+  error: STALE_VERSION_MESSAGE,
+});

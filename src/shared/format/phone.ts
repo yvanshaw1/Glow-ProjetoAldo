@@ -27,3 +27,16 @@ export function formatPhone(text: string): string {
     ? `(${areaCode}) ${prefix}`
     : `(${areaCode}) ${prefix}-${suffix}`;
 }
+
+// The links need Brazil's country code, which RN035 does not store.
+const COUNTRY_CODE = "55";
+
+// A stored phone (its digits) as a link for calling.
+export function formatPhoneLink(digits: string): string {
+  return `tel:+${COUNTRY_CODE}${digits}`;
+}
+
+// A stored WhatsApp (its digits) as WhatsApp's own link to a chat.
+export function formatWhatsAppLink(digits: string): string {
+  return `https://wa.me/${COUNTRY_CODE}${digits}`;
+}

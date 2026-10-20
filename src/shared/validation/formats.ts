@@ -111,6 +111,10 @@ function isMissing(input: unknown): boolean {
   return input === undefined || input === null;
 }
 
+function isBlank(input: unknown): boolean {
+  return typeof input === "string" && normalizeText(input) === "";
+}
+
 function reject(context: z.core.$RefinementCtx, message: string): never {
   context.addIssue({ code: "custom", message });
   return z.NEVER;
@@ -405,3 +409,20 @@ export const searchTermSchema = z
   .refine((term) => countCharacters(term) <= SEARCH_TERM_MAX_LENGTH, {
     error: SEARCH_TERM_MESSAGE,
   });
+
+// RN035: an optional field left absent, null or empty, spaces included, has no
+// value (null), and on a PUT or PATCH it erases the stored one
+// (docs/padroes/api.md). A filled one follows its format, with its message.
+export function optionalFormat<Output>(format: z.ZodType<Output, string>) {
+  return z
+    .custom<string | null | undefined>()
+    .transform((value, context): Output | null => {
+      if (isMissing(value) || isBlank(value)) return null;
+      const result = format.safeParse(value);
+      if (result.success) return result.data;
+      return reject(
+        context,
+        result.error.issues[0]?.message ?? REQUIRED_MESSAGE,
+      );
+    });
+}
