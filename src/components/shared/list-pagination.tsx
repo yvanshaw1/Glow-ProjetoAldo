@@ -13,7 +13,8 @@ import { cn } from "@/lib/utils";
 type ListPaginationProps = {
   page: number;
   pageCount: number;
-  pageSize: number;
+  firstItem: number;
+  lastItem: number;
   total: number;
   onPageChange: (page: number) => void;
 };
@@ -24,16 +25,16 @@ const VISIBLE_PAGES = 3;
 const FIRST_PAGE = 1;
 
 // docs/padroes/componentes.md, Listagem: buttons, because changing the page
-// is an action; the range is announced after each page change and search.
+// is an action. The range comes from the items on the screen, so it is
+// announced when a new page or search arrives.
 export function ListPagination({
   page,
   pageCount,
-  pageSize,
+  firstItem,
+  lastItem,
   total,
   onPageChange,
 }: ListPaginationProps) {
-  const firstItem = (page - 1) * pageSize + 1;
-  const lastItem = Math.min(page * pageSize, total);
   const isFirstPage = page === FIRST_PAGE;
   const isLastPage = page === pageCount;
 

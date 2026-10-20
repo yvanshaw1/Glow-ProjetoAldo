@@ -30,8 +30,10 @@ export type PaginatedList<T, F extends ListFilters = ListFilters> = {
   items: T[];
   total: number;
   page: number;
-  pageSize: number;
   pageCount: number;
+  // The range of the items on the screen, as "21–40 de 45".
+  firstItem: number;
+  lastItem: number;
   hasLoaded: boolean;
   isLoading: boolean;
   error: ApiError | null;
@@ -88,13 +90,15 @@ export function usePaginatedList<T, F extends ListFilters>({
   if (result && result.data.length === 0 && criteria.page > pageCount) {
     setCriteria({ ...criteria, page: pageCount });
   }
+  const firstItem = result ? (result.page - 1) * result.pageSize + 1 : 0;
 
   return {
     items: result?.data ?? [],
     total: result?.total ?? 0,
     page: criteria.page,
-    pageSize: result?.pageSize ?? pageSize,
     pageCount,
+    firstItem,
+    lastItem: result ? firstItem + result.data.length - 1 : 0,
     hasLoaded: result !== null,
     isLoading: query.isLoading,
     error: query.error,

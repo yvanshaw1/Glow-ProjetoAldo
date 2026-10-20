@@ -1,7 +1,7 @@
 "use client";
 
 import { SearchIcon } from "lucide-react";
-import { useId, type ReactNode } from "react";
+import { useId, useRef, type ReactNode } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ListPagination } from "@/components/shared/list-pagination";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -44,6 +44,13 @@ export function PaginatedList<T, F extends ListFilters>({
   renderItems,
 }: PaginatedListProps<T, F>) {
   const searchId = useId();
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  // The button goes away with the filters: the focus goes to the search.
+  function clearFilters() {
+    list.clearFilters();
+    searchRef.current?.focus();
+  }
 
   return (
     <div className="flex flex-col gap-5">
@@ -57,6 +64,7 @@ export function PaginatedList<T, F extends ListFilters>({
             className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
           />
           <Input
+            ref={searchRef}
             id={searchId}
             type="search"
             value={list.searchText}
@@ -71,7 +79,7 @@ export function PaginatedList<T, F extends ListFilters>({
         {filters}
         {/* RF048: the search and the filters go away in a single action. */}
         {list.hasActiveFilters && (
-          <Button variant="ghost" onClick={list.clearFilters}>
+          <Button variant="ghost" onClick={clearFilters}>
             Limpar filtros
           </Button>
         )}
@@ -89,7 +97,8 @@ export function PaginatedList<T, F extends ListFilters>({
         <ListPagination
           page={list.page}
           pageCount={list.pageCount}
-          pageSize={list.pageSize}
+          firstItem={list.firstItem}
+          lastItem={list.lastItem}
           total={list.total}
           onPageChange={list.setPage}
         />
