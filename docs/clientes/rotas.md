@@ -42,14 +42,14 @@ Altera os dados da conta.
 Lista os veículos vinculados à conta do cliente.
 
 - Entrada: Nenhuma.
-- Resposta: **200** lista paginada de veículos, com tipo e porte.
+- Resposta: **200** lista paginada de `id`, `plate`, `type`, `size`, `brand`, `model`, `color`, `year`, `isShared` (o veículo também está vinculado a outra conta e só a empresa altera os dados dele, RN036, UC05 FE03) e `updatedAt`, na ordem em que foram vinculados à conta.
 
 #### `GET /api/me/vehicles/lookup`
 
 Consulta uma placa antes do cadastro (UC05).
 
 - Entrada: `plate*`
-- Resposta: **200** tipo, marca, modelo, cor e ano do veículo, se a placa já estiver cadastrada, ou resposta vazia; nunca devolve dados de clientes.
+- Resposta: **200** `type`, `brand`, `model`, `color` e `year` do veículo, se a placa já estiver cadastrada, ou `null`; nunca devolve dados de clientes.
 
 #### `POST /api/me/vehicles`
 
