@@ -46,7 +46,7 @@ Toda listagem aceita `page` e `pageSize` (máximo 50; acima disso vale 50) e res
 | Veículos do cliente, agendamentos do cliente, busca de clientes no novo agendamento, agenda do dia | 10 |
 | Agendamentos do painel, serviços, categorias, clientes, funcionários e cargos | 20 |
 
-Não paginam só as listas de tamanho fixo: sete dias da semana, quatro formas de pagamento e serviços de um agendamento.
+Não paginam só as listas de tamanho fixo (sete dias da semana, quatro formas de pagamento e serviços de um agendamento) e as categorias do filtro do catálogo público, que o filtro precisa inteiras.
 
 ## Erros (RFC 9457, RS017)
 
