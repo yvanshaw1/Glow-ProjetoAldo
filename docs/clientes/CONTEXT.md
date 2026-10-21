@@ -16,3 +16,4 @@ Leia só o que a tarefa pede: o caso de uso do fluxo, as regras que ele cita e, 
 | RN036-placa-unica.md | Placa única |
 | dados.md | Tabelas `clients`, `vehicles`, `client_vehicles` |
 | rotas.md | Telas e rotas da API |
+| area-do-cliente.md | Conteúdo e textos da área do cliente (`/profile`) |
