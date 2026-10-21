@@ -2,7 +2,7 @@
 titulo: Requisitos não funcionais
 assunto: plataforma
 origem: Documentação de Análise do Sistema, seção 7 (Quadro 18)
-ids: [RNF001, RNF002, RNF003, RNF004, RNF005, RNF006, RNF007, RNF008, RNF009, RNF010, RNF011, RNF012, RNF013, RNF014, RNF015, RNF016]
+ids: [RNF001, RNF002, RNF003, RNF004, RNF005, RNF006, RNF007, RNF008, RNF009, RNF010, RNF011, RNF012, RNF013, RNF014, RNF015, RNF016, RNF017, RNF018]
 ---
 
 # Requisitos não funcionais
@@ -27,3 +27,5 @@ Valem para todo o sistema. Os requisitos de segurança (RS) estão em [seguranca
 | RNF014 | Manutenibilidade | O código-fonte deve ser versionado e seguir os padrões de codificação e de revisão definidos na Documentação de Desenvolvimento com IA. | Essencial |
 | RNF015 | Implantação | Os parâmetros que variam entre ambientes devem ser definidos por configuração externa ao código. | Importante |
 | RNF016 | Localização | A interface deve ser apresentada em português do Brasil, com valores monetários em reais (R$) e datas no formato dd/mm/aaaa. | Essencial |
+| RNF017 | Confiabilidade | A falha ou a indisponibilidade de um serviço externo complementar, como o de inteligência artificial, não deve impedir o uso das demais informações e funções da tela. | Importante |
+| RNF018 | Desempenho | A geração da análise por inteligência artificial deve ser concluída ou interrompida em até 20 segundos, com indicação de andamento durante a espera; o limite de RNF007 não se aplica a ela. | Desejável |

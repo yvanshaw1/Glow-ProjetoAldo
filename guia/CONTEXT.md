@@ -13,6 +13,6 @@ Toda tarefa começa aqui. Identifique o tipo, leia só o que a linha indica e si
 | Documentação | O módulo afetado e `docs/CONTEXT.md` | Ciclo completo, com plano simplificado |
 | CI/CD e configuração | `workflows/procedimentos/` e `docs/plataforma/infraestrutura.md` | Ciclo completo |
 
-Padrões das áreas: `docs/padroes/codigo.md` sempre, mais `frontend.md`, `backend.md` e `api.md`, `banco.md` e `testes.md`, conforme as áreas que a tarefa toca.
+Padrões das áreas: `docs/padroes/codigo.md` sempre, mais `frontend.md`, `backend.md` e `api.md`, `banco.md` e `testes.md`, conforme as áreas que a tarefa toca. A tarefa que chama a IA do produto lê também `docs/plataforma/servico-de-ia.md`.
 
 Na dúvida entre trivial e ciclo completo, é ciclo completo. Uma tarefa só é tratada como trivial depois de conferidos os critérios do procedimento e aprovada na conversa.

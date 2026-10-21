@@ -15,6 +15,7 @@ Parte de [design.md](design.md), separada pelo tamanho.
 - Tamanhos: 16 px em texto, botões e navegação; 26 px em ícones de destaque; 42 e 68 px só em ilustrações, como estado vazio e seções da página inicial.
 - Cor: a do texto; o ícone ativo usa `--link`. Ícone decorativo leva `aria-hidden`.
 - O Lucide não tem ícones de marca: as redes sociais aparecem como links de texto.
+- `Sparkles` identifica o conteúdo gerado por IA, sempre com o texto que o diz.
 
 ## Imagens
 

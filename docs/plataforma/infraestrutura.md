@@ -2,12 +2,12 @@
 titulo: Infraestrutura, ambientes e CI
 assunto: plataforma
 origem: Documentação de Arquitetura de Software, seção 8 (Quadros 36 e 37)
-relacionados: [RNF014, RNF015, RS016, 0030, 0038]
+relacionados: [RNF014, RNF015, RNF017, RS016, RS019, 0030, 0038, 0054]
 ---
 
 # Infraestrutura, ambientes e CI
 
-Três serviços em plano gratuito: GitHub (código e CI), Vercel (aplicação) e Supabase (banco, autenticação e arquivos). Sem servidor próprio nem domínio, e a aplicação não é hospedada em contêineres: o Docker serve só para executá-la da mesma forma em qualquer máquina (Execução em contêiner).
+Quatro serviços em plano gratuito: GitHub (código e CI), Vercel (aplicação), Supabase (banco, autenticação e arquivos) e Groq (modelo de linguagem da análise do dashboard, [servico-de-ia.md](servico-de-ia.md)). Sem servidor próprio nem domínio, e a aplicação não é hospedada em contêineres: o Docker serve só para executá-la da mesma forma em qualquer máquina (Execução em contêiner).
 
 ## Ambientes
 
@@ -29,6 +29,11 @@ Nenhuma usa o prefixo `NEXT_PUBLIC_`, então nenhuma chega ao navegador. O repos
 | `SUPABASE_ANON_KEY` | não | chave pública, usada pelo servidor no login e na validação da sessão |
 | `SUPABASE_SERVICE_ROLE_KEY` | sim | chave de serviço: leitura e gravação dos dados e criação de contas, só em `src/server` |
 | `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` | sim | conta de administrador, só para o script de dados iniciais |
+| `AI_BASE_URL` | não | endereço do serviço de IA, no formato Chat Completions |
+| `AI_MODEL` | não | modelo da análise do dashboard |
+| `AI_API_KEY` | sim | chave do serviço de IA, só em `src/server/ai/` |
+
+Sem as variáveis `AI_*`, a análise do dashboard responde indisponível, e o resto funciona (RNF017); valores e limites em [servico-de-ia.md](servico-de-ia.md).
 
 O fuso da empresa não é variável de ambiente: é a constante `COMPANY_TIME_ZONE` (`America/Maceio`), em `src/shared/constants/time-zone.ts`, usada pelo navegador e pelo servidor (decisão 0053).
 

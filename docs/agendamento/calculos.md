@@ -2,12 +2,12 @@
 titulo: Funções puras do agendamento
 assunto: agendamento
 origem: Documentação de Arquitetura de Software, seção 4.2; Documentação de Análise do Sistema, seção 9
-relacionados: [RN005, RN006, RN009, RN010, RN012, RN013, RN015, RN016, RN017, RN018, RN019, RN020, RN021, RN032, RN033, RN034, RN037]
+relacionados: [RN005, RN006, RN009, RN010, RN012, RN013, RN015, RN016, RN017, RN018, RN019, RN020, RN021, RN032, RN033, RN034, RN037, RN038, RN039]
 ---
 
 # Funções puras do agendamento
 
-Quatro conjuntos de regras do módulo `appointments` são funções puras, sem banco, desenvolvidas com TDD (`docs/padroes/testes.md`). Recebem por parâmetro tudo de que precisam: itens do catálogo vigente, porte do veículo, percentual da forma de pagamento, disponibilidade (`business_hours`), fuso da empresa (`COMPANY_TIME_ZONE`, `America/Maceio`) e o instante atual (`now`). Nunca leem relógio, banco ou variáveis de ambiente. O serviço `appointments` busca esses dados, chama as funções e grava o resultado.
+Quatro conjuntos de regras do módulo `appointments` e as regras da análise do módulo `dashboard` são funções puras, sem banco, desenvolvidas com TDD (`docs/padroes/testes.md`). Recebem por parâmetro tudo de que precisam: itens do catálogo vigente, porte do veículo, percentual da forma de pagamento, disponibilidade (`business_hours`), fuso da empresa (`COMPANY_TIME_ZONE`, `America/Maceio`) e o instante atual (`now`). Nunca leem relógio, banco ou variáveis de ambiente. O serviço `appointments` busca esses dados, chama as funções e grava o resultado.
 
 | Seção | Arquivo | Teste |
 |---|---|---|
@@ -15,6 +15,7 @@ Quatro conjuntos de regras do módulo `appointments` são funções puras, sem b
 | 2. Transições de status | `src/server/rules/status-transitions.ts` | `tests/rules/status-transitions.test.ts` |
 | 3. Datas e horários | `src/server/rules/scheduling.ts` | `tests/rules/scheduling.test.ts` |
 | 4. Edição | `src/server/rules/editing.ts` | `tests/rules/editing.test.ts` |
+| 6. Análise do dashboard | `src/server/rules/dashboard-analysis.ts` | `tests/rules/dashboard-analysis.test.ts` |
 
 Os indicadores (seção 5) não ficam em `rules/`: são agregações por período, e onde calculá-las (no banco ou no serviço `dashboard`) é decidido no plano da tarefa do dashboard.
 
@@ -60,6 +61,15 @@ Os indicadores (seção 5) não ficam em `rules/`: são agregações por períod
 - Ticket médio: receita dividida pela quantidade desses agendamentos.
 - Taxa de cancelamento: cancelados sobre o total de agendamentos do período. A data que define o período para essa taxa (`scheduled_at` ou `created_at`) não está definida: perguntar no plano.
 - Período padrão: mês atual; no máximo 12 meses (RN035).
+
+## 6. Análise do dashboard (RN038, RN039)
+
+- Período anterior: a mesma quantidade de dias, terminando no dia anterior à data inicial. 01/10/2026 a 31/10/2026 dá 31/08/2026 a 30/09/2026; 21/10/2026 dá 20/10/2026; 01/03/2028 a 31/03/2028 dá 30/01/2028 a 29/02/2028.
+- Variação: percentual sobre o valor anterior, com uma casa decimal (R$ 10.000,00 para R$ 12.500,00 dá 25,0); na taxa de cancelamento, a diferença em pontos percentuais (10,0% para 15,0% dá 5,0). Sem variação quando o valor anterior é zero.
+- Entrada do modelo: os indicadores do período e do anterior, as variações, a receita por dia e a quantidade de agendamentos por status, com os rótulos de RN017. Nada da agenda do dia nem texto livre. Sem agendamentos no período anterior, a entrada marca a comparação como indisponível.
+- Mensagens: uma de sistema, fixa no código e em português, e uma com a entrada em JSON.
+- Resposta: JSON com `summary`, de 1 a 600 caracteres, e até quatro `highlights`, cada um com um indicador da lista (`revenue`, `appointmentCount`, `averageTicket`, `cancellationRate`, `revenueByDay`, `appointmentsByStatus`) e um `comment` de 1 a 240 caracteres, com os textos normalizados como os de RN035. A resposta fora desse formato é recusada (`INVALID_RESPONSE`), como a que tem algarismo no resumo ou numa observação (`NUMBERS_IN_TEXT`); campos não previstos são descartados.
+- As funções recebem os indicadores já calculados pelo serviço `dashboard` e devolvem a recusa como valor, sem lançar erro.
 
 ## Persistência
 

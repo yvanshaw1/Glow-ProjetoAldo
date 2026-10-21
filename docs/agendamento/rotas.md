@@ -14,7 +14,7 @@ Valem para todas as rotas, sem repetição abaixo ([../padroes/api.md](../padroe
 |---|---|---|---|
 | `/booking` | Agendar serviço | Cliente | UC06 |
 | `/appointments` | Agendamentos atuais e histórico, com edição, cancelamento e reagendamento | Cliente | UC07, UC25, UC26 |
-| `/admin` | Dashboard | permissão `dashboard` | UC09 |
+| `/admin` | Dashboard, com a análise do período por IA | permissão `dashboard` | UC09, UC27 |
 | `/admin/appointments` | Gerenciamento de agendamentos | permissão `appointments` | UC10, UC11, UC12, UC25, UC26 |
 
 Proteção das páginas: [../acesso/autenticacao.md](../acesso/autenticacao.md).
@@ -91,6 +91,13 @@ Indicadores e agenda do dia (UC09).
 
 - Entrada: `from, to` (datas; padrão: mês atual).
 - Resposta: **200** receita, quantidade de agendamentos, ticket médio, taxa de cancelamento, receita por dia, agendamentos por status e agenda do dia; 400 período inválido ou maior que 12 meses.
+
+#### `POST /api/admin/dashboard/analysis`
+
+Gera a análise do período por inteligência artificial (UC27); nada é gravado.
+
+- Entrada: `from*, to*` (datas do período exibido; até 12 meses).
+- Resposta: **200** `from`, `to`, `previousFrom`, `previousTo`, `hasComparison`, `summary`, `highlights` (até quatro, cada um com `indicator` e `comment`) e `generatedAt`; 400 período inválido ou maior que 12 meses; 409 `INSUFFICIENT_DATA`, período sem agendamentos, sem chamar a IA; 503 `AI_UNAVAILABLE`, serviço de IA sem configuração, sem resposta em 15 segundos, com o limite atingido ou com resposta fora de RN039 (`docs/plataforma/servico-de-ia.md`).
 
 ### Rotas do painel: agendamentos
 

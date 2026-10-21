@@ -1,7 +1,7 @@
 ---
 titulo: Padrões de testes e qualidade
 origem: Documentação de Desenvolvimento com IA, seção 8; Documentação de Arquitetura de Software, seção 9
-relacionados: [RN005, RN006, RN009, RN010, RN012, RN013, RN014, RN015, RN017, RN018, RN019, RN020, RN032, RN033, RN034, RN035]
+relacionados: [RN005, RN006, RN009, RN010, RN012, RN013, RN014, RN015, RN017, RN018, RN019, RN020, RN032, RN033, RN034, RN035, RN038, RN039]
 ---
 
 # Padrões de testes e qualidade
@@ -23,6 +23,7 @@ O Vitest testa as funções puras das regras de negócio (`docs/agendamento/calc
 | Cliente da API | JSON e Problem Details; 401 `UNAUTHENTICATED` leva a `/login` com a página atual, os outros 401 voltam à tela, e o da carga da sessão não sai da página; 403 `PASSWORD_CHANGE_REQUIRED` leva a `/set-password`; nenhuma chamada repetida; falha de rede e resposta fora do formato; parâmetros de consulta, sem os vazios |
 | Proteção das páginas | visitante, troca pendente, cliente, funcionário com e sem a permissão, sem nenhuma permissão e admin, em cada tipo de página; `next` de outro site, da API e das telas de acesso (RF010, RN025, RS004, RS010) |
 | Formatação | telefone celular e fixo, durante a digitação e já formatado; moeda, inclusive zero, e a leitura do campo monetário; data de um instante no fuso da empresa, perto da meia-noite, e data de calendário; data e hora; duração com e sem horas ou minutos; CNPJ durante a digitação e alfanumérico; links de telefone e de WhatsApp; ano no fuso da empresa (RN035, RNF016) |
+| Análise do dashboard | período anterior com a mesma quantidade de dias, na virada do ano e no ano bissexto; variação, inclusive com o valor anterior zero e em pontos percentuais; entrada só com valores agregados; resposta válida, fora do formato e com algarismos (RN038, RN039) |
 
 Todo caso desta tabela tem ao menos um teste, e o revisor confere a correspondência no pull request.
 

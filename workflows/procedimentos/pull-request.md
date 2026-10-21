@@ -22,6 +22,7 @@ Tamanho: até cerca de 400 linhas alteradas, sem contar testes; maior que isso, 
 - [ ] Erros pelo tratamento único, sem detalhe interno (RS017).
 - [ ] Nenhuma senha, token ou chave no código, nos testes ou nos registros (RS016, RS018).
 - [ ] Envio de arquivo respeita formatos e tamanho (RS015).
+- [ ] Chamada a serviço de IA só pelo servidor, com dados agregados e sem dado pessoal, e resposta conferida antes de exibir (RS019, RS020).
 
 Em funcionalidade nova, o revisor percorre também as demais categorias do OWASP Top 10 que se aplicam a ela.
 

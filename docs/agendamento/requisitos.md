@@ -2,7 +2,7 @@
 titulo: Requisitos funcionais – Agendamento
 assunto: agendamento
 origem: Documentação de Análise do Sistema, seções 6.1.4, 6.1.5, 6.2.2, 6.2.3 (Quadros 9, 10, 12, 13)
-ids: [RF019, RF020, RF021, RF022, RF023, RF024, RF025, RF026, RF027, RF028, RF029, RF030, RF031, RF032, RF040, RF041, RF042, RF043, RF044, RF045, RF046, RF047, RF048, RF049, RF050, RF051, RF052, RF053, RF054, RF055, RF056]
+ids: [RF019, RF020, RF021, RF022, RF023, RF024, RF025, RF026, RF027, RF028, RF029, RF030, RF031, RF032, RF040, RF041, RF042, RF043, RF044, RF045, RF046, RF047, RF048, RF049, RF050, RF051, RF052, RF053, RF054, RF055, RF056, RF089, RF090]
 ---
 
 # Requisitos funcionais: Agendamento
@@ -41,6 +41,8 @@ Prioridade: Essencial (obrigatório no MVP), Importante (sem ele o sistema funci
 | RF041 | O sistema deve exibir a receita por dia. | Importante |
 | RF042 | O sistema deve exibir a distribuição dos agendamentos por status. | Importante |
 | RF043 | O sistema deve exibir a agenda do dia, com os agendamentos previstos para a data corrente. | Importante |
+| RF089 | O sistema deve gerar, quando o funcionário solicitar, uma análise em texto dos indicadores do período exibido no dashboard, produzida por um serviço de inteligência artificial (RN038, RN039). | Desejável |
+| RF090 | O sistema deve exibir a análise identificada como gerada por inteligência artificial, com a data e o horário da geração, junto aos indicadores do período, sem substituí-los. | Desejável |
 
 ## Gestão de agendamentos
 

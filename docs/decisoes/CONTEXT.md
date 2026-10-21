@@ -61,3 +61,4 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0051](0051-protecao-das-paginas-no-proxy.md) | Proteção das páginas com a sessão e a conta conferidas no proxy.ts, que também decide o destino depois do login |
 | [0052](0052-testes-da-formatacao-e-da-protecao-das-paginas.md) | Testes automatizados das regras, dos esquemas, do tratamento único, do cliente da API, da formatação e da proteção das páginas |
 | [0053](0053-fuso-da-empresa-como-constante.md) | Fuso da empresa como constante compartilhada, sem variável de ambiente |
+| [0054](0054-analise-por-ia-no-groq.md) | Análise do dashboard por um modelo de linguagem do Groq em plano gratuito, chamado pelo servidor no formato Chat Completions |

@@ -11,11 +11,15 @@ origem: Documentação de Análise do Sistema, seções 1 a 5; Documentação de
 Aplicação web de uma única empresa de estética automotiva, usada pelo navegador, com duas interfaces e um backend em uma só aplicação Next.js:
 
 - **portal público e do cliente**: página inicial institucional, catálogo, cadastro e login; para o cliente, conta, veículos, agendamento e acompanhamento (editar, cancelar, reagendar);
-- **painel administrativo**: dashboard, agendamentos (criar, editar, avançar status, concluir com a forma de pagamento, cancelar, reagendar), serviços e categorias, clientes e veículos, funcionários e cargos, configurações.
+- **painel administrativo**: dashboard, com a análise do período por inteligência artificial, agendamentos (criar, editar, avançar status, concluir com a forma de pagamento, cancelar, reagendar), serviços e categorias, clientes e veículos, funcionários e cargos, configurações.
 
 ## Fora do escopo do MVP
 
-Pagamento online (o pagamento é presencial; o sistema só registra a forma e calcula o valor); envio de e-mails (convites, notificações, recuperação de senha); aplicativo nativo; documentos fiscais; estoque; controle de capacidade e de conflito de horários; fidelidade, cupons e promoções; várias empresas ou unidades.
+Pagamento online (o pagamento é presencial; o sistema só registra a forma e calcula o valor); envio de e-mails (convites, notificações, recuperação de senha); aplicativo nativo; documentos fiscais; estoque; gestão financeira além do valor e da forma de pagamento de cada agendamento; controle de capacidade e de conflito de horários; fidelidade, cupons e promoções; várias empresas ou unidades.
+
+## Evolução prevista
+
+O Glow foi pensado como a base de um sistema de gestão (ERP) de estética automotiva. Funções essenciais a um ERP, como o controle de estoque e a gestão financeira, ficam fora do MVP pelo prazo do projeto. A intenção é acrescentá-las depois e levar a elas a análise por inteligência artificial que começa no dashboard (UC27), com as mesmas regras: só dados agregados, nenhum dado pessoal enviado ao serviço de IA e a resposta conferida antes de ser exibida (RS019, RS020). Essas funções ainda não têm requisitos.
 
 ## Premissas
 
@@ -29,6 +33,7 @@ Todo veículo é hatch, sedan, SUV ou picape; pagamento presencial por crédito,
 | Cliente | `client` | mantém conta e veículos, agenda e acompanha os seus agendamentos |
 | Funcionário | `staff` | usa o painel conforme as permissões do cargo |
 | Administrador | `admin` | equipe de desenvolvimento; acesso irrestrito e oculto nas listagens (RN027) |
+| Serviço de inteligência artificial | – | serviço externo que escreve a análise do período do dashboard a partir dos valores agregados (UC27, RN038) |
 
 ## Stack
 
@@ -40,6 +45,7 @@ Todo veículo é hatch, sedan, SUV ou picape; pagamento presencial por crédito,
 | Contêineres | Docker e Docker Compose | 29 e 5 |
 | Interface | Tailwind CSS e shadcn/ui sobre Base UI | 4.3 |
 | Gráficos | Recharts | 3.10 |
+| Inteligência artificial | modelo de linguagem do Groq (`openai/gpt-oss-120b`), no formato Chat Completions, para a análise do dashboard ([servico-de-ia.md](servico-de-ia.md)) | serviço |
 | Validação | Zod | 4.6 |
 | Formulários | React Hook Form | 7.90 |
 | Dados | PostgreSQL, Auth e Storage do Supabase, via `supabase-js` e `@supabase/ssr`; CLI do Supabase para as migrations | gerenciado; 2.117, 0.12 e 2.120 |

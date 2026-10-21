@@ -10,7 +10,7 @@ Os módulos reproduzem, por assunto, os três documentos formais do projeto (An�
 | `clientes/` | conta do cliente, clientes no painel, veículos |
 | `equipe/` | funcionários, cargos, permissões, administrador |
 | `configuracoes/` | dados da empresa, disponibilidade, formas de pagamento |
-| `plataforma/` | visão geral e stack, requisitos não funcionais, segurança, formatos dos dados, exclusão lógica, infraestrutura |
+| `plataforma/` | visão geral e stack, requisitos não funcionais, segurança, formatos dos dados, exclusão lógica, infraestrutura, serviço de IA |
 | `padroes/` | como programar: `codigo.md` (todas as áreas), `frontend.md`, `layouts.md` e `componentes.md`, `design.md` e `design-midia.md` (estilo visual), `backend.md`, `api.md`, `banco.md`, `testes.md` |
 | `decisoes/` | registros de decisão; índice em `decisoes/CONTEXT.md` |
 
@@ -39,6 +39,7 @@ Lacuna decidida pelo desenvolvedor (`guia/regras.md`) vira documentação aqui:
 | Requisito não funcional ou de segurança | `docs/plataforma/requisitos.md` ou `docs/plataforma/seguranca.md` (com a implementação) |
 | Fluxo, alternativa ou exceção de um caso de uso | o `UCxx-*.md` correspondente; caso de uso novo vira arquivo novo |
 | Tabela, coluna, restrição ou função SQL | `dados.md` do assunto, junto com a migration |
+| Serviço externo usado pelo servidor, como o de IA | `docs/plataforma/servico-de-ia.md` |
 | Rota, campo ou erro da API | `rotas.md` do assunto, a especificação OpenAPI e, se for erro novo, `docs/padroes/api.md` |
 | Formato de dado | `docs/plataforma/RN035-formatos-dos-dados.md` |
 | Convenção de código de uma área | `docs/padroes/<área>.md` |

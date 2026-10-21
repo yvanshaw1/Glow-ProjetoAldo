@@ -2,7 +2,7 @@
 titulo: Requisitos de segurança e implementação
 assunto: plataforma
 origem: Documentação de Análise do Sistema, seção 8 (Quadro 19); Documentação de Arquitetura de Software, seção 7 (Quadro 35)
-ids: [RS001, RS002, RS003, RS004, RS005, RS006, RS007, RS008, RS009, RS010, RS011, RS012, RS013, RS014, RS015, RS016, RS017, RS018]
+ids: [RS001, RS002, RS003, RS004, RS005, RS006, RS007, RS008, RS009, RS010, RS011, RS012, RS013, RS014, RS015, RS016, RS017, RS018, RS019, RS020]
 ---
 
 # Segurança: requisitos e implementação
@@ -29,10 +29,14 @@ Todos os RS são obrigatórios no MVP. A coluna Implementação diz como cada um
 | RS016 | Segredos | Credenciais, chaves e demais segredos não devem constar no código-fonte nem no repositório, devendo ser fornecidos por configuração do ambiente. | As chaves ficam em variáveis de ambiente da Vercel e no arquivo `.env.local`, ignorado pelo Git e excluído da imagem do contêiner pelo `.dockerignore`. A chave de serviço do Supabase existe somente no servidor, e nenhuma variável é exposta ao navegador. |
 | RS017 | Dados de saída | As mensagens de erro devolvidas ao usuário devem ser genéricas e não devem expor detalhes internos, como mensagens do banco de dados, nomes de tabelas ou rastros de execução. | Tratamento único em `src/server/http/handler.ts`, com mensagens genéricas do catálogo de `src/shared/errors` e `requestId` para localizar o registro; os detalhes técnicos ficam só no servidor (`docs/padroes/api.md`). |
 | RS018 | Registros | Senhas, tokens e cookies de sessão não devem ser registrados em logs nem incluídos em mensagens de erro. | O registro do servidor guarda o `requestId`, a rota, o status e o usuário, e nunca senhas, tokens, cookies, o cabeçalho de autorização ou o corpo das rotas de autenticação. |
+| RS019 | Integrações | A comunicação com serviços externos de inteligência artificial deve partir somente do servidor, depois da verificação da sessão e da permissão, com a credencial fornecida pela configuração do ambiente e nunca exposta ao navegador nem registrada. | A rota `POST /api/admin/dashboard/analysis` chama `requirePermission("dashboard")`. O adaptador de `src/server/ai/` (`import 'server-only'`) lê `AI_BASE_URL`, `AI_MODEL` e `AI_API_KEY` durante a requisição e envia a chave só no cabeçalho de autorização, por HTTPS; sem as variáveis, a rota responde 503 `AI_UNAVAILABLE`. A chave não aparece no código do navegador nem no registro. |
+| RS020 | Integrações | Os dados enviados a serviços externos de inteligência artificial devem se limitar aos necessários, sem dados pessoais, e a resposta desses serviços deve ser tratada como não confiável, validada quanto ao formato e ao tamanho antes de ser exibida. | A entrada é montada por uma função pura que só recebe valores agregados (RN038), sem texto digitado pelo usuário. A resposta é pedida em esquema JSON e conferida por `src/server/rules/dashboard-analysis.ts` (RN039); o texto aparece como texto, nunca como HTML (RS014). Entradas e respostas não são gravadas nem registradas. |
 
 ## Complementos
 
 Complementam essas medidas o fechamento do banco ao acesso direto, descrito em `docs/padroes/banco.md`, e o envio dos cabeçalhos de segurança `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Strict-Transport-Security` e `Content-Security-Policy`, esta impedindo a exibição das páginas dentro de outros sites, o carregamento de objetos incorporados e o desvio de links e formulários, em todas as respostas, configurados em `next.config.ts` com os valores de `docs/padroes/backend.md`, e os limites de formato e de tamanho das requisições, descritos em `docs/padroes/api.md`.
+
+O serviço externo de inteligência artificial, usado pela análise do dashboard, é chamado só pelo servidor e recebe só valores agregados (RS019, RS020). O provedor, as variáveis, as falhas e o que o registro guarda das chamadas estão em [servico-de-ia.md](servico-de-ia.md).
 
 A segurança também é verificada durante o desenvolvimento: a lista OWASP Top 10 orienta as verificações de segurança de cada pull request, descritas na Documentação de Desenvolvimento com IA, e o CI audita as dependências a cada alteração (`docs/plataforma/infraestrutura.md`). Os acessos seguem o princípio do menor privilégio: a chave de serviço do Supabase é usada apenas pelo código de `src/server`, o fluxo do GitHub Actions tem somente permissão de leitura do repositório e não recebe nenhuma chave, e cada funcionário acessa apenas as páginas do seu cargo.
 
