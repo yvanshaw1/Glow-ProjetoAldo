@@ -113,3 +113,27 @@ Verificação local do PR 2, aprovada:
 ## 2026-10-21 – descoberta
 
 Fora do escopo, visto na paginação da variante temporária: as setas desativadas do `ListPagination` (#56) usam `focusableWhenDisabled`, então ficam com `aria-disabled` e `data-disabled`, sem o atributo `disabled`; o `buttonVariants` só estiliza `disabled:`, e as setas aparecem com opacidade 1 e o cursor normal, contra a linha "Desativado" de `design.md` (opacidade 0,5, cursor `not-allowed`). O leitor de tela anuncia o estado. Nenhum arquivo alterado; fica como tarefa à parte.
+
+## 2026-10-21 – desvio
+
+O Yvan pediu na conversa para corrigir o defeito das setas desativadas dentro da #57 e seguir para a etapa 03 depois. Os arquivos estão fora do plano, então o plano ganhou a seção "Ajuste pedido na etapa 02" e voltou a `aguardando_aprovacao` (`02_construir.md`), sem mudar `aprovado_por` nem `aprovado_em`. Na investigação, a mesma causa (`focusableWhenDisabled` sem o atributo `disabled`) apareceu no estado "Carregando" do `SubmitButton` e do `ConfirmDialog`, que usam `disabled:cursor-progress disabled:opacity-70`. Opções no plano: 1 (recomendada), o desativado também por `aria-disabled` no `buttonVariants` e `aria-disabled:` no carregamento dos dois botões, em três arquivos; 2, só as setas, no `ListPagination`. Nada construído até a aprovação gravada no arquivo.
+
+## 2026-10-21 – decisão
+
+O Yvan marcou a opção 1 do ajuste e gravou `status: aprovado` no plano (conferido no arquivo); status em `em_execucao`.
+
+## 2026-10-21 – descoberta
+
+Ajuste da etapa 02, commit 86f024e (`button.tsx`, `submit-button.tsx` e `confirm-dialog.tsx`), verificado como o resto do PR 2:
+
+- **Antes**, na compilação sem a correção: o "Entrar" de `/login` durante a chamada com `aria-disabled="true"`, opacidade 1 e cursor normal.
+- **Setas**, com a alteração temporária dos 33 serviços (sem commit, desfeita): a seta desativada com opacidade 0,5, cursor `not-allowed` e `shadow-neu-sm` parada, sob o cursor e ao clicar, sem o `scale` nem a sombra rebaixada; o clique nela mantém "1–12 de 33"; o teclado chega a ela, com o contorno. As setas ativas sem mudança: `shadow-neu-lg` sob o cursor, `scale` 0,98 e sombra rebaixada ao clicar. A 360 px no tema claro e a 1440 px no escuro.
+- **Carregando:** o "Entrar" de `/login` durante a chamada com opacidade 0,7, cursor de espera e o foco, a 360 px no claro e a 1440 px no escuro.
+- **Contorno com opacidade.** A opacidade vale para o botão inteiro, então o contorno de foco da seta desativada fica a 50% e o do botão carregando a 70%, como os estados de `design.md` definem.
+- **Login de teste.** A chamada retida pelo Chrome de teste foi liberada quando a página fechou: quatro `POST /api/auth/login` com o e-mail fictício `@example.com` chegaram ao servidor local e receberam 401 `INVALID_CREDENTIALS` do banco local. As linhas do registro têm só método, caminho, status e código.
+- **Registro** acumulado nas cinco execuções do `next start` do PR 2: 125 linhas, sem cookie, token, cabeçalho de autorização, senha, chave nem e-mail, e sem linha de erro ou aviso da aplicação.
+- **Encerramento.** `next start` encerrado por PID, alteração temporária desfeita (`git status` só com os arquivos do plano), `npx supabase stop` com o backup e a aplicação compilada de novo. `npm run check` sem erros nem avisos, com 387 testes; `npm audit --omit=dev --audit-level=high` com 0.
+
+## 2026-10-21 – desvio
+
+Etapa 03 do PR 2, a pedido do Yvan. A `origin/main` continuava em 818895a, sem nada a incorporar. O `02_relatorio.md` passou de parcial a completo, com os dois PRs, e o plano foi para `concluido`. O PR 2 tem 492 linhas em `src/`, acima das ~400 de `pull-request.md`; 133 delas são os dados fixos de `src/lib/demo/catalog.ts`.
