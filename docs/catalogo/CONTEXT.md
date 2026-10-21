@@ -18,3 +18,4 @@ Leia só o que a tarefa pede: o caso de uso do fluxo, as regras que ele cita e, 
 | RN031-categoria-inativa.md | Categoria inativa |
 | dados.md | Tabelas `categories`, `services`, `service_prices`, `service_additionals` |
 | rotas.md | Telas e rotas da API |
+| paginas-publicas.md | Seções e textos da página inicial e do catálogo público |

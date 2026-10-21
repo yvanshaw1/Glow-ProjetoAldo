@@ -1,6 +1,6 @@
 # `src/shared/constants/` – Constantes e enums
 
-Os valores de enum como listas `as const` (status, permissões, formas de pagamento, tipos de veículo e de serviço, portes), com os rótulos em português, e os limites usados pelos dois lados (tamanhos de página, máximo de 50, intervalo de 30 minutos).
+Os valores de enum como listas `as const` (status, permissões, formas de pagamento, tipos de veículo e de serviço, portes, dias da semana), com os rótulos em português, e os limites usados pelos dois lados (tamanhos de página, máximo de 50, intervalo de 30 minutos).
 
 ## Vai aqui
 
