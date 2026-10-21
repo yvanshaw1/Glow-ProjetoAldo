@@ -2,7 +2,7 @@
 titulo: Estrutura de pastas do repositório
 assunto: plataforma
 origem: Documentação de Arquitetura de Software, seções 3.1 e 4.1, refinadas na decisão 0036
-relacionados: [RNF013, RS008, RS016]
+relacionados: [RNF013, RS008, RS016, RS019]
 ---
 
 # Estrutura de pastas
@@ -42,10 +42,11 @@ App/
 │   ├── server/                      só servidor: todo arquivo começa com import 'server-only'
 │   │   ├── auth/                    session.ts · guards.ts · login-attempts.ts · accounts.ts · page-access.ts
 │   │   ├── http/                    handler.ts · logger.ts · respond.ts
-│   │   ├── rules/                   funções puras: pricing, status-transitions, scheduling, editing
+│   │   ├── rules/                   funções puras: pricing, status-transitions, scheduling, editing, dashboard-analysis
 │   │   ├── services/                um arquivo por módulo: busca, chama as regras, grava
 │   │   ├── repositories/            um arquivo por tabela ou grupo de tabelas
-│   │   └── supabase/                clientes (chave de serviço e sessão) e envio ao Storage
+│   │   ├── supabase/                clientes (chave de serviço e sessão) e envio ao Storage
+│   │   └── ai/                      adaptador do serviço de IA, no formato Chat Completions (decisão 0054)
 │   └── proxy.ts                     proteção das páginas (Next.js 16)
 ├── supabase/
 │   ├── config.toml                  criado pelo supabase init
@@ -81,6 +82,7 @@ As pastas acima já existem no repositório, e cada pasta de `src/`, `supabase/`
 components, hooks → lib/api-client → (HTTP) → app/api/**/route.ts
 route.ts → server/auth, server/http, services
 services → rules (puras) + repositories → server/supabase → PostgreSQL
+services → server/ai → serviço de IA, só com valores agregados (RN038)
 shared ← usado por todos; não importa nada de server/ nem do Supabase
 ```
 
@@ -101,7 +103,7 @@ shared ← usado por todos; não importa nada de server/ nem do Supabase
 | `services/` com a lógica | `src/server/services/` (orquestração) e `src/server/rules/` (regras puras) | regras testáveis sem banco (decisão 0035) |
 | `repositories/` | `src/server/repositories/` | igual |
 | `models/` | migrations (esquema), tipos das linhas nos repositórios, esquemas Zod e tipos de `src/shared` | sem ORM (decisão 0006) |
-| `providers/` | `src/server/supabase/` | único provedor externo; sem e-mail (decisão 0015) |
+| `providers/` | `src/server/supabase/` e `src/server/ai/` | Supabase e o serviço de IA (decisão 0054); sem e-mail (decisão 0015) |
 | `shared/` do back (erros, middlewares) | `src/server/http/`, `src/server/auth/`, `src/proxy.ts` | |
 | `services/` do front (HTTP) | `src/lib/api-client.ts` | |
 | `features/` do front | `components/portal/<módulo>` e `components/admin/<módulo>` | as páginas já se agrupam por rota; módulo igual ao do backend |

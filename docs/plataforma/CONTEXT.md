@@ -6,11 +6,12 @@ Leia só o arquivo do tema da tarefa; estes módulos valem para todos os assunto
 
 | Arquivo | Conteúdo |
 |---|---|
-| requisitos.md | Requisitos não funcionais RNF001–RNF016 |
-| seguranca.md | Requisitos de segurança RS001–RS018 com a implementação de cada um |
+| requisitos.md | Requisitos não funcionais RNF001–RNF018 |
+| seguranca.md | Requisitos de segurança RS001–RS020 com a implementação de cada um |
 | RN030-exclusao-logica.md | Exclusão lógica |
 | RN035-formatos-dos-dados.md | Formatos dos dados |
 | mensagens-de-validacao.md | Mensagens de validação de cada formato de RN035 |
-| visao-geral.md | Produto, escopo, fora do escopo, atores, stack com versões e princípios |
+| visao-geral.md | Produto, escopo, fora do escopo, evolução prevista, atores, stack com versões e princípios |
 | infraestrutura.md | Ambientes, variáveis de ambiente, preparação do banco, publicação, CI e execução em contêiner |
+| servico-de-ia.md | Serviço de inteligência artificial da análise do dashboard: provedor, modelo, variáveis, limites, falhas, registro, troca de provedor e uso futuro |
 | estrutura-de-pastas.md | Árvore de pastas do repositório, regras de dependência e equivalência com a estrutura clássica |
