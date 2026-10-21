@@ -1,11 +1,11 @@
 ---
 issue: 57
-pull_request: 70
+pull_request: 71
 ---
 
 # Relatório: Telas do portal público com dados de demonstração: página inicial e catálogo
 
-Em dois PRs: o PR #70, da página inicial (`Refs #57`, incorporado em 818895a), e o PR 2, do catálogo (`Closes #57`).
+Em dois PRs: o PR #70, da página inicial (`Refs #57`, incorporado em 818895a), e o PR #71, do catálogo (`Closes #57`).
 
 ## O que foi feito
 
@@ -13,9 +13,9 @@ Em dois PRs: o PR #70, da página inicial (`Refs #57`, incorporado em 818895a), 
 - **Localização** (RN028, RF004, UC01 FE02; PR #70): o endereço gravado no painel, com o link "Como chegar" para a rota no Google Maps, e o horário de funcionamento de segunda a domingo, de `GET /api/public/company`. Sem endereço, a linha e o link não aparecem. Enquanto carrega, o lugar fica reservado; na falha, aparece o aviso com "Tentar novamente".
 - **Imagem** (RNF006; PR #70): `public/images/home-hero.webp`, da Unsplash (Luay Barani), em WebP, φ:1 e 126 KB, carregada com `preload`, com o crédito em `design-midia.md`.
 - **Formatação** (PR #70): `formatBusinessHours`, `formatDirectionsLink` e os nomes dos dias (`WEEKDAY_LABELS`).
-- **Catálogo** (`/services`, UC01 passos 3 e 4, RF006, RN008, RN031; PR 2): o título "Serviços", o aviso de demonstração logo abaixo dele, o parágrafo de L2, o filtro por categoria ("Todas" e uma opção por categoria, trocada também pelas setas do teclado) e os cartões, com o lugar da imagem (o ícone `CarFront` enquanto o serviço não tem imagem, L5), a categoria, o nome, a descrição e a duração média, em páginas de 12. Na primeira carga, o filtro e três cartões reservados; sem serviços, "Não há serviços disponíveis no momento." (UC01 FE01); na falha, o aviso com "Tentar novamente", no filtro e nos cartões (UC01 FE02).
-- **Dados de demonstração** (decisão 0055; PR 2): `GET /api/public/categories` e `GET /api/public/services` respondidos por `src/lib/demo/catalog.ts` até a #48, com as três categorias e os 11 serviços que o catálogo público mostra do `seed-demo.sql`, com os mesmos ids.
-- **Botões desativados que mantêm o foco** (ajuste da etapa 02; PR 2): as setas desativadas da paginação com o estado "Desativado" de `design.md` (opacidade 0,5, cursor `not-allowed`, sem o efeito de pressionado), e o estado "Carregando" do `SubmitButton` (login, cadastro, troca de senha, configurações da empresa, formulário em etapas) e do `ConfirmDialog` com opacidade 0,7 e cursor de espera.
+- **Catálogo** (`/services`, UC01 passos 3 e 4, RF006, RN008, RN031; PR #71): o título "Serviços", o aviso de demonstração logo abaixo dele, o parágrafo de L2, o filtro por categoria ("Todas" e uma opção por categoria, trocada também pelas setas do teclado) e os cartões, com o lugar da imagem (o ícone `CarFront` enquanto o serviço não tem imagem, L5), a categoria, o nome, a descrição e a duração média, em páginas de 12. Na primeira carga, o filtro e três cartões reservados; sem serviços, "Não há serviços disponíveis no momento." (UC01 FE01); na falha, o aviso com "Tentar novamente", no filtro e nos cartões (UC01 FE02).
+- **Dados de demonstração** (decisão 0055; PR #71): `GET /api/public/categories` e `GET /api/public/services` respondidos por `src/lib/demo/catalog.ts` até a #48, com as três categorias e os 11 serviços que o catálogo público mostra do `seed-demo.sql`, com os mesmos ids.
+- **Botões desativados que mantêm o foco** (ajuste da etapa 02; PR #71): as setas desativadas da paginação com o estado "Desativado" de `design.md` (opacidade 0,5, cursor `not-allowed`, sem o efeito de pressionado), e o estado "Carregando" do `SubmitButton` (login, cadastro, troca de senha, configurações da empresa, formulário em etapas) e do `ConfirmDialog` com opacidade 0,7 e cursor de espera.
 
 ## Arquivos alterados
 
@@ -31,7 +31,7 @@ PR #70:
 - `docs/catalogo/CONTEXT.md`, `docs/padroes/design-midia.md` e `docs/padroes/testes.md`.
 - README de `src/shared/format/`, `src/shared/constants/` e `tests/format/`.
 
-PR 2:
+PR #71:
 
 - `src/app/(portal)/services/page.tsx`: criado.
 - `src/components/portal/catalog/category-filter.tsx`, `service-card.tsx` e `service-catalog.tsx`: criados.
@@ -44,10 +44,10 @@ PR 2:
 
 ## Testes executados
 
-- `npm run check`: aprovado, com 387 testes. Os 4 novos são do PR #70, no commit 327b58b, anterior ao código, e falhavam antes dele. O PR 2 não tem teste automatizado: os componentes e os dados de demonstração foram conferidos à mão (decisão 0052).
+- `npm run check`: aprovado, com 387 testes. Os 4 novos são do PR #70, no commit 327b58b, anterior ao código, e falhavam antes dele. O PR #71 não tem teste automatizado: os componentes e os dados de demonstração foram conferidos à mão (decisão 0052).
 - `npm audit --omit=dev --audit-level=high` (o passo do CI): 0 falhas. `npx next build`: concluído, com `/` e `/services` estáticas e sem avisos.
 - Local, com o Supabase local e o `next start`, no Chrome sem interface, a 360 × 800 e a 1440 × 900, claro e escuro, sem transbordar:
-  - **Página inicial:** sem endereço gravado e com ele (gravado pelo admin, só no banco local), o link de rota com o endereço codificado, os atalhos para `/register` e `/login`, o teclado do "Pular para o conteúdo" ao rodapé e a falha de `GET /api/public/company`, com o aviso na localização e no rodapé. Conferida de novo no PR 2, sem mudança.
+  - **Página inicial:** sem endereço gravado e com ele (gravado pelo admin, só no banco local), o link de rota com o endereço codificado, os atalhos para `/register` e `/login`, o teclado do "Pular para o conteúdo" ao rodapé e a falha de `GET /api/public/company`, com o aviso na localização e no rodapé. Conferida de novo no PR #71, sem mudança.
   - **Catálogo:** os 11 serviços com o ícone no lugar da imagem, "1–11 de 11" e nenhuma chamada do catálogo à rede (a demonstração responde sem ela). "Higienização" mostra só Higienização interna completa, Higienização do ar-condicionado e Oxi-sanitização; "Todas", os 11. Pelo teclado, as setas trocam a categoria, com o contorno de foco na opção.
   - **Estados do catálogo**, por alterações temporárias de `src/lib/demo/catalog.ts`, sem commit: na falha, os dois avisos com "Tentar novamente", e cada um traz de volta a sua parte; com 33 serviços, a paginação pelo teclado ("13–24 de 33", "25–33 de 33"); sem serviços, a mensagem de UC01 FE01, só com "Todas" no filtro.
   - **Botões desativados:** as setas desativadas com opacidade 0,5, cursor `not-allowed` e sem o efeito de pressionado, e as ativas sem mudança; o "Entrar" de `/login` durante a chamada com opacidade 0,7 e cursor de espera (antes da correção, 1 e o cursor normal), com o foco nos dois.
