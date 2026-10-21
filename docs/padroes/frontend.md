@@ -1,7 +1,7 @@
 ---
 titulo: Padrões de frontend
 origem: Documentação de Arquitetura de Software, seção 3
-relacionados: [RNF001, RNF002, RNF003, RNF004, RNF005, RNF006, RNF009, RNF016, RN035, 0049]
+relacionados: [RNF001, RNF002, RNF003, RNF004, RNF005, RNF006, RNF009, RNF016, RN035, 0049, 0055]
 ---
 
 # Padrões de frontend
@@ -19,7 +19,7 @@ src/components/shared/       formulário em etapas, etiqueta de status, diálogo
 src/components/portal/<mód>/ ex.: layout/ (cabeçalho, rodapé), catalog/ (cartão de serviço), vehicles/ (formulário), appointments/ (assistente de agendamento, também na edição)
 src/components/admin/<mód>/  ex.: layout/ (navegação por permissões), dashboard/ (indicadores, gráficos, agenda do dia), appointments/ (filtros, resumo de conclusão)
 src/hooks/                   listagem paginada, chamada à API com carregamento
-src/lib/                     api-client.ts (cliente HTTP único), utils.ts (cn do shadcn)
+src/lib/                     api-client.ts (cliente HTTP único), utils.ts (cn do shadcn), demo/ (dados das telas de demonstração)
 public/                      logo, favicon, imagem da página inicial
 ```
 
@@ -38,6 +38,7 @@ Estrutura, layouts e textos fixos são componentes de servidor. As partes que ex
 - 401 `UNAUTHENTICATED` → `/login?next=<página atual>`; os outros 401 (`INVALID_CREDENTIALS`, `INVALID_CURRENT_PASSWORD`) voltam ao formulário, e a carga da sessão trata o 401 como visitante, sem sair da página. 403 `PASSWORD_CHANGE_REQUIRED` → `/set-password`. O redirecionamento é uma navegação completa, e a chamada fica pendente até a página mudar.
 - O `api-client` devolve os outros erros à tela como `ApiError` (código, `detail` e `fields`), sem repetir nenhuma chamada: no 409 `VERSION_CONFLICT`, a tela de edição mostra o aviso e recarrega o registro. A falha de rede usa a mensagem de `SERVICE_UNAVAILABLE`, e a resposta fora do formato Problem Details, a de `INTERNAL_ERROR`.
 - Durante a chamada: estado de carregamento e botão de envio desativado; ao final, aviso de sucesso ou falha (RNF004). Requisição de gravação nunca é repetida automaticamente.
+- Rota ainda não construída: os dados de demonstração de `src/lib/demo/` (`componentes.md`, decisão 0055).
 
 ## Estado e formulários
 

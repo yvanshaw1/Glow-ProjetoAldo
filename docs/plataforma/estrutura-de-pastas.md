@@ -32,7 +32,7 @@ App/
 │   │   ├── portal/<módulo>/         ex.: portal/appointments/booking-wizard.tsx
 │   │   └── admin/<módulo>/          ex.: admin/dashboard/revenue-chart.tsx
 │   ├── hooks/                       hooks de cliente reutilizáveis
-│   ├── lib/                         api-client.ts · utils.ts (cn() do shadcn)
+│   ├── lib/                         api-client.ts · utils.ts (cn() do shadcn) · demo/ (dados das telas de demonstração, decisão 0055)
 │   ├── shared/                      roda no navegador e no servidor
 │   │   ├── validation/              formatos de RN035 (formats.ts), id e paginação (params.ts) e esquemas por módulo
 │   │   ├── format/                  exibição de moeda, telefone, placa, CNPJ, datas e duração (Intl)
