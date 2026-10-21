@@ -24,12 +24,19 @@ Proteção das páginas: [../acesso/autenticacao.md](../acesso/autenticacao.md).
 
 Acesso: Público, sem autenticação.
 
+#### `GET /api/public/categories`
+
+Categorias do filtro do catálogo (UC01): as ativas com ao menos um serviço principal ou complementar ativo (RN008, RN031).
+
+- Entrada: Nenhuma.
+- Resposta: **200** lista de `id` e `name`, em ordem alfabética, sem paginação.
+
 #### `GET /api/public/services`
 
 Catálogo de serviços principais e complementares ativos (UC01).
 
 - Entrada: `categoryId` (opcional).
-- Resposta: **200** lista com nome, descrição, imagem, categoria e duração média.
+- Resposta: **200** lista paginada de `id`, `name`, `description`, `imageUrl` (endereço público da imagem, ou `null`), `category` (`id` e `name`) e `avgDurationMinutes`.
 
 ### Rotas do painel: serviços e categorias
 

@@ -69,3 +69,71 @@ Verificação local do PR 1, aprovada:
 ## 2026-10-21 – desvio
 
 Etapa 03 do PR 1, a pedido do Yvan: PR #70, aberto como rascunho para pôr o número no relatório e depois marcado como pronto. O plano previa o relatório parcial em `notas.md`; ele foi para `02_relatorio.md`, marcado como parcial, como no PR 1 da #66 (`Refs #66`), porque o contrato da etapa 03 pede o arquivo. O plano continua em `em_execucao` até o PR 2. A `origin/main` continuava em d6d28b8, sem nada a incorporar.
+
+## 2026-10-21 – descoberta
+
+Retomada do PR 2 (catálogo), numa sessão nova, depois da incorporação do PR 1 (#70, 818895a):
+
+- **Plano.** Conferido no arquivo: aprovado por yvan em 21/10/2026, `em_execucao`, opção 1 em L1 a L6 e imagem A em L4.
+- **Ramificação.** Worktree `56-base-da-demonstracao-e6d9a4` (nome herdado), passado para `feat/57-services-catalog`, só local e sem vínculo, com o commit 7130a45 sobre 818895a (igual à `origin/main`). `npx -y npm@11.21.1 ci` concluído.
+- **Commit 7130a45 reaproveitado.** Feito antes de um retrocesso da conversa e não registrado antes; o Yvan pediu para reaproveitá-lo. Conferido contra o plano (passo 8): `PublicCategory` e `PublicService` com os campos de L1; as três categorias em ordem alfabética; os 11 serviços na ordem do `seed-demo.sql`, com nome, descrição, duração e categoria iguais aos do arquivo, sem a "Lavagem a seco", a "Cristalização de vidros" e a "Película nos vidros"; `imageUrl` `null` em todos; os 14 ids iguais a `md5('glow-demo:<chave>')` calculado de novo; `demoPage` com `CATALOG_PAGE_SIZE` e o filtro `categoryId`; as duas entradas de `DEMO_ROUTES`, com `load`. `npm run check` aprovado, com 387 testes.
+
+## 2026-10-21 – desvio
+
+Etapa 02 do PR 2, passos 9 e 10, na mesma ramificação. Commits:
+
+- 20be3b8: `category-filter.tsx`, `service-card.tsx`, `service-catalog.tsx` e `src/app/(portal)/services/page.tsx`;
+- a4c319e: L1 em `rotas.md` e `api.md`; a parte do catálogo de L2 e L5 em `paginas-publicas.md`.
+
+Escolhas pequenas, sem mudar regra nem escopo:
+
+- **Catálogo sem o `PaginatedList`.** O componente compartilhado tem a busca embutida, que o catálogo não usa; o `ServiceCatalog` chama o `usePaginatedList` e desenha os mesmos estados de `componentes.md` na forma da grade, com o `ListPagination`.
+- **Título.** `text-h3 md:text-h2`, como os títulos das outras páginas.
+- **Filtro.** A legenda "Categoria" fica visualmente oculta, lida pelo leitor de tela; o lugar reservado tem quatro pílulas, que quebram em duas linhas a 360 px como as reais.
+- **Imagem do cartão.** Com imagem (depois da #47), `alt=""`, porque o nome do serviço logo abaixo diz o que ela mostra; `sizes` pela largura do cartão em cada grade.
+- **`paginas-publicas.md`.** Além dos textos de L2 e L5, uma frase de abertura do catálogo (serviços ativos de categorias ativas, de `GET /api/public/services`, em páginas de 12) e a linha de carregamento e falha (UC01 FE02), como na localização. O parágrafo fica "abaixo do título e do aviso de demonstração enquanto a tela usar os dados de demonstração", para o texto continuar certo quando a #48 tirar o aviso.
+
+## 2026-10-21 – descoberta
+
+Verificação local do PR 2, aprovada:
+
+- **Ambiente.** `npx supabase start` a partir do backup do PR 1 (com o endereço gravado), sem `db reset`; variáveis pelo `local-env.sh` do scratchpad, que não as exibe; `npx next build` (`/services` estática, sem avisos) e `npx next start -p 3057`. Chrome sem interface pelo `puppeteer-core` do cache do Lighthouse 13.5.0.
+- **Conteúdo.** `/services` com o título "Serviços", o `DemoNotice` logo abaixo dele, o parágrafo de L2, o filtro ("Todas", Higienização, Lavagem, Polimento e proteção) e os 11 cartões, cada um com o ícone `CarFront` no lugar da imagem (φ:1: 272 × 168 a 360 px e 331 × 204 a 1440 px), a categoria, o nome, a descrição e a duração ("Duração média: 1 h 30 min"), e "1–11 de 11". Uma coluna a 360 px e três a 1440 px.
+- **Larguras e temas.** 360 × 800 e 1440 × 900, claro e escuro, nada transborda. Capturas em `local/shots/` do scratchpad.
+- **Filtro.** "Higienização" → só Higienização interna completa, Higienização do ar-condicionado e Oxi-sanitização ("1–3 de 3"); "Todas" → os 11. Lavagem e Polimento e proteção, 4 cada. A pílula marcada continua em `--link` sob o cursor. Lista de requisições sem `/api/public/services` nem `/api/public/categories` (a demonstração não vai à rede); só `/api/public/company` (rodapé) e `/api/auth/me`.
+- **Teclado.** "Pular para o conteúdo", marca, navegação (ou "Abrir menu" a 360 px), ações do cabeçalho e a opção marcada do filtro; as setas trocam a categoria (3, 4, 4 e 11 serviços), com o contorno de foco na pílula; depois, o rodapé.
+- **Carregamento.** Na primeira carga, o filtro com quatro pílulas reservadas e três cartões reservados na forma do cartão.
+- **Falha e paginação**, por alteração temporária de `src/lib/demo/catalog.ts` (a primeira chamada de cada rota lança erro, e as seguintes devolvem 33 serviços): os dois avisos com "Tentar novamente", no lugar do filtro e dos cartões; tentar de novo os serviços traz "1–12 de 33" com o aviso do filtro ainda na tela, e tentar de novo o filtro traz as pílulas. Pelo teclado, da opção do filtro para os sete botões da paginação, com o contorno; "Próxima página" com Enter leva a "13–24 de 33" e a "25–33 de 33", com o foco no botão. Nos dois tamanhos, nada transborda.
+- **Vazio**, pela mesma alteração temporária (nenhuma categoria e nenhum serviço): só "Todas" no filtro e "Não há serviços disponíveis no momento.", como status, sem paginação.
+- **Lighthouse 13.5.0, acessibilidade:** 100 em `/services` no celular e no computador, claro e escuro, e 100 em `/` no celular, claro e escuro, sem auditoria reprovada.
+- **LCP no celular.** `/services`: 3,0 s em duas execuções no modo padrão (simulado; desempenho 94, CLS 0) e 1,9 s com o estrangulamento do DevTools (igual ao FCP, CLS 0, desempenho 96); o LCP é o texto do aviso de demonstração, de servidor. `/`: 3,0 s simulado (desempenho 95) e 1,9 s pelo DevTools (desempenho 97), CLS 0, com a imagem, como no PR 1.
+- **Registro.** Acumulado (`>>`) nas três execuções do `next start` (a normal e as duas variantes): 91 linhas, nenhuma com cookie, token, cabeçalho de autorização, senha, chave ou e-mail de teste, e nenhuma de erro ou aviso no registro da aplicação. As requisições registradas são só `GET /api/public/company` (200) e `GET /api/auth/me` (401, visitante). O próprio Next.js avisa, em cada início, que `next start` não combina com `output: standalone`, como no PR 1.
+- **Encerramento.** `next start` encerrado por PID; a alteração temporária desfeita (`git diff` vazio) e a aplicação compilada de novo sem ela; `npx supabase stop`, com o backup. `npm run check` sem erros nem avisos, com 387 testes; `npm audit --omit=dev --audit-level=high` com 0. Nenhum import de `src/server/` nos arquivos novos, e nada em `src/app/api/`, `supabase/` ou `src/shared/validation/` (`git diff --stat origin/main...HEAD`: 10 arquivos, todos da lista do plano).
+
+## 2026-10-21 – descoberta
+
+Fora do escopo, visto na paginação da variante temporária: as setas desativadas do `ListPagination` (#56) usam `focusableWhenDisabled`, então ficam com `aria-disabled` e `data-disabled`, sem o atributo `disabled`; o `buttonVariants` só estiliza `disabled:`, e as setas aparecem com opacidade 1 e o cursor normal, contra a linha "Desativado" de `design.md` (opacidade 0,5, cursor `not-allowed`). O leitor de tela anuncia o estado. Nenhum arquivo alterado; fica como tarefa à parte.
+
+## 2026-10-21 – desvio
+
+O Yvan pediu na conversa para corrigir o defeito das setas desativadas dentro da #57 e seguir para a etapa 03 depois. Os arquivos estão fora do plano, então o plano ganhou a seção "Ajuste pedido na etapa 02" e voltou a `aguardando_aprovacao` (`02_construir.md`), sem mudar `aprovado_por` nem `aprovado_em`. Na investigação, a mesma causa (`focusableWhenDisabled` sem o atributo `disabled`) apareceu no estado "Carregando" do `SubmitButton` e do `ConfirmDialog`, que usam `disabled:cursor-progress disabled:opacity-70`. Opções no plano: 1 (recomendada), o desativado também por `aria-disabled` no `buttonVariants` e `aria-disabled:` no carregamento dos dois botões, em três arquivos; 2, só as setas, no `ListPagination`. Nada construído até a aprovação gravada no arquivo.
+
+## 2026-10-21 – decisão
+
+O Yvan marcou a opção 1 do ajuste e gravou `status: aprovado` no plano (conferido no arquivo); status em `em_execucao`.
+
+## 2026-10-21 – descoberta
+
+Ajuste da etapa 02, commit 86f024e (`button.tsx`, `submit-button.tsx` e `confirm-dialog.tsx`), verificado como o resto do PR 2:
+
+- **Antes**, na compilação sem a correção: o "Entrar" de `/login` durante a chamada com `aria-disabled="true"`, opacidade 1 e cursor normal.
+- **Setas**, com a alteração temporária dos 33 serviços (sem commit, desfeita): a seta desativada com opacidade 0,5, cursor `not-allowed` e `shadow-neu-sm` parada, sob o cursor e ao clicar, sem o `scale` nem a sombra rebaixada; o clique nela mantém "1–12 de 33"; o teclado chega a ela, com o contorno. As setas ativas sem mudança: `shadow-neu-lg` sob o cursor, `scale` 0,98 e sombra rebaixada ao clicar. A 360 px no tema claro e a 1440 px no escuro.
+- **Carregando:** o "Entrar" de `/login` durante a chamada com opacidade 0,7, cursor de espera e o foco, a 360 px no claro e a 1440 px no escuro.
+- **Contorno com opacidade.** A opacidade vale para o botão inteiro, então o contorno de foco da seta desativada fica a 50% e o do botão carregando a 70%, como os estados de `design.md` definem.
+- **Login de teste.** A chamada retida pelo Chrome de teste foi liberada quando a página fechou: quatro `POST /api/auth/login` com o e-mail fictício `@example.com` chegaram ao servidor local e receberam 401 `INVALID_CREDENTIALS` do banco local. As linhas do registro têm só método, caminho, status e código.
+- **Registro** acumulado nas cinco execuções do `next start` do PR 2: 125 linhas, sem cookie, token, cabeçalho de autorização, senha, chave nem e-mail, e sem linha de erro ou aviso da aplicação.
+- **Encerramento.** `next start` encerrado por PID, alteração temporária desfeita (`git status` só com os arquivos do plano), `npx supabase stop` com o backup e a aplicação compilada de novo. `npm run check` sem erros nem avisos, com 387 testes; `npm audit --omit=dev --audit-level=high` com 0.
+
+## 2026-10-21 – desvio
+
+Etapa 03 do PR 2, a pedido do Yvan. A `origin/main` continuava em 818895a, sem nada a incorporar. O `02_relatorio.md` passou de parcial a completo, com os dois PRs, e o plano foi para `concluido`. O PR 2 tem 492 linhas em `src/`, acima das ~400 de `pull-request.md`; 133 delas são os dados fixos de `src/lib/demo/catalog.ts`.

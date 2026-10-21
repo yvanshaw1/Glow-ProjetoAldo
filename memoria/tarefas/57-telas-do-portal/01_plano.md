@@ -4,7 +4,7 @@ titulo: "Telas do portal público com dados de demonstração: página inicial e
 areas: [frontend, testes]
 tipo: funcionalidade
 requisitos: [UC01, RF001, RF002, RF004, RF005, RF006, RN008, RN028, RN031, RNF001, RNF005, RNF006]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 21/10/2026
 ---
@@ -168,6 +168,8 @@ Como na #56 (`memoria/tarefas/56-base-da-demonstracao/notas.md`):
 | `docs/padroes/design-midia.md` | alterar (L4, L6) |
 | `docs/padroes/testes.md` | alterar: a linha "Formatação" |
 | `memoria/tarefas/57-telas-do-portal/` | `01_plano.md`, `notas.md` e, na etapa 03, `02_relatorio.md` |
+| `src/components/ui/button.tsx`, `src/components/shared/submit-button.tsx`, `src/components/shared/confirm-dialog.tsx` | alterar, com a opção 1 do ajuste da etapa 02 |
+| `src/components/shared/list-pagination.tsx` | alterar, com a opção 2 do ajuste da etapa 02 |
 
 O README de `src/components/portal/catalog/` já lista "Seções da página inicial (destaque, institucional, localização) e cartão de serviço do catálogo público" e não muda; os de `src/app/(portal)/` e `services/` também não. `public/` não tem README (`estrutura-de-pastas.md`).
 
@@ -366,6 +368,21 @@ Escolhas locais, sem registro:
 - Testes automatizados de componentes (decisão 0052).
 - Os documentos formais (#67).
 
+## Ajuste pedido na etapa 02 (21/10/2026)
+
+**Pedido.** Na verificação local do PR 2, as setas desativadas da paginação apareceram sem o estado "Desativado" de `design.md` (opacidade 0,5, cursor `not-allowed`, `shadow-neu-sm`). O Yvan pediu na conversa para corrigir isso dentro da #57, no PR 2.
+
+**Causa.** O `ListPagination` usa `disabled` com `focusableWhenDisabled`, para a seta continuar recebendo o foco. Nesse modo, o Base UI não grava o atributo `disabled` no botão, só `aria-disabled="true"` e `data-disabled`, e as classes `disabled:` do `buttonVariants` não se aplicam (medido no Chrome: opacidade 1, cursor normal). A mesma causa atinge o estado "Carregando" de `design.md` (opacidade 0,7, sem cliques) no `SubmitButton`, usado no login, no cadastro, na troca de senha, nas configurações da empresa e no formulário em etapas, e no botão de confirmação do `ConfirmDialog`, que ainda não está em nenhuma tela: os dois usam `disabled:cursor-progress disabled:opacity-70` com `focusableWhenDisabled`.
+
+**Opções (marque uma):**
+
+- [x] **1. Estado desativado também por `aria-disabled` (recomendada).** No `buttonVariants`, o botão com `aria-disabled="true"` recebe o mesmo tratamento do desativado (opacidade 0,5, cursor `not-allowed`, `shadow-neu-sm`), sem o efeito de pressionado ao clicar; o `SubmitButton` e o `ConfirmDialog` trocam `disabled:` por `aria-disabled:` no estado "Carregando". Corrige as setas e o carregamento dos dois botões, em três arquivos. O foco, o anúncio do leitor de tela e o bloqueio do clique, que o Base UI já faz, não mudam.
+- [ ] **2. Só as setas da paginação.** As classes do desativado no `PageButton` do `ListPagination`, um arquivo. O carregamento do `SubmitButton` e do `ConfirmDialog` continua sem a opacidade e o cursor de espera, para outra tarefa.
+
+**Verificação.** Local, no Chrome sem interface, como o restante do PR 2. Com a alteração temporária de `src/lib/demo/catalog.ts` (33 serviços, sem commit): as setas desativadas com opacidade 0,5, cursor `not-allowed` e o contorno de foco, sem o efeito de pressionado ao clicar, e as ativas sem mudança, a 360 e a 1440 px, claro e escuro. Com a opção 1, também o botão "Entrar" de `/login` durante a chamada (requisição retida pelo Chrome de teste), com opacidade 0,7, cursor de espera e o foco. `npm run check` sem erros nem avisos. Componentes conferidos à mão (decisão 0052); a documentação não muda, porque `design.md` já define os dois estados.
+
 ## Estado da construção
 
-PR 1 (página inicial) feito dentro do plano aprovado, na ramificação `feat/57-portal-screens` (commits 327b58b a ea52d83): testes em vermelho, formatação e nomes dos dias, as três seções com a imagem A e a documentação de L2 (página inicial), L3, L4 e L6. Nenhum arquivo fora da lista do plano. `npm run check` aprovado, com 387 testes; verificação local aprovada, com o resultado em `notas.md`. Na etapa 03, o `02_relatorio.md` parcial e o PR. Faltam o PR 2 (catálogo) e a etapa 04.
+PR 1 (página inicial) feito dentro do plano aprovado, na ramificação `feat/57-portal-screens` (commits 327b58b a ea52d83): testes em vermelho, formatação e nomes dos dias, as três seções com a imagem A e a documentação de L2 (página inicial), L3, L4 e L6. Nenhum arquivo fora da lista do plano. `npm run check` aprovado, com 387 testes; verificação local aprovada, com o resultado em `notas.md`. Na etapa 03, o `02_relatorio.md` parcial e o PR #70, incorporado em 818895a.
+
+PR 2 (catálogo) feito dentro do plano aprovado, na ramificação `feat/57-services-catalog` (commits 7130a45 a 86f024e): tipos, dados de demonstração e as duas entradas da lista; filtro, cartão, catálogo e `/services`; a documentação de L1, L5 e da parte do catálogo de L2; e o ajuste da etapa 02, com a opção 1 (estado desativado dos botões que mantêm o foco). Nenhum arquivo fora da lista do plano. `npm run check` aprovado, com 387 testes; verificação local de `/services`, de novo de `/` e do ajuste aprovada, com o resultado em `notas.md`. Na etapa 03, o `02_relatorio.md` completo, o PR com "Closes #57" e o item da rota de categorias no corpo da #48. Falta a etapa 04.

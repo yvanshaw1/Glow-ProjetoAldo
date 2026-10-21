@@ -27,7 +27,10 @@ export function SubmitButton({
       size={size}
       disabled={isLoading}
       focusableWhenDisabled
-      className={cn("disabled:cursor-progress disabled:opacity-70", className)}
+      className={cn(
+        "aria-disabled:cursor-progress aria-disabled:opacity-70",
+        className,
+      )}
     >
       {isLoading && (
         <LoaderCircleIcon aria-hidden className="animate-spin text-link" />

@@ -41,3 +41,17 @@ As seções seguem a ordem do UC01 (passo 2). Quem já entrou vê a mesma págin
 - O endereço gravado, com o link "Como chegar", que abre a rota até ele no Google Maps (`https://www.google.com/maps/dir/?api=1&destination=` e o endereço codificado), na mesma aba. Sem endereço gravado, a linha e o link não aparecem.
 - "Horário de funcionamento", de segunda a domingo, um dia por linha: o nome do dia e "08:00 às 12:00 e 13:00 às 18:00" (com pausa), "08:00 às 12:00" (sem pausa) ou "Fechado".
 - Enquanto os dados carregam, o lugar fica reservado; na falha, o aviso com a mensagem e "Tentar novamente" (UC01 FE02).
+
+## Catálogo
+
+Os serviços principais e complementares ativos de categorias ativas (UC01, passo 4; RN008, RN031), de `GET /api/public/services`, em páginas de 12 ([../padroes/api.md](../padroes/api.md)).
+
+- Título: "Serviços".
+- Parágrafo, abaixo do título e do aviso de demonstração enquanto a tela usar os dados de demonstração ([../padroes/componentes.md](../padroes/componentes.md)): "Conheça os serviços disponíveis e filtre por categoria."
+- Filtro: legenda "Categoria" e a primeira opção "Todas", seguida das categorias de `GET /api/public/categories`.
+- Nenhum serviço (UC01 FE01): "Não há serviços disponíveis no momento."
+- Enquanto os dados carregam, o lugar fica reservado; na falha, o aviso com a mensagem e "Tentar novamente" (UC01 FE02).
+
+### Cartão
+
+A imagem do serviço no topo, na proporção φ:1; sem imagem, o mesmo lugar rebaixado, com o ícone `CarFront` de 42 px. Abaixo, a categoria como sobretítulo, o nome, a descrição e "Duração média: <duração>".
