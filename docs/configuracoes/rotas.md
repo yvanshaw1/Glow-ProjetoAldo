@@ -12,7 +12,9 @@ Valem para todas as rotas, sem repetição abaixo ([../padroes/api.md](../padroe
 
 | Rota | Tela | Acesso | Casos de uso |
 |---|---|---|---|
-| `/admin/settings` | Configurações: empresa, disponibilidade e formas de pagamento | permissão `settings` | UC22, UC23, UC24 |
+| `/admin/settings` | Configurações, em abas: Empresa, Disponibilidade e Formas de pagamento | permissão `settings` | UC22, UC23, UC24 |
+
+A aba escolhida fica na página, sem mudar o endereço, e começa em Empresa. Trocar de aba mantém o que foi digitado nas outras; cada aba grava só a sua seção.
 
 Proteção das páginas: [../acesso/autenticacao.md](../acesso/autenticacao.md).
 
@@ -27,7 +29,7 @@ Acesso: Público, sem autenticação.
 Dados institucionais e horários de funcionamento (RN028).
 
 - Entrada: Nenhuma.
-- Resposta: **200** nome, contato, endereço, redes sociais e disponibilidade por dia da semana.
+- Resposta: **200** `companyName`, `email`, `phone`, `whatsapp`, `address`, `instagramUrl`, `facebookUrl` e `businessHours`, com os sete dias de domingo (0) a sábado (6): `weekday`, `isOpen`, `opensAt`, `closesAt`, `breakStartsAt` e `breakEndsAt`. Dado opcional vazio é `null`; o CNPJ não é público.
 
 ### Rotas do painel: configurações
 
@@ -38,14 +40,14 @@ Acesso: Perfis `staff` ou `admin` com a permissão `settings`.
 Dados da empresa (UC22).
 
 - Entrada: Nenhuma.
-- Resposta: **200** dados da empresa.
+- Resposta: **200** `companyName`, `cnpj`, `email`, `phone`, `address`, `instagramUrl`, `facebookUrl`, `whatsapp` e `updatedAt`.
 
 #### `PUT /api/admin/settings/company`
 
 Grava os dados da empresa.
 
-- Entrada: `companyName*, cnpj, email, phone, address, instagramUrl, facebookUrl, whatsapp`
-- Resposta: **200** dados atualizados.
+- Entrada: `companyName*, cnpj, email, phone, address, instagramUrl, facebookUrl, whatsapp, updatedAt*`; o opcional ausente, `null` ou vazio apaga o valor gravado.
+- Resposta: **200** o corpo do `GET`, com o `updatedAt` novo; 400 campo fora de RN035; 409 `VERSION_CONFLICT`.
 
 #### `GET /api/admin/settings/business-hours`
 

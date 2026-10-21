@@ -1,6 +1,6 @@
 # `src/components/admin/settings/` – Painel: settings
 
-Formulários de dados da empresa, disponibilidade por dia (com pausa) e percentuais das formas de pagamento.
+Abas das seções de `/admin/settings` (`settings-tabs.tsx`) e os formulários de dados da empresa, disponibilidade por dia (com pausa) e percentuais das formas de pagamento, um por aba.
 
 ## Vai aqui
 

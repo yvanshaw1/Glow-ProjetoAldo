@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDate, formatDateTime } from "@/shared/format/date";
+import { formatDate, formatDateTime, formatYear } from "@/shared/format/date";
 
 // Display of the dates of RN035 (column Exibição) and RNF016, in the company's
 // time zone, America/Maceio (UTC-3), whatever the zone of the device
@@ -30,5 +30,16 @@ describe("formatDateTime", () => {
 
   it("formats midnight as 00:00", () => {
     expect(formatDateTime("2026-10-15T03:00:00Z")).toBe("15/10/2026 às 00:00");
+  });
+});
+
+describe("formatYear", () => {
+  it("formats the year of an instant in the company's time zone", () => {
+    expect(formatYear("2026-10-15T12:30:00Z")).toBe("2026");
+  });
+
+  it("uses the company's year near the new year", () => {
+    expect(formatYear("2027-01-01T02:30:00Z")).toBe("2026");
+    expect(formatYear("2027-01-01T03:00:00Z")).toBe("2027");
   });
 });

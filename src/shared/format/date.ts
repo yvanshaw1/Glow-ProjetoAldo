@@ -17,6 +17,11 @@ const dateFormat = new Intl.DateTimeFormat(LOCALE, {
   year: "numeric",
 });
 
+const yearFormat = new Intl.DateTimeFormat(LOCALE, {
+  timeZone: COMPANY_TIME_ZONE,
+  year: "numeric",
+});
+
 const timeFormat = new Intl.DateTimeFormat(LOCALE, {
   timeZone: COMPANY_TIME_ZONE,
   hour: "2-digit",
@@ -37,4 +42,10 @@ export function formatDate(value: string): string {
 export function formatDateTime(value: string): string {
   const instant = new Date(value);
   return `${dateFormat.format(instant)} às ${timeFormat.format(instant)}`;
+}
+
+// The year of an instant in the company's time zone, as in the copyright
+// notice of the portal footer.
+export function formatYear(value: string): string {
+  return yearFormat.format(new Date(value));
 }

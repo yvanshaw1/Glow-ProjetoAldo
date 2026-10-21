@@ -14,7 +14,7 @@ As rotas de cada assunto estão em `docs/<assunto>/rotas.md`. Aqui fica o que va
 - `GET` consulta; `POST` cria ou executa uma ação; `PATCH` altera parte; `PUT` substitui uma configuração; `DELETE` exclui (lógico).
 - `GET` nunca altera dados; `PUT` e `DELETE` são idempotentes. `POST` e `PATCH` nunca são repetidos automaticamente.
 - Ações que não são simples alteração de dados viram rota própria com `POST` (`/advance`, `/complete`, `/cancel`, `/reschedule`), para a regra ficar no servidor.
-- JSON em `camelCase`; datas e horários ISO 8601 com fuso; dinheiro como número com duas casas.
+- JSON em `camelCase`; datas e horários ISO 8601 com fuso; horário do dia, como o de funcionamento, em `HH:MM`, no fuso da empresa, sem data nem deslocamento; dinheiro como número com duas casas.
 - Autenticação só pelo cookie de sessão; não há chave de API nem token enviado pela página.
 - Sucesso: 200, 201 (criado) e 204 (sem corpo).
 - Nenhuma resposta da API vai para cache: o tratamento único envia `Cache-Control: no-store` em todas, de sucesso e de erro, porque qualquer uma pode renovar os cookies da sessão.
@@ -25,6 +25,7 @@ As rotas de cada assunto estão em `docs/<assunto>/rotas.md`. Aqui fica o que va
 
 - Toda entrada passa pelos esquemas Zod de `src/shared/validation`, que normalizam (espaços, caixa, máscaras) e depois validam tipo, formato e tamanho. Os mesmos esquemas servem aos formulários.
 - Campos não previstos são descartados; valores calculados pelo sistema (preços, totais, porte, status, previsão, cópias do agendamento) nunca são aceitos na entrada.
+- Dado opcional ausente, `null` ou vazio depois da normalização de RN035 é gravado e devolvido como `null`; no `PUT` e no `PATCH`, enviá-lo vazio apaga o valor gravado. Toda resposta traz o campo opcional, com `null` quando vazio.
 - Id no caminho deve ser UUID válido, isto é, 32 algarismos hexadecimais no formato 8-4-4-4-12, como aceita o tipo `uuid` do PostgreSQL, sem exigir a versão (os ids do `seed-demo.sql` vêm de `md5`); id inválido responde o mesmo 404 de registro inexistente.
 - Filtros, ordenação e paginação só aceitam os valores previstos.
 - Gravação com corpo só com `application/json` (exceto envio de imagem); outro formato → 415. A gravação sem corpo, como o `DELETE` e o logout, dispensa o formato. Corpo JSON até 100 KB (102.400 bytes) e imagem até 2 MB; acima → 413. Corpo que não é JSON válido → 400 `VALIDATION_ERROR`, sem `fields`.
@@ -78,7 +79,7 @@ Em `fields`, cada campo aparece uma vez, com a primeira mensagem; o campo dentro
 | 404 | `NOT_FOUND` | Não encontramos o que você procura. |
 | 409 | `EMAIL_IN_USE` | Este e-mail não pode ser usado. Se você já tem conta, entre com ela. |
 | 409 | `INVALID_STATUS` | Esta ação não está disponível para a situação atual do agendamento. |
-| 409 | `VERSION_CONFLICT` | Estes dados foram alterados por outra pessoa. Atualize a página e tente novamente. |
+| 409 | `VERSION_CONFLICT` | Estes dados foram alterados por outra pessoa. Confira os dados atualizados e tente novamente. |
 | 409 | `NAME_IN_USE` | Já existe um cadastro com este nome. |
 | 409 | `PLATE_IN_USE` | Esta placa já está cadastrada em outro veículo. |
 | 409 | `VEHICLE_ALREADY_LINKED` | Este veículo já está na sua conta. |

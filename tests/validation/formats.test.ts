@@ -13,6 +13,7 @@ import {
   mobilePhoneSchema,
   moneySchema,
   normalizeText,
+  optionalFormat,
   passwordSchema,
   percentSchema,
   personNameSchema,
@@ -578,5 +579,25 @@ describe("plainTextSchema and searchTermSchema", () => {
 
   it("rejects an empty text with the required message", () => {
     expect(messageOf(plainTextSchema(100), "  ")).toBe(REQUIRED);
+  });
+});
+
+describe("optionalFormat", () => {
+  const optionalEmailSchema = optionalFormat(emailSchema);
+
+  it("turns an absent, null, empty or blank optional value into null", () => {
+    for (const value of [undefined, null, "", "   "]) {
+      expect(optionalEmailSchema.parse(value)).toBeNull();
+    }
+  });
+
+  it("applies the format to a filled optional value", () => {
+    expect(optionalEmailSchema.parse(" Maria@Email.COM ")).toBe(
+      "maria@email.com",
+    );
+  });
+
+  it("rejects a filled optional value with the message of its format", () => {
+    expect(messageOf(optionalEmailSchema, "maria@")).toBe(EMAIL);
   });
 });

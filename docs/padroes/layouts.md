@@ -19,7 +19,8 @@ Portal (`src/app/(portal)/layout.tsx`, também em `/login`, `/register` e `/set-
 | Funcionário ou admin | Início, Serviços, Painel (a primeira página permitida; sem o link se não houver nenhuma) | Sair, que leva a `/` |
 
 - A partir de 768 px, os links ficam na barra; abaixo, num menu à direita, aberto pelo botão "Abrir menu".
-- Rodapé: a marca e "Acesso rápido" (Serviços e Agendar). Contato, endereço, redes sociais e o nome da empresa no aviso de direitos vêm de `GET /api/public/company` (RN028) e entram com essa rota, na tarefa do UC01.
+- Rodapé: a marca; "Contato", com o endereço, o telefone (link `tel:`) e o e-mail (link `mailto:`); "Redes sociais", com os links de texto Instagram, Facebook e WhatsApp (`https://wa.me/55` e o número); e "Acesso rápido" (Serviços e Agendar). Abaixo, "© <ano> <nome da empresa>. Todos os direitos reservados.", com o ano no fuso da empresa. Os dados vêm de `GET /api/public/company` (RN028); o dado vazio não aparece, nem o bloco sem nenhum dado. Os links abrem na mesma aba.
+- Enquanto os dados da empresa carregam, as linhas de contato e do aviso de direitos ficam reservadas. Na falha, o aviso com a mensagem e "Tentar novamente" fica no lugar de "Contato" e "Redes sociais", e o aviso de direitos não aparece (UC01 FE02).
 
 Painel (`src/app/(admin)/admin/layout.tsx`):
 

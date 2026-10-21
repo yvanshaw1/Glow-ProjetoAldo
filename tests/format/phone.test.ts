@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { formatPhone } from "@/shared/format/phone";
+import {
+  formatPhone,
+  formatPhoneLink,
+  formatWhatsAppLink,
+} from "@/shared/format/phone";
 
 // Display of the phones of RN035 (column Exibição), also used as the mask of
 // the phone fields while they are typed (docs/padroes/frontend.md).
@@ -29,5 +33,20 @@ describe("formatPhone", () => {
   it("keeps only digits, up to eleven", () => {
     expect(formatPhone("829999988881")).toBe("(82) 99999-8888");
     expect(formatPhone("abc")).toBe("");
+  });
+});
+
+describe("formatPhoneLink", () => {
+  it("links a phone for calling", () => {
+    expect(formatPhoneLink("8233334444")).toBe("tel:+558233334444");
+    expect(formatPhoneLink("82999998888")).toBe("tel:+5582999998888");
+  });
+});
+
+describe("formatWhatsAppLink", () => {
+  it("links the WhatsApp to a chat", () => {
+    expect(formatWhatsAppLink("82999998888")).toBe(
+      "https://wa.me/5582999998888",
+    );
   });
 });
