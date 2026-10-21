@@ -1,14 +1,86 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Mock } from "vitest";
 import { ApiError, apiRequest, withQuery } from "@/lib/api-client";
+import type { DemoAnswer, DemoRoute } from "@/lib/demo/routes";
 import type { SessionUser } from "@/shared/api/auth";
+import type { Page } from "@/shared/api/pagination";
 import type { ProblemDetails } from "@/shared/api/problem";
 import type { ErrorCode } from "@/shared/errors/catalog";
 
 // The single HTTP client of the pages (docs/padroes/frontend.md, decision
-// 0050). fetch and location are stubbed: no server, browser or network.
+// 0052). fetch and location are stubbed, and so is the list of demo routes
+// (decision 0055): no server, browser or network.
 
 const REQUEST_ID = "a1b2c3d4";
+
+type DemoService = { id: string; name: string; type: string };
+
+// The demo list of these tests. Its paths are not the ones of the other
+// tests, which keep going to the stubbed fetch.
+const demo = vi.hoisted(() => {
+  // The services of supabase/seed-demo.sql, completed up to 25.
+  const serviceNames: [string, string][] = [
+    ["Lavagem simples", "main"],
+    ["Lavagem completa", "main"],
+    ["Lavagem técnica", "main"],
+    ["Polimento comercial", "main"],
+    ["Polimento técnico", "main"],
+    ["Vitrificação de pintura", "main"],
+    ["Higienização interna completa", "main"],
+    ["Película nos vidros", "main"],
+    ["Lavagem a seco", "main"],
+    ["Higienização do ar-condicionado", "complementary"],
+    ["Lavagem de motor", "complementary"],
+    ["Revitalização de faróis", "complementary"],
+    ["Oxi-sanitização", "complementary"],
+    ["Cristalização de vidros", "complementary"],
+    ["Cera de carnaúba", "additional"],
+    ["Pretinho nos pneus", "additional"],
+    ["Hidratação de couro", "additional"],
+    ["Repelente de chuva nos vidros", "additional"],
+    ...Array.from({ length: 7 }, (_, index): [string, string] => [
+      `Serviço de teste ${index + 19}`,
+      "main",
+    ]),
+  ];
+  return {
+    services: serviceNames.map(([name, type], index) => ({
+      id: `service-${String(index + 1).padStart(2, "0")}`,
+      name,
+      type,
+    })),
+    preview: { total: 85, durationMinutes: 90 },
+    loadServiceList: vi.fn<() => Promise<DemoAnswer>>(),
+    loadService: vi.fn<() => Promise<DemoAnswer>>(),
+    loadPreview: vi.fn<() => Promise<DemoAnswer>>(),
+  };
+});
+
+vi.mock("@/lib/demo/routes", async () => {
+  const { demoPage } = await import("@/lib/demo/list");
+  demo.loadServiceList.mockResolvedValue(({ query }) =>
+    demoPage(demo.services, query, {
+      pageSize: 20,
+      searchIn: (service) => [service.name],
+      filters: { type: (service) => service.type },
+    }),
+  );
+  demo.loadService.mockResolvedValue(({ params }) =>
+    demo.services.find((service) => service.id === params.id),
+  );
+  demo.loadPreview.mockResolvedValue(() => demo.preview);
+  const routes: DemoRoute[] = [
+    { method: "GET", path: "/api/admin/services", load: demo.loadServiceList },
+    { method: "GET", path: "/api/admin/services/:id", load: demo.loadService },
+    {
+      method: "POST",
+      path: "/api/admin/appointments/preview",
+      load: demo.loadPreview,
+    },
+    { method: "POST", path: "/api/admin/services" },
+  ];
+  return { DEMO_ROUTES: routes };
+});
 
 type LocationStub = {
   pathname: string;
@@ -314,6 +386,198 @@ describe("apiRequest", () => {
 
     expect(reason).not.toBeInstanceOf(ApiError);
     expect(reason).toHaveProperty("name", "AbortError");
+  });
+});
+
+// Decision 0055 (docs/padroes/componentes.md, Telas de demonstração): a
+// route of the demo list answers after 400 ms, without the network. The
+// clock is simulated, so no test waits.
+describe("apiRequest with demo data", () => {
+  const DEMO_WAIT_MS = 400;
+  const SERVICES_PATH = "/api/admin/services";
+
+  async function afterDemoWait<T>(promise: Promise<T>): Promise<T> {
+    const [result] = await Promise.all([
+      promise,
+      vi.advanceTimersByTimeAsync(DEMO_WAIT_MS),
+    ]);
+    return result;
+  }
+
+  function readServicePage(params: Record<string, string | number>) {
+    return afterDemoWait(
+      apiRequest<Page<DemoService>>(withQuery(SERVICES_PATH, params)),
+    );
+  }
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("answers a listed read with the fixed data, without a network request", async () => {
+    const service = await afterDemoWait(
+      apiRequest<DemoService>("/api/admin/services/service-07"),
+    );
+
+    expect(service).toEqual({
+      id: "service-07",
+      name: "Higienização interna completa",
+      type: "main",
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("waits 400 ms before answering a listed route", async () => {
+    const settled = vi.fn();
+    const promise = apiRequest<DemoService>("/api/admin/services/service-07");
+    promise.then(settled, settled);
+
+    await vi.advanceTimersByTimeAsync(399);
+    expect(settled).not.toHaveBeenCalled();
+
+    await vi.advanceTimersByTimeAsync(1);
+    await expect(promise).resolves.toHaveProperty("id", "service-07");
+  });
+
+  it("answers a listed POST that does not write with the fixed data", async () => {
+    const preview = await afterDemoWait(
+      apiRequest("/api/admin/appointments/preview", {
+        method: "POST",
+        body: { serviceIds: ["service-01"] },
+      }),
+    );
+
+    expect(preview).toEqual({ total: 85, durationMinutes: 90 });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("loads only the data of the requested route", async () => {
+    await readServicePage({ page: 1, pageSize: 20 });
+
+    expect(demo.loadServiceList).toHaveBeenCalledTimes(1);
+    expect(demo.loadService).not.toHaveBeenCalled();
+    expect(demo.loadPreview).not.toHaveBeenCalled();
+  });
+
+  it("pages the fixed list", async () => {
+    const page = await readServicePage({ page: 2, pageSize: 20 });
+
+    expect(page.data.map((service) => service.id)).toEqual([
+      "service-21",
+      "service-22",
+      "service-23",
+      "service-24",
+      "service-25",
+    ]);
+    expect(page.page).toBe(2);
+    expect(page.pageSize).toBe(20);
+    expect(page.total).toBe(25);
+  });
+
+  it("caps the page size of the fixed list at 50", async () => {
+    const page = await readServicePage({ page: 1, pageSize: 100 });
+
+    expect(page.pageSize).toBe(50);
+    expect(page.data).toHaveLength(25);
+    expect(page.total).toBe(25);
+  });
+
+  it("searches the term in the fields of the screen, ignoring case", async () => {
+    const page = await readServicePage({
+      page: 1,
+      pageSize: 20,
+      search: "LAVAGEM",
+    });
+
+    expect(page.data.map((service) => service.name)).toEqual([
+      "Lavagem simples",
+      "Lavagem completa",
+      "Lavagem técnica",
+      "Lavagem a seco",
+      "Lavagem de motor",
+    ]);
+    expect(page.page).toBe(1);
+    expect(page.total).toBe(5);
+  });
+
+  it("filters the fixed list by equality", async () => {
+    const page = await readServicePage({
+      page: 1,
+      pageSize: 20,
+      type: "additional",
+    });
+
+    expect(page.data.map((service) => service.name)).toEqual([
+      "Cera de carnaúba",
+      "Pretinho nos pneus",
+      "Hidratação de couro",
+      "Repelente de chuva nos vidros",
+    ]);
+    expect(page.total).toBe(4);
+  });
+
+  it("refuses a listed write with NOT_IMPLEMENTED, without a network request", async () => {
+    const error = await afterDemoWait(
+      catchApiError(
+        apiRequest(SERVICES_PATH, {
+          method: "POST",
+          body: { name: "Lavagem simples" },
+        }),
+      ),
+    );
+
+    expect(error.status).toBe(501);
+    expect(error.code).toBe("NOT_IMPLEMENTED");
+    expect(error.message).toBe(
+      "Esta ação ainda não está disponível nesta versão de demonstração.",
+    );
+    expect(error.fields).toBeNull();
+    expect(error.requestId).toBeNull();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("sends a route out of the list to the API", async () => {
+    const company = { companyName: "Glow – Estética Automotiva" };
+    fetchMock.mockResolvedValue(jsonResponse(company));
+
+    await expect(apiRequest("/api/admin/settings/company")).resolves.toEqual(
+      company,
+    );
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][0]).toBe("/api/admin/settings/company");
+  });
+
+  it("sends another method of a listed path to the API", async () => {
+    fetchMock.mockResolvedValue(jsonResponse({}));
+
+    await apiRequest("/api/admin/services/service-07", {
+      method: "PATCH",
+      body: { name: "Polimento técnico" },
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("rejects an aborted demo request as aborted", async () => {
+    const controller = new AbortController();
+    const reason = apiRequest(SERVICES_PATH, {
+      signal: controller.signal,
+    }).then(
+      () => null,
+      (error: unknown) => error,
+    );
+
+    await vi.advanceTimersByTimeAsync(200);
+    controller.abort();
+
+    await expect(reason).resolves.toHaveProperty("name", "AbortError");
+    expect(await reason).not.toBeInstanceOf(ApiError);
+    expect(demo.loadServiceList).not.toHaveBeenCalled();
   });
 });
 

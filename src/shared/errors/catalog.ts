@@ -82,6 +82,13 @@ export const ERROR_CATALOG = {
     message:
       "Não foi possível concluir a operação. Tente novamente em instantes.",
   },
+  // Only the API client answers it, on a write of the demo screens
+  // (decision 0055); it leaves with the last demo route.
+  NOT_IMPLEMENTED: {
+    status: 501,
+    message:
+      "Esta ação ainda não está disponível nesta versão de demonstração.",
+  },
   SERVICE_UNAVAILABLE: {
     status: 503,
     message:

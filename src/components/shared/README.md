@@ -1,6 +1,6 @@
 # `src/components/shared/` – Componentes das duas interfaces
 
-Componentes usados pelo portal e pelo painel: formulário em etapas, etiqueta de status do agendamento, diálogo de confirmação, listagem com busca e filtros, estado vazio, campo de valor monetário, os campos e o aviso dos formulários, o campo de senha, o botão de envio e o provedor da sessão (contexto React carregado de `GET /api/auth/me`).
+Componentes usados pelo portal e pelo painel: formulário em etapas, etiqueta de status do agendamento, diálogo de confirmação, listagem com busca e filtros, estado vazio, aviso de demonstração, campo de valor monetário, os campos e o aviso dos formulários, o campo de senha, o botão de envio e o provedor da sessão (contexto React carregado de `GET /api/auth/me`).
 
 ## Vai aqui
 

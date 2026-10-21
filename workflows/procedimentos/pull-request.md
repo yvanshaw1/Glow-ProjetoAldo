@@ -26,6 +26,12 @@ Tamanho: até cerca de 400 linhas alteradas, sem contar testes; maior que isso, 
 
 Em funcionalidade nova, o revisor percorre também as demais categorias do OWASP Top 10 que se aplicam a ela.
 
+## Telas de demonstração (decisão 0055)
+
+Enquanto `src/lib/demo/` existir, o PR que constrói uma rota confere:
+
+- [ ] A rota nova saiu da lista de `src/lib/demo/`, e a tela ligada a ela não mostra mais o aviso de demonstração.
+
 ## Revisar
 
 - Qualquer integrante que não seja o autor revisa e aprova (decisão 0039); a proteção da `main` exige uma aprovação.

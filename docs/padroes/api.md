@@ -1,7 +1,7 @@
 ---
 titulo: Padrões da API
 origem: Documentação de Arquitetura de Software, seção 6 e Apêndice A
-relacionados: [RNF008, RNF011, RN035, RS013, RS014, RS017]
+relacionados: [RNF008, RNF011, RN035, RS013, RS014, RS017, 0055]
 ---
 
 # Padrões da API
@@ -89,10 +89,13 @@ Em `fields`, cada campo aparece uma vez, com a primeira mensagem; o campo dentro
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | Formato de envio não aceito. |
 | 429 | `ACCOUNT_LOCKED` | Muitas tentativas. Aguarde alguns minutos e tente novamente. (com `Retry-After`) |
 | 500 | `INTERNAL_ERROR` | Não foi possível concluir a operação. Tente novamente em instantes. |
+| 501 | `NOT_IMPLEMENTED` | Esta ação ainda não está disponível nesta versão de demonstração. |
 | 503 | `SERVICE_UNAVAILABLE` | O serviço está temporariamente indisponível. Tente novamente em instantes. |
 | 503 | `AI_UNAVAILABLE` | Não foi possível gerar a análise agora. Tente novamente em instantes. |
 
 O 503 `SERVICE_UNAVAILABLE` responde quando o Supabase Auth não atende (rede, indisponibilidade ou limite de requisições), no login, no logout, na conferência da sessão, no cadastro e na troca de senha; o detalhe vai só ao registro, numa linha `warn`. O 503 `AI_UNAVAILABLE` responde quando o serviço de IA não está configurado, não responde a tempo, recusa por limite ou devolve resposta fora do formato; o motivo vai só ao registro (`docs/plataforma/servico-de-ia.md`).
+
+Só o cliente da API produz o `NOT_IMPLEMENTED`, nas telas de demonstração; ele sai do catálogo com a última rota de demonstração.
 
 Os códigos e as mensagens ficam em `src/shared/errors`, usados pelo backend para responder e pelo frontend para exibir. Código novo entra nesta tabela no mesmo PR.
 

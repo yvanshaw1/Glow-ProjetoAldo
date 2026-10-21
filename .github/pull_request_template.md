@@ -32,3 +32,4 @@ Closes #<issue>
 - [ ] Cada critério de aceitação tem teste automatizado ou passo manual.
 - [ ] `02_relatorio.md` gravado (exceto tarefa trivial); módulos de `docs/` e OpenAPI atualizados, se preciso.
 - [ ] Até cerca de 400 linhas alteradas, sem contar testes.
+- [ ] Rota nova: saiu da lista de `src/lib/demo/`, e a tela ligada a ela não mostra mais o aviso de demonstração (decisão 0055).
