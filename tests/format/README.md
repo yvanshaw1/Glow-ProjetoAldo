@@ -4,7 +4,7 @@ Testes das funções de exibição de `src/shared/format/`, que também servem d
 
 ## Vai aqui
 
-- um arquivo de teste para cada arquivo de `src/shared/format/` (`phone.test.ts`, `cnpj.test.ts`, `currency.test.ts`, `date.test.ts`, `duration.test.ts`)
+- um arquivo de teste para cada arquivo de `src/shared/format/` (`phone.test.ts`, `cnpj.test.ts`, `currency.test.ts`, `date.test.ts`, `duration.test.ts`, `business-hours.test.ts`, `address.test.ts`)
 
 ## Não vai aqui
 

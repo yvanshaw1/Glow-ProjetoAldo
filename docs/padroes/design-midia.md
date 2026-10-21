@@ -26,10 +26,11 @@ Parte de [design.md](design.md), separada pelo tamanho.
   - as fixas, como a da seção de destaque, em `public/images/`, só quando o código as referencia;
   - as dos serviços entram pelo painel no Storage, como dado (RS015), inclusive as da demonstração.
 - Texto sobre imagem fica sobre um degradê escuro, com 4,5:1 conferido na imagem escolhida.
-- Carregamento pelo `next/image`, com a proporção reservada para não deslocar a página. Só a imagem da seção de destaque carrega com prioridade (`priority`); as outras esperam até aparecer na tela (RNF006).
+- Carregamento pelo `next/image`, com a proporção reservada para não deslocar a página. Só a imagem da seção de destaque carrega com prioridade (`preload`, que substitui o `priority` no Next.js 16); as outras esperam até aparecer na tela (RNF006).
 - Cada download é feito na tarefa da página que usa a imagem, com o aval do desenvolvedor para o arquivo (nome, fonte e tamanho).
 
 ## Créditos das imagens
 
 | Arquivo | Autor | Fonte | Licença | Endereço | Data |
 |---|---|---|---|---|---|
+| `public/images/home-hero.webp` | Luay Barani (@luaybarani) | Unsplash | Licença da Unsplash | https://unsplash.com/photos/5SmPnmCjwcU | 21/10/2026 |

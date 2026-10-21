@@ -1,6 +1,6 @@
 # `src/shared/format/` – Formatação para exibição
 
-Funções que transformam valores gravados em texto para a tela, com a API `Intl`: moeda (`R$ 1.250,00`), telefone, placa, CNPJ, data `dd/mm/aaaa`, horário, duração, o ano do aviso de direitos e os links de telefone (`tel:`) e de WhatsApp; datas e horários no fuso da empresa (`COMPANY_TIME_ZONE`).
+Funções que transformam valores gravados em texto para a tela, com a API `Intl`: moeda (`R$ 1.250,00`), telefone, placa, CNPJ, data `dd/mm/aaaa`, horário, duração, o ano do aviso de direitos, o horário de funcionamento de um dia e os links de telefone (`tel:`), de WhatsApp e de rota para o endereço; datas e horários no fuso da empresa (`COMPANY_TIME_ZONE`).
 
 ## Vai aqui
 
