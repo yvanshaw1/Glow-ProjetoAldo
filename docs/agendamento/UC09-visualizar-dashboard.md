@@ -29,7 +29,9 @@ regras: [RN021, RN035]
 
 ## Fluxos alternativos
 
-Não há.
+### FA01 – Análise do período (passo 3)
+
+1. O funcionário solicita a análise dos indicadores, gerada por inteligência artificial (UC27).
 
 ## Fluxos de exceção
 
@@ -47,6 +49,7 @@ Não há.
 
 ## Relacionados
 
-- Requisitos: [RF040](requisitos.md), [RF041](requisitos.md), [RF042](requisitos.md), [RF043](requisitos.md)
+- Requisitos: [RF040](requisitos.md), [RF041](requisitos.md), [RF042](requisitos.md), [RF043](requisitos.md), [RF089](requisitos.md)
 - Regras: [RN021](RN021-indicadores-do-dashboard.md), [RN035](../plataforma/RN035-formatos-dos-dados.md)
+- Casos de uso: [UC27](UC27-gerar-analise-do-dashboard.md)
 - Telas e API: [rotas.md](rotas.md)
