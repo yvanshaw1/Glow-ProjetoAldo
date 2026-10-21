@@ -1,6 +1,6 @@
 ---
 issue: 57
-pull_request: PR_NUMBER
+pull_request: 70
 ---
 
 # Relatório: Telas do portal público com dados de demonstração: página inicial e catálogo

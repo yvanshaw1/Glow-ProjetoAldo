@@ -68,4 +68,4 @@ Verificação local do PR 1, aprovada:
 
 ## 2026-10-21 – desvio
 
-Etapa 03 do PR 1, a pedido do Yvan. O plano previa o relatório parcial em `notas.md`; ele foi para `02_relatorio.md`, marcado como parcial, como no PR 1 da #66 (`Refs #66`), porque o contrato da etapa 03 pede o arquivo. O plano continua em `em_execucao` até o PR 2. A `origin/main` continuava em d6d28b8, sem nada a incorporar.
+Etapa 03 do PR 1, a pedido do Yvan: PR #70, aberto como rascunho para pôr o número no relatório e depois marcado como pronto. O plano previa o relatório parcial em `notas.md`; ele foi para `02_relatorio.md`, marcado como parcial, como no PR 1 da #66 (`Refs #66`), porque o contrato da etapa 03 pede o arquivo. O plano continua em `em_execucao` até o PR 2. A `origin/main` continuava em d6d28b8, sem nada a incorporar.
