@@ -28,7 +28,7 @@ Acesso: Perfil `client`; opera só sobre os dados do cliente da sessão (RS009).
 Dados da conta (UC04).
 
 - Entrada: Nenhuma.
-- Resposta: **200** nome, sobrenome, e-mail e telefone.
+- Resposta: **200** `firstName`, `lastName`, `email`, `phone` (os 11 algarismos) e `updatedAt`.
 
 #### `PATCH /api/me/profile`
 
