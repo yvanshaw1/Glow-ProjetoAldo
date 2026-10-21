@@ -100,7 +100,7 @@ export function ConfirmDialog({
             disabled={isRunning}
             focusableWhenDisabled
             onClick={() => void confirm()}
-            className="disabled:cursor-progress disabled:opacity-70"
+            className="aria-disabled:cursor-progress aria-disabled:opacity-70"
           >
             {isRunning && (
               <LoaderCircleIcon

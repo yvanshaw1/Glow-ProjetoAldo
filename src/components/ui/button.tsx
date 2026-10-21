@@ -4,8 +4,10 @@ import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   // Neumorphism of docs/padroes/design.md; the focus outline comes from
-  // globals.css, and shadows change without animation.
-  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-semibold whitespace-nowrap transition-[color,background-color,transform,opacity] select-none active:not-aria-[haspopup]:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-neu-sm aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  // globals.css, and shadows change without animation. A button disabled but
+  // still focusable (focusableWhenDisabled) has aria-disabled instead of the
+  // disabled attribute, so it takes the same look, without being pressed.
+  "group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-semibold whitespace-nowrap transition-[color,background-color,transform,opacity] select-none active:not-aria-[haspopup]:not-aria-disabled:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-neu-sm aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:shadow-neu-sm aria-disabled:inset-shadow-none aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
