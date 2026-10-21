@@ -16,4 +16,5 @@ A publicação é automática: a Vercel gera uma pré-visualização para cada p
 ## Lembretes
 
 - Variáveis de ambiente ficam só na Vercel e nas máquinas de quem precisa (`docs/plataforma/infraestrutura.md`); nunca no repositório.
+- As variáveis `AI_*` ficam na Vercel em Production e Preview; conferir a cota do provedor de IA nos dias antes da apresentação (`docs/plataforma/servico-de-ia.md`).
 - O plano gratuito do Supabase pausa projetos parados por alguns dias: acessar o sistema nos dias antes da apresentação.

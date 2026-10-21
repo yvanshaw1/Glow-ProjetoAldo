@@ -49,6 +49,7 @@ Os padrões estão em `docs/padroes/` (sempre `codigo.md`, mais os das áreas qu
 
 - respeitar as camadas: a rota valida e autoriza, o serviço aplica as regras, o repositório acessa o banco;
 - manter regra de negócio e decisão de acesso no servidor; a interface só orienta (RS008);
+- a IA do produto (análise do dashboard) recebe só os valores agregados de RN038, e a resposta dela é dado não confiável, conferido e exibido como texto (RS020); os testes nunca chamam o provedor, e a chave dele é um segredo como os outros (RS016);
 - validar e normalizar toda entrada com `src/shared/validation` (RS013) e responder erros pelo tratamento único, sem `catch` vazio (RS017);
 - usar os nomes do glossário de `guia/mapa.md` no banco, na API e no código;
 - construir só o que o plano pede: nada de opções, camadas ou generalizações para casos não pedidos;

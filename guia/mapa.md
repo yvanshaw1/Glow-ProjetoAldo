@@ -1,11 +1,12 @@
 # O sistema em uma tela
 
-Uma única aplicação Next.js reúne as duas interfaces e a API. O navegador fala só com a aplicação; só o servidor acessa o Supabase.
+Uma única aplicação Next.js reúne as duas interfaces e a API. O navegador fala só com a aplicação; só o servidor acessa o Supabase e o serviço de IA, que recebe só valores agregados (RN038).
 
 ```
 página (React) → src/lib/api-client.ts → rota src/app/api/**/route.ts (sessão, permissão, Zod)
   → serviço src/server/services/ (usa as funções puras de src/server/rules/) → repositório src/server/repositories/ (supabase-js)
   → PostgreSQL (RLS ligado e sem políticas: só a chave de serviço do servidor lê e grava)
+análise do dashboard: serviço dashboard → src/server/ai/ → serviço de IA (Groq), só com valores agregados
 ```
 
 | Grupo da API | Quem acessa |
@@ -34,7 +35,7 @@ src/
 ├── hooks/          hooks de cliente reutilizáveis
 ├── lib/            api-client.ts, utils.ts
 ├── shared/         validation/, format/, errors/, constants/, api/: usados pelo front e pelo back
-├── server/         auth/, http/, rules/ (puras), services/, repositories/, supabase/: só servidor
+├── server/         auth/, http/, rules/ (puras), services/, repositories/, supabase/, ai/: só servidor
 └── proxy.ts        proteção das páginas (Next.js 16; não existe middleware.ts)
 public/             estáticos
 supabase/           migrations/, seed.sql, seed-demo.sql, scripts/
@@ -64,3 +65,4 @@ tests/              rules/ e validation/, espelhando o código
 | Exclusão lógica · Desativação | `deleted_at` · `is_active` | clientes e serviços são excluídos logicamente; o resto é desativado (RN030) |
 | Senha inicial | `must_change_password` | troca obrigatória no primeiro acesso (RN023) |
 | Receita, ticket médio, taxa de cancelamento | módulo `dashboard` | (RN021) |
+| Análise do período | `DashboardAnalysis`, `POST /api/admin/dashboard/analysis` | texto gerado por IA a partir dos valores agregados (RN038, RN039) |

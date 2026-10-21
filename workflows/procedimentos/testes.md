@@ -42,6 +42,8 @@ Quando a tarefa cria ou muda uma tela, um layout ou o tema (`docs/padroes/design
 2. Local: `npx -y lighthouse@13.5.0 <endereço> --only-categories=accessibility`, nos modos celular e computador (`--preset=desktop`) e nos dois temas, sem auditoria reprovada.
 3. Pré-visualização, pelo desenvolvedor: o Lighthouse das ferramentas do navegador (Acessibilidade, celular e computador) e as duas larguras no modo de dispositivo, com a captura de tela no PR.
 
+A IA do produto é conferida localmente com um provedor simulado no scratchpad, pelo `AI_BASE_URL`, nos modos de sucesso e de falha; o provedor real, só na pré-visualização, pelo desenvolvedor (`docs/plataforma/servico-de-ia.md`).
+
 ## Manuais (pré-visualização)
 
 1. Abrir a pré-visualização da Vercel indicada no pull request.
