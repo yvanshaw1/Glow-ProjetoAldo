@@ -1,0 +1,70 @@
+# Notas: 58-telas-do-cliente
+
+Registro curto do que outra sessão precisaria saber. Uma entrada por fato, a mais recente embaixo.
+
+## 2026-10-21 – descoberta
+
+Conferências do planejamento, sem alterar o código do projeto:
+
+- **Origem.** Sessão iniciada pela sessão principal para conduzir a #58 (T2 da `proposta-das-issues.md` da #66), depois da #57 (PRs #70 e #71, 61b4cb3). As notas de passagem da #56 e da #57 foram lidas; a pasta de notas compartilhadas desta sessão estava vazia.
+- **Worktree.** `36-regras-do-agendamento-05611e` (nome herdado, não renomeável), na ramificação `claude/58-telas-do-cliente-b6423c`, em 61b4cb3, igual à `origin/main` depois do `git fetch`. Plano e notas sem commit, como nas etapas 01 anteriores. A etapa 02 cria uma ramificação `feat/58-…` por PR a partir da `origin/main`.
+- **GitHub.** Nenhum PR aberto. A #59 (agendar e editar) depende desta e diz que "a edição abre o mesmo assistente a partir do detalhe da #58".
+- **Rotas.** `rotas.md` descreve as respostas do cliente por alto: o perfil sem `updatedAt` (exigido no `PATCH` por `api.md`), os veículos sem a marca de veículo compartilhado (o UC05 FE03 manda não oferecer a edição), a consulta da placa com "resposta vazia", o `scope` sem os status nem a ordem e o detalhe como "agendamento completo" (L1).
+- **Reagendamento.** `POST /api/me/appointments/:id/reschedule` exige `paymentMethod` e `scheduledAt`, e o UC25 (passos 4 a 6) pede o total pela forma escolhida e os horários de funcionamento: são as etapas do assistente da #59, desenhadas com calendário e grade de horários (`clientPages/appointment/AppointmentPageStep3*` e `Step4*`). Os requisitos da #58 não têm RN013, RN015 nem RN034 (L4).
+- **Constantes que faltam.** `src/shared/constants/` não tem tipos de veículo nem formas de pagamento, embora o README as cite; `src/shared/format/` não tem placa (o README cita) nem percentual.
+- **Esquemas.** `changePasswordFormSchema` já existe (#24, com a confirmação); `/set-password` o usa com `POST /api/auth/change-password`. Os erros `INVALID_CURRENT_PASSWORD`, `VEHICLE_ALREADY_LINKED`, `VEHICLE_SHARED`, `PLATE_IN_USE` e `INVALID_STATUS` já estão no catálogo; a frase do veículo compartilhado reaproveita a mensagem de `VEHICLE_SHARED`.
+- **Componentes.** `StepForm`, `ConfirmDialog` e `PaginatedList` ainda não têm uso nas telas. O `StepForm` não consulta nada entre as etapas (L6). O `ConfirmDialog` tem "Cancelar" fixo, que colide com "Cancelar agendamento" (L5). O cabeçalho do portal não mostra o nome de quem entrou.
+- **Dados do seed.** Henrique Costa tem o Fiat Toro `GLW8H08` (picape, GG) e o Toyota SW4 `GLW5L15` (SUV, G), este também na conta de Isabela Melo (RN036). Ids: `md5('glow-demo:vehicle:GLW8H08')` → `a229a2b8-eb46-90df-1285-bcd05a9570a0`, `GLW5L15` → `c27d6551-0c94-5624-d779-0cad75a490a3`. As taxas do `seed.sql` são todas zero; o funcionamento é de segunda a sexta das 08:00 às 18:00 com pausa das 12:00 às 13:00, sábado das 08:00 às 12:00, domingo fechado. Os agendamentos do `seed-demo.sql` são sorteados por dia, relativos ao dia da carga; a demonstração define os seus, com os preços e durações do seed e a previsão calculada à mão por RN034.
+- **Wireframes.** O perfil tem foto, "Cliente desde", "Sair" e a "Zona de perigo" (exclusão da conta, só do funcionário no Glow, RF074); o cadastro de veículo pede o tipo antes da placa, ao contrário do UC05; os agendamentos agrupam os atuais em "Em andamento" e "Próximos", põem "Cancelar" no cartão e pedem o motivo do cancelamento, que a rota não recebe.
+- **Tamanho.** Cerca de 1.650 linhas em `src/`, sem testes nem README: o plano propõe três PRs (conta, veículos, agendamentos), com o 2 e o 3 acima de ~400.
+
+## 2026-10-21 – decisão
+
+Plano gravado em `aguardando_aprovacao`, com as lacunas:
+
+- L1, campos das respostas: recomendado os campos em `rotas.md`, com `isShared` nos veículos e os status e a ordem de cada `scope`;
+- L2, `/profile`: recomendado duas abas, a troca de senha numa seção "Senha" sem o aviso de demonstração e numa janela, e os textos no módulo novo `docs/clientes/area-do-cliente.md`;
+- L3, `/appointments`: recomendado abas "Atuais" e "Histórico", cartão com "Ver detalhes" e as ações só na janela de detalhe, e os textos no módulo novo `docs/agendamento/meus-agendamentos.md`;
+- L4, reagendamento: recomendado passar o reagendamento inteiro à #59, no mesmo assistente da edição, com a edição dos corpos da #58 e da #59;
+- L5, "Voltar" no lugar de "Cancelar" quando a ação do `ConfirmDialog` é cancelar;
+- L6, cadastro de veículo: recomendado uma janela que começa pela placa e mostra o resto depois da consulta, sem o `StepForm`.
+
+Pontos de aprovação: os três PRs (ou cinco), a edição das issues (com a opção 1 de L4), a conta de teste de cliente no banco local com a troca de senha real e, como na #56 e na #57, as chaves do banco local, o cookie no Lighthouse e as alterações temporárias sem commit. Nada foi construído.
+
+## 2026-10-21 – decisão
+
+Plano aprovado por yvan (21/10/2026), conferido no arquivo: opção 1 em L1 a L6 (caixas `[X]`). A divisão ficou a do plano, em três PRs. Status em `em_execucao`. A edição dos corpos da #58 e da #59 (L4, opção 1) ainda espera o OK do Yvan na conversa.
+
+## 2026-10-21 – desvio
+
+Etapa 02, PR 1 (conta), na ramificação `feat/58-client-account`, criada da `origin/main` (61b4cb3) com `git switch --no-track -c`, sem vínculo, e `npx -y npm@11.21.1 ci`. Commits:
+
+- 4694cea: `ClientProfile`, `src/lib/demo/clients.ts` (Henrique Costa) e `GET`/`PATCH /api/me/profile` em `DEMO_ROUTES`;
+- 9ae86c4: `/profile` com a aba "Dados pessoais", `account-form.tsx` (seção "Dados da conta") e `password-section.tsx` (seção "Senha" com a janela);
+- c11e91d: `area-do-cliente.md` (só a parte da conta; os veículos entram no PR 2), `clientes/CONTEXT.md` e o perfil em `clientes/rotas.md` (L1).
+
+Escolhas pequenas, sem mudar regra nem escopo:
+
+- **Largura.** A página usa `max-w-3xl`, centralizada, como a coluna do wireframe; cada seção é uma superfície com `shadow-neu-md`.
+- **Títulos das seções.** `h2` com peso 600 no tamanho do texto, como o título do cartão do catálogo, para não igualar o `h1` a 360 px.
+- **E-mail.** No formulário, só para leitura e com o texto em `--muted-foreground`; o envio leva só `firstName`, `lastName`, `phone` e `updatedAt`.
+- **Celular.** Enviado com a máscara, como digitado: sem o esquema (decisão 0055), a normalização entra com a rota.
+- **Janela de senha.** Os campos são limpos ao abrir e ao fechar; durante a chamada, ela não fecha (`componentes.md`). O "Cancelar" do rodapé fecha a janela pelo `DialogClose`.
+- **PR 1 com uma aba só**, como `/admin/settings` com "Empresa"; a de veículos entra no PR 2.
+
+## 2026-10-21 – descoberta
+
+Verificação local do PR 1, aprovada:
+
+- **Ambiente.** Docker Desktop aberto; `npx supabase start` e `db reset` (só o `seed.sql`); variáveis pelo `local/local-env.sh` do scratchpad, que só aceita `http://127.0.0.1:` e não as exibe; `npx next build` (`/profile` estática) e `npx next start -p 3058`, esperado por `wait.mjs`.
+- **Conta de teste.** Cliente "Cliente Teste" criado por `POST /api/auth/register` no banco local (`make-client.mjs`), com e-mail `@example.com` e senhas geradas em `local/client.json` do scratchpad, nunca exibidos; o arquivo é atualizado a cada troca.
+- **Conteúdo.** Título "Minha conta – Glow"; `h1` "Minha conta"; a aba "Dados pessoais" selecionada; "Dados da conta" com o aviso logo abaixo do título (`role="note"`), "Henrique", "Costa", o e-mail só para leitura com a descrição e "(82) 90000-0008"; "Senha" sem o aviso. Na carga, o lugar reservado (`aria-busy`).
+- **Larguras e temas.** 360 × 800 e 1440 × 900, claro e escuro, sem rolagem horizontal; uma coluna a 360 px e duas a 1440 px. Capturas em `local/shots/` do scratchpad.
+- **Envio de demonstração.** O celular mascarado na digitação ("(82) 98888-7777"); "Salvar alterações" passa a "Salvando…" com `aria-disabled` e mostra "Esta ação ainda não está disponível nesta versão de demonstração." no topo do formulário, com o foco, a 360 px no claro e a 1440 px no escuro.
+- **Teclado.** "Pular para o conteúdo", marca, navegação (ou "Abrir menu"), a aba, os quatro campos (o e-mail recebe o foco, só para leitura), "Salvar alterações", "Alterar senha" e o rodapé, com o contorno em todos.
+- **Troca de senha real**, a 360 px no claro e a 1440 px no escuro: "Alterar senha" com Enter abre a janela com o foco em "Senha atual"; o Tab percorre os campos, os botões "Mostrar senha", "Cancelar", "Salvar nova senha" e "Fechar", e volta ao primeiro; Esc fecha e devolve o foco ao botão. A senha atual errada mostra "A senha atual está incorreta." no topo da janela, com o foco, e ela continua aberta; a certa fecha a janela, a seção mostra "Senha alterada. As sessões abertas em outros aparelhos foram encerradas." e o foco volta a "Alterar senha", em `/profile`. Depois de "Sair", a senha antiga dá "E-mail ou senha incorretos." em `/login`, e a nova entra. Requisições: `change-password` 401 e 204, `logout` 204, `login` 401 e 200.
+- **Falha**, por alteração temporária de `src/lib/demo/clients.ts` (a primeira leitura lança erro), sem commit: o aviso "Não foi possível concluir a operação. Tente novamente em instantes." com "Tentar novamente" no lugar dos campos, a seção "Senha" intacta; "Tentar novamente" pelo teclado traz os dados. Desfeita (`git checkout`, `git status` só com a pasta da tarefa) e a aplicação compilada de novo.
+- **Rede.** Nenhuma chamada a `/api/me/*`: só `GET /api/auth/me` e `GET /api/public/company`, e as de `/api/auth/` da troca de senha.
+- **Lighthouse 13.5.0** em `/profile`, com o cookie da sessão de teste por `--extra-headers` (arquivo apagado com os JSON): acessibilidade 100 no celular e no computador, claro e escuro, sem auditoria reprovada. LCP no celular: 3,1 e 3,2 s no modo padrão (simulado; desempenho 93 e 94) e 1,9 s com o estrangulamento do DevTools (igual ao FCP); o LCP é o texto do aviso de demonstração. CLS de 0,007 no celular e 0,017 no computador: a seção "Senha" desce quando o formulário, mais alto que os quatro lugares reservados, aparece, como na aba "Empresa".
+- **Registro.** Acumulado (`>>`) nas três execuções do `next start` (normal, variante da falha e final): 135 linhas, só `requestId`, `userId`, método, caminho, status e código; nenhuma com cookie, token, cabeçalho de autorização, senha, chave ou e-mail, e nenhuma de erro ou aviso. As palavras "password" que aparecem são o caminho `/api/auth/change-password` e o código `INVALID_CURRENT_PASSWORD`.
+- **Encerramento.** `next start` encerrado por PID e `npx supabase stop`, com o backup (a conta de teste fica para os PRs 2 e 3). `npm run check` sem erros nem avisos, com 387 testes; `npm audit --omit=dev --audit-level=high` com 0. Nenhum import de `src/server/`, e nada em `src/app/api/`, `supabase/` ou `src/shared/validation/` (`git diff --stat origin/main...HEAD`: 10 arquivos, todos da lista do plano; 484 linhas em `src/`).
