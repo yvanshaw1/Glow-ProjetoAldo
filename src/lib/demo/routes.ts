@@ -40,4 +40,12 @@ export const DEMO_ROUTES: readonly DemoRoute[] = [
         (catalog) => catalog.answerPublicServices,
       ),
   },
+  // docs/clientes/rotas.md, built in phase 3.
+  {
+    method: "GET",
+    path: "/api/me/profile",
+    load: () =>
+      import("@/lib/demo/clients").then((clients) => clients.answerProfile),
+  },
+  { method: "PATCH", path: "/api/me/profile" },
 ];
