@@ -84,13 +84,15 @@ Em `fields`, cada campo aparece uma vez, com a primeira mensagem; o campo dentro
 | 409 | `PLATE_IN_USE` | Esta placa já está cadastrada em outro veículo. |
 | 409 | `VEHICLE_ALREADY_LINKED` | Este veículo já está na sua conta. |
 | 409 | `VEHICLE_SHARED` | Este veículo também está vinculado a outra conta. Para alterar os dados, procure a empresa. |
+| 409 | `INSUFFICIENT_DATA` | Não há dados suficientes no período para gerar a análise. |
 | 413 | `PAYLOAD_TOO_LARGE` | O conteúdo enviado é maior que o permitido. |
 | 415 | `UNSUPPORTED_MEDIA_TYPE` | Formato de envio não aceito. |
 | 429 | `ACCOUNT_LOCKED` | Muitas tentativas. Aguarde alguns minutos e tente novamente. (com `Retry-After`) |
 | 500 | `INTERNAL_ERROR` | Não foi possível concluir a operação. Tente novamente em instantes. |
 | 503 | `SERVICE_UNAVAILABLE` | O serviço está temporariamente indisponível. Tente novamente em instantes. |
+| 503 | `AI_UNAVAILABLE` | Não foi possível gerar a análise agora. Tente novamente em instantes. |
 
-O 503 `SERVICE_UNAVAILABLE` responde quando o Supabase Auth não atende (rede, indisponibilidade ou limite de requisições), no login, no logout, na conferência da sessão, no cadastro e na troca de senha; o detalhe vai só ao registro, numa linha `warn`.
+O 503 `SERVICE_UNAVAILABLE` responde quando o Supabase Auth não atende (rede, indisponibilidade ou limite de requisições), no login, no logout, na conferência da sessão, no cadastro e na troca de senha; o detalhe vai só ao registro, numa linha `warn`. O 503 `AI_UNAVAILABLE` responde quando o serviço de IA não está configurado, não responde a tempo, recusa por limite ou devolve resposta fora do formato; o motivo vai só ao registro (`docs/plataforma/servico-de-ia.md`).
 
 Os códigos e as mensagens ficam em `src/shared/errors`, usados pelo backend para responder e pelo frontend para exibir. Código novo entra nesta tabela no mesmo PR.
 
