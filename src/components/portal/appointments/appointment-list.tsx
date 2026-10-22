@@ -24,8 +24,9 @@ import { SHORT_LIST_PAGE_SIZE } from "@/shared/constants/pagination";
 
 const APPOINTMENTS_PATH = "/api/me/appointments";
 
-// Cards held while the first page loads, so the page does not shift.
-const LOADING_PLACES = 2;
+// Cards held while the first page loads, so the page does not shift: two
+// rows from 1024 px (RNF006).
+const LOADING_PLACES = 4;
 
 const GRID_CLASS = "grid gap-8 lg:grid-cols-2";
 
