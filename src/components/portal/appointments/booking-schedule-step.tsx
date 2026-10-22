@@ -20,7 +20,7 @@ import {
   toCompanyInstant,
 } from "@/shared/format/date";
 
-// UC06 steps 9 and 10 (docs/agendamento/agendar-servico.md, L4 of the plan):
+// UC06 steps 9 and 10 (docs/agendamento/agendar-servico.md, Data e horário):
 // a calendar of the month and the start times of the chosen day, as native
 // radio buttons, by the business hours of GET /api/public/company. A day with
 // no time left is disabled; the times are every 30 minutes, out of the break

@@ -60,8 +60,8 @@ const EMPTY_VALUES: BookingFormValues = {
   paymentMethod: null,
 };
 
-// L2 of the plan: the date before the payment, which stays beside the total
-// it changes.
+// docs/agendamento/agendar-servico.md, Etapas: the date before the payment,
+// which stays beside the total it changes.
 const STEPS: FormStep<BookingFormValues>[] = [
   { title: "Veículo", fields: ["vehicle"] },
   { title: "Serviços", fields: ["serviceIds"] },

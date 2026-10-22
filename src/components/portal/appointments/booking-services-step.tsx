@@ -27,7 +27,7 @@ import { formatDuration } from "@/shared/format/duration";
 // book with the price of the size of the chosen vehicle (RF020, RN009), as
 // native check boxes. A checked main service offers its additionals (FA01,
 // RN006); unchecking it takes out the ones no other checked main service
-// links (FA02, L8 of the plan).
+// links (FA02).
 
 const SERVICES_PATH = "/api/me/bookable-services";
 const REQUIRED_MESSAGE =
