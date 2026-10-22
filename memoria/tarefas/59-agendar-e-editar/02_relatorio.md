@@ -127,4 +127,4 @@ Revisão de segurança do diff: sem rota ou acesso ao banco novo, sem identifica
 - Pré-visualização autenticada: percorrer UC25/UC26 e regressão de `/booking` e cancelamento, nos dois tamanhos/temas.
 - RNF006: reavaliar LCP de `/booking` na pré-visualização; a medição histórica do PR #76 foi 3,0 s no celular, acima de 2,5 s. Não há nova medição de desempenho no PR 3.
 - CI/build remoto e aprovação de outro integrante antes da incorporação. O agente não incorpora o PR.
-- Tamanho do PR 3: 501 linhas alteradas em componentes, acima da referência de cerca de 400; resolver a divisão ou uma exceção explícita antes de marcar pronto para revisão, conforme `workflows/procedimentos/pull-request.md`.
+- Tamanho do PR 3: 501 linhas alteradas em componentes, acima da referência de cerca de 400. Yvan autorizou explicitamente manter o terceiro PR por exceção em 22/10/2026; a divisão deixou de ser pendência.
