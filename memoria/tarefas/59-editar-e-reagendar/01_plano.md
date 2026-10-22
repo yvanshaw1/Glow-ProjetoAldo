@@ -4,7 +4,7 @@ titulo: "PR 3 — edição e reagendamento do cliente com dados de demonstraçã
 areas: [frontend, testes]
 tipo: funcionalidade
 requisitos: [UC06, UC07, UC25, UC26, RF019, RF020, RF021, RF022, RF023, RF024, RF025, RF026, RF031, RF032, RN005, RN006, RN008, RN020, RN032, RN033, RN034, RNF002, RNF003, RNF004, RNF005, RNF011, RS008, RS009]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 22/10/2026
 ---
@@ -108,6 +108,7 @@ Todos os passos de tela abaixo são verificação manual local e na pré-visuali
 | `memoria/tarefas/59-editar-e-reagendar/01_plano.md` e `notas.md` | Complemento e memória do PR 3 |
 | `memoria/tarefas/59-agendar-e-editar/notas.md` | Apontar para este complemento, preservando o histórico |
 | `memoria/tarefas/59-agendar-e-editar/02_relatorio.md` | Na etapa 03, completar o relatório cumulativo dos três PRs e vincular este plano |
+| `memoria/tarefas/59-editar-e-reagendar/evidencias/` | Capturas locais com dados fictícios, exigidas pelo procedimento de PR para a revisão da interface na etapa 03 |
 
 O README de `src/components/portal/appointments/` já admite estes componentes. `booking-vehicle-step.tsx` já aceita `canAddVehicle`; `appointment-list.tsx` já recarrega pelo callback. Não prever alterações nesses arquivos sem necessidade demonstrada.
 

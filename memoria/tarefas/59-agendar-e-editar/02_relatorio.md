@@ -1,11 +1,11 @@
 ---
 issue: 59
-pull_request: 76
+pull_request: pendente
 ---
 
 # Relatório: Telas do cliente com dados de demonstração: agendar serviço e editar o agendamento
 
-Relatório parcial: PR 2 de 3. O PR #75, da base do assistente de agendamento (`Refs #59`, incorporado em aa60565), e o PR #76, de `/booking` (`Refs #59`). O PR 3, da edição e do reagendamento em `/appointments` (`Closes #59`), vem depois da incorporação deste e completa este relatório.
+Relatório cumulativo dos três recortes: PR #75, base do assistente (`aa60565`); PR #76, página `/booking` (`9e8a4a9`); PR 3, edição e reagendamento em `/appointments` (`Closes #59`). O recorte final segue o [plano complementar aprovado](../59-editar-e-reagendar/01_plano.md), com evidências detalhadas nas [notas](../59-editar-e-reagendar/notas.md). As evidências dos PRs anteriores abaixo são históricas; a verificação do PR 3 está discriminada ao final.
 
 ## O que foi feito
 
@@ -84,13 +84,47 @@ Nos dois: `memoria/tarefas/59-agendar-e-editar/`, com o plano, as notas e este r
   - L2 (ordem das etapas), L4 (escolha da data e do horário), L7 (textos do assistente) e L8 (adicional vinculado a mais de um principal) → `agendar-servico.md`; o "Cancelar" de L7 → `componentes.md`;
   - L5 (conferência das etapas sem o esquema) → `componentes.md`;
   - L6 (prévia de demonstração que segue as escolhas) → `componentes.md` e o README de `src/lib/demo/`;
-  - L3 e a parte da edição e do reagendamento de L7 entram no PR 3.
+  - L3 e a parte da edição e do reagendamento de L7 → `meus-agendamentos.md` e `agendar-servico.md` (PR 3);
+  - L9, opção 1 do plano complementar → `agendar-servico.md`: impedir confirmação sem principal/complementar disponível, informar e oferecer link para `/booking`.
 - **Decisões:** nenhuma.
 - **Documentos formais a atualizar** (pela #67), até aqui:
   - **Documentação de Arquitetura de Software, seção 3.2 (Quadro 4) e Apêndice A:** a resposta de `GET /api/me/bookable-services` (paginada, com `id`, `name`, `description`, `type`, `category`, `price`, `durationMinutes` e `additionals`, dos serviços ativos de categorias ativas) e a de `POST /api/me/appointments/preview` (`services`, `subtotal`, `feePercent`, `total`, `estimatedDurationMinutes` e `estimatedEndAt`, com o serviço inativo fora dos itens);
   - **Documentação de Desenvolvimento com IA, seção 8:** os testes de formatação cobrem o dia de calendário, o horário, o instante de um dia e um horário, o mês, a data por extenso e os horários de início de um dia; os do cliente da API, o corpo das leituras por `POST` na demonstração.
 
+## PR 3 — edição e reagendamento
+
+### Implementação e arquivos
+
+- `appointment-change-dialog.tsx`: janela sobre o detalhe, foco inicial em Cancelar, retorno de foco ao fechar, fechamento bloqueado durante envio; sucesso fecha ambas as janelas e recarrega a lista.
+- `booking-wizard.tsx`: modos novo/edição/reagendamento no formulário existente. Edição com quatro etapas preenchidas e `updatedAt` preservado; reagendamento com duas etapas, veículo e serviços fixos, data/horário/pagamento vazios (UC25, UC26, RF031, RF032, RN020, RN032).
+- `booking-schedule-step.tsx`: manter o instante original, mesmo passado ou fora do funcionamento atual; alternativas somente posteriores ao original e ao momento atual (RN033), no fuso da empresa.
+- `booking-summary.tsx`: itens indisponíveis identificados somente após a prévia atual bem-sucedida; bloqueio de confirmação sem principal/complementar disponível (RN005).
+- `appointment-details-dialog.tsx` e `appointment-card.tsx`: ações por status e callback comum de atualização. `VERSION_CONFLICT` provoca releitura e substituição dos valores; falha de releitura bloqueia envio com versão antiga e permite tentar novamente (RNF011).
+- `docs/agendamento/agendar-servico.md`, `meus-agendamentos.md` e `CONTEXT.md`: modos, ações, mensagens, exceção do instante original e L9.
+- `.prettierignore`: exclusão autorizada de `supabase/.temp/`, arquivos gerados do CLI.
+- Memória do plano geral e do complemento; capturas em `../59-editar-e-reagendar/evidencias/` para revisão do PR.
+
+Os seis arquivos de componentes ficam em `src/components/portal/appointments/`. Não há rota, migration, esquema, dependência ou mudança de autenticação. OpenAPI permanece sem alteração. As gravações continuam retornando `NOT_IMPLEMENTED` (0055); não foi implementada persistência real.
+
+### Verificação do PR 3
+
+- `npm run check`: aprovado, 411 testes em 22 arquivos, sem erro de formatação, tipo ou lint. Build Next.js 16.4.1 concluído; auditoria de dependências de produção sem vulnerabilidades. A instalação relatou nove vulnerabilidades altas de desenvolvimento, sem atualização de dependências neste recorte.
+- Chrome local sobre build compilado, 360 × 800 e 1440 × 900, claro/escuro: edição preenchida, adicionais, calendário, pagamento, reagendamento, aviso de gravação não implementada, foco, teclado e ausência de transbordamento horizontal. Verificados os dois Agendados e os dois Concluídos; totais de reagendamento de R$ 105,00 e R$ 190,00.
+- Verificados os sete status, cancelamento existente e regressão de `/booking`: escolhas mantidas ao voltar e trocar veículo/serviço; adicional compartilhado preservado enquanto houver principal correspondente.
+- Respostas temporárias controladas: `VERSION_CONFLICT`, nova versão, falha/repetição da releitura, mudança de status, serviços parcialmente/todos indisponíveis, falha/recuperação da prévia, sucesso com recarga da lista e bloqueio de Esc durante envio. Calendário com original passado em dia fechado e durante pausa; repetido em fuso `Asia/Tokyo`.
+- Lighthouse 13.5.0: acessibilidade **100/100 nos 24 snapshots**, sem auditoria reprovada. Quatro etapas de edição e duas de reagendamento, nos dois tamanhos e temas. Isto não mede LCP.
+- Toda instrumentação foi removida antes do check/build finais; fluxos principais repetidos no build final, com sucesso. Não há teste temporário incorporado ao código.
+- Limite: testes de interface usaram dados fictícios, respostas públicas/sessão controladas e Supabase desconfigurado no processo isolado. Não validam sessão real, autorização integrada nem persistência do futuro backend. A pré-visualização autenticada continua como passo humano.
+
+### Documentos formais e segurança
+
+Pela #67, refletir no detalhamento de UC25/UC26 e das telas do cliente os modos, ações por status, mensagens aprovadas, tratamento dos indisponíveis e a exceção RN033. Na documentação de desenvolvimento com IA, registrar a cobertura de concorrência, foco, responsividade e acessibilidade. Os `.docx` não foram abertos nem alterados.
+
+Revisão de segurança do diff: sem rota ou acesso ao banco novo, sem identificador de cliente recebido do formulário, sem valores calculados enviados como entrada confiável, sem HTML do usuário ou SQL concatenado, sem segredos/logs novos. Erros seguem o tratamento existente. Upload e integração de IA não se aplicam. Autorização e validação definitivas permanecem responsabilidade das rotas reais na fase 3; a interface somente orienta.
+
 ## Pendências
 
-- **PR 3 (edição e reagendamento):** "Editar" e "Reagendar" no detalhe de `/appointments`, com o assistente numa janela, e a frase de UC26 FE01; L3 e as ações por status em `meus-agendamentos.md`; a parte da edição e do reagendamento em `agendar-servico.md`.
-- **Pré-visualização**, passo do Yvan: `/booking` no celular e no computador, com o Lighthouse e o LCP no PR.
+- Pré-visualização autenticada: percorrer UC25/UC26 e regressão de `/booking` e cancelamento, nos dois tamanhos/temas.
+- RNF006: reavaliar LCP de `/booking` na pré-visualização; a medição histórica do PR #76 foi 3,0 s no celular, acima de 2,5 s. Não há nova medição de desempenho no PR 3.
+- CI/build remoto e aprovação de outro integrante antes da incorporação. O agente não incorpora o PR.
+- Tamanho do PR 3: 501 linhas alteradas em componentes, acima da referência de cerca de 400; resolver a divisão ou uma exceção explícita antes de marcar pronto para revisão, conforme `workflows/procedimentos/pull-request.md`.

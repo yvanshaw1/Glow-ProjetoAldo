@@ -83,3 +83,11 @@ Permanecem para a etapa 03 a revisão na pré-visualização com sessão real, o
 Após restaurar o cliente da API: `npm run check` passou (formatação, tipos, lint sem avisos e **411 testes em 22 arquivos**); build Next.js 16.4.1 concluído com sucesso; repetidos os fluxos principais nas quatro combinações de tamanho/tema, todos aprovados. Conferidos também os dois Agendados, com seus serviços pré-selecionados (inclusive adicional), e os dois Concluídos, com totais de reagendamento de R$ 105,00 e R$ 190,00. `git diff --check` passou, sem instrumentação restante no código.
 
 Commits locais: `283439f` (exclusão dos temporários no Prettier), `f28c1a1` (funcionalidade e módulos) e um commit de memória com este registro. Branch `feat/59-edit-and-reschedule`, sem envio. Status mantido em `em_execucao`; a conclusão formal e o PR pertencem à etapa 03.
+
+## 2026-10-22 — etapa 03 autorizada
+
+Yvan pediu para prosseguir após a conclusão local. Conferidos novamente a issue #59, o diff, o checklist de segurança e `origin/main`: branch já atualizada, sem conflitos. `npm run check` repetido com sucesso (411 testes); auditoria de produção repetida sem vulnerabilidades. Relatório cumulativo atualizado, sem reescrever a evidência histórica dos PRs #75/#76. Plano complementar marcado `concluido`, preservando aprovação e escolha L9; isto indica implementação entregue, não aprovação humana do PR nem encerramento da issue.
+
+Incluídas duas capturas de dados fictícios em `evidencias/`, como artefatos da entrega exigidos pelo procedimento de PR, e a linha correspondente na relação de arquivos do plano. Nenhuma mudança adicional no produto. A pré-visualização autenticada e o LCP continuam pendentes; não foram declarados aprovados.
+
+Tamanho conferido: 501 linhas alteradas nos seis componentes, além de documentação e uma linha de configuração. O procedimento manda dividir alterações acima de cerca de 400 antes da revisão. Abrir o terceiro PR como rascunho torna o resultado concreto e permite CI/pré-visualização; antes de marcá-lo pronto, solicitar a escolha entre manter o recorte aprovado como exceção explícita ou dividir edição e reagendamento. Não inventar aprovação dessa exceção nem pedir revisão a um integrante enquanto isso estiver pendente.
