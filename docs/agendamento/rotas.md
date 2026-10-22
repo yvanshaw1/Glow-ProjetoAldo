@@ -50,15 +50,15 @@ Registra o agendamento (UC06).
 
 Lista os agendamentos (UC07).
 
-- Entrada: `scope`: `current` ou `history`.
-- Resposta: **200** lista com data, previsão de conclusão, veículo, serviços, total e status.
+- Entrada: `scope*`: `current` (Agendado, Em espera, Em execução e Finalizado, da data mais próxima à mais distante) ou `history` (Concluído, Cancelado e Reagendado, da data mais recente à mais antiga).
+- Resposta: **200** lista paginada de `id`, `status`, `scheduledAt`, `estimatedEndAt`, `vehicle` (`plate`, `brand`, `model` e `color`), `services` (`id` e `name`) e `total`, com os dados copiados no agendamento (RN037).
 
 #### `GET /api/me/appointments/:id`
 
 Detalha um agendamento do cliente.
 
 - Entrada: Nenhuma.
-- Resposta: **200** agendamento completo.
+- Resposta: **200** `id`, `status`, `scheduledAt`, `estimatedEndAt`, `estimatedDurationMinutes`, `paymentMethod`, `subtotal`, `feePercent`, `total`, `vehicle` (`id`, `plate`, `type`, `size`, `brand`, `model`, `color` e `year`), `services` (`id`, `name`, `type`, `price` e `durationMinutes`) e `updatedAt`, com os dados copiados no agendamento (RN037).
 
 #### `PATCH /api/me/appointments/:id`
 
