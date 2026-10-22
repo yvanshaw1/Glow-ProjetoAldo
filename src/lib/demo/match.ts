@@ -13,11 +13,13 @@ const PARAM_PREFIX = ":";
 
 export type DemoMatch = { route: DemoRoute; request: DemoRequest };
 
-// The entry of the demo list with the same method and path, or null. Another
-// method on a listed path is not an entry: it goes to the API.
+// The entry of the demo list with the same method and path, or null, with the
+// request its answer reads. Another method on a listed path is not an entry:
+// it goes to the API.
 export function findDemoRoute(
   method: HttpMethod,
   path: string,
+  body: unknown,
 ): DemoMatch | null {
   const [pathname, queryText = ""] = path.split("?");
   for (const route of DEMO_ROUTES) {
@@ -26,7 +28,7 @@ export function findDemoRoute(
     if (params) {
       return {
         route,
-        request: { params, query: new URLSearchParams(queryText) },
+        request: { params, query: new URLSearchParams(queryText), body },
       };
     }
   }
