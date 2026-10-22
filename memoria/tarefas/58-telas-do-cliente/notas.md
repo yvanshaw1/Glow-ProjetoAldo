@@ -161,3 +161,7 @@ Verificação local do PR 3, aprovada:
 - **LCP no celular** de `/appointments`: 3,0 s no modo padrão (simulado; desempenho 94 e 95) e 1,8 s com o estrangulamento do DevTools; o LCP é o texto do aviso de demonstração. No computador, 0,6 e 0,7 s.
 - **Registro.** Acumulado (`>>`) nas cinco execuções do `next start` (normal, com a correção, falha e paginação, vazio e final): 207 linhas, todas `info`; nenhuma com cookie, token, cabeçalho de autorização, chave ou o e-mail de teste.
 - **Encerramento.** `next start` encerrado por PID e `npx supabase stop`, com o backup. `npm run check` sem erros nem avisos, com 395 testes; `npm audit --omit=dev --audit-level=high` com 0. Nenhum import de `src/server/` e nada em `src/app/api/`, `supabase/` ou `src/shared/validation/` (`git diff --stat origin/main...HEAD`: 19 arquivos, todos da lista do plano).
+
+## 2026-10-21 – desvio
+
+Etapa 03 do PR 3, a pedido do Yvan: PR #74 (`Closes #58`), aberto como rascunho para pôr o número no relatório e depois marcado como pronto, com a revisão pedida a LFaustin0 e Kaykebr144, como no #72 e no #73. A `origin/main` continuava em 0fbcf60, sem nada a incorporar. `02_relatorio.md` completo, com os três PRs, e o plano em `concluido`. O PR tem 1.010 linhas em `src/`, acima da estimativa de ~650.

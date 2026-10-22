@@ -4,7 +4,7 @@ titulo: "Telas do cliente com dados de demonstração: conta, veículos e agenda
 areas: [frontend, testes]
 tipo: funcionalidade
 requisitos: [UC04, UC05, UC07, UC25, RF012, RF013, RF014, RF015, RF016, RF017, RF018, RF028, RF029, RF030, RF032, RN002, RN017, RN019, RN020, RN036, RNF001, RNF003, RNF004, RNF005, RNF008, RNF011, RNF016]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 21/10/2026
 ---
