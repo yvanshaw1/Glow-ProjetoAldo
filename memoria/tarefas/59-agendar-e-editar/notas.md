@@ -111,4 +111,4 @@ Verificação local do PR 2, aprovada:
 
 ## 2026-10-22 – desvio
 
-Etapa 03 do PR 2, a pedido do Yvan. Na revisão do diff, três comentários do assistente citavam lacunas do plano ("L2/L4/L8 of the plan"); passaram a citar `agendar-servico.md` (46ecf16). `02_relatorio.md` parcial, com os dois PRs; o plano continua em `em_execucao` até o PR 3. PR aberto como rascunho para pôr o número no relatório e depois marcado como pronto, com a revisão pedida a LFaustin0 e Kaykebr144.
+Etapa 03 do PR 2 (PR #76), a pedido do Yvan. Na revisão do diff, três comentários do assistente citavam lacunas do plano ("L2/L4/L8 of the plan"); passaram a citar `agendar-servico.md` (46ecf16). `02_relatorio.md` parcial, com os dois PRs; o plano continua em `em_execucao` até o PR 3. PR aberto como rascunho para pôr o número no relatório e depois marcado como pronto, com a revisão pedida a LFaustin0 e Kaykebr144.

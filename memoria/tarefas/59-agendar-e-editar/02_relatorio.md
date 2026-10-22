@@ -1,11 +1,11 @@
 ---
 issue: 59
-pull_request: <número>
+pull_request: 76
 ---
 
 # Relatório: Telas do cliente com dados de demonstração: agendar serviço e editar o agendamento
 
-Relatório parcial: PR 2 de 3. O PR #75, da base do assistente de agendamento (`Refs #59`, incorporado em aa60565), e o PR <número>, de `/booking` (`Refs #59`). O PR 3, da edição e do reagendamento em `/appointments` (`Closes #59`), vem depois da incorporação deste e completa este relatório.
+Relatório parcial: PR 2 de 3. O PR #75, da base do assistente de agendamento (`Refs #59`, incorporado em aa60565), e o PR #76, de `/booking` (`Refs #59`). O PR 3, da edição e do reagendamento em `/appointments` (`Closes #59`), vem depois da incorporação deste e completa este relatório.
 
 ## O que foi feito
 
@@ -13,14 +13,14 @@ Relatório parcial: PR 2 de 3. O PR #75, da base do assistente de agendamento (`
 - **Corpo na demonstração** (decisão 0055, L6; PR #75): a resposta de demonstração recebe o corpo da chamada, e o `useApiQuery` lê um `POST` que não grava, como a prévia, com o corpo na chave da leitura.
 - **Serviços para agendar e prévia** (UC06, RF020 a RF022, RF024, RF026, RN006, RN008, RN009, RN010, RN012, RN014, RN031, RN034; L1; PR #75): os tipos `BookableService`, `BookableAdditional` e `AppointmentPreview`; os 11 serviços principais e complementares ativos do `seed-demo.sql`, com os valores por porte ou fixos e os adicionais vinculados; a prévia de demonstração, calculada sobre esses dados, o percentual zero do `seed.sql` e os horários de funcionamento dele, com o serviço que não pode ser agendado fora dos itens.
 - **Lista de demonstração** (PR #75): as leituras `GET /api/me/bookable-services` e `POST /api/me/appointments/preview`, e as gravações `POST /api/me/appointments`, `PATCH /api/me/appointments/:id` e `POST /api/me/appointments/:id/reschedule`, que respondem `NOT_IMPLEMENTED`.
-- **Página `/booking`** ("Agendar serviço", UC06; PR <número>): o aviso de demonstração logo abaixo do título, o assistente em quatro etapas ("Veículo", "Serviços", "Data e horário" e "Pagamento e resumo", L2) num único formulário (RNF002) e, ao lado a partir de 1024 px ou abaixo no celular, o "Resumo do pedido". "Próximo" confere a escolha da etapa (L5), e a mensagem some assim que ela é feita.
+- **Página `/booking`** ("Agendar serviço", UC06; PR #76): o aviso de demonstração logo abaixo do título, o assistente em quatro etapas ("Veículo", "Serviços", "Data e horário" e "Pagamento e resumo", L2) num único formulário (RNF002) e, ao lado a partir de 1024 px ou abaixo no celular, o "Resumo do pedido". "Próximo" confere a escolha da etapa (L5), e a mensagem some assim que ela é feita.
 - **Veículo** (UC06 passos 2 e 3, FE01, RF019, RN003, RN004): os veículos da conta como botões de opção, em páginas de 10, com o cadastro pela placa da área do cliente (UC05) acima da lista e, sem veículos, no estado vazio.
 - **Serviços** (UC06 passos 4 a 6, FA01 a FA03, FE02, RF020 a RF022, RN005, RN006, RN009): os serviços para agendar com o valor do porte do veículo, como caixas de seleção, em páginas de 12; o principal marcado oferece os adicionais vinculados; desmarcá-lo tira os adicionais que nenhum outro principal marcado vincula (L8); trocar o veículo mantém os serviços e mostra os valores do novo porte.
 - **Data e horário** (UC06 passos 9 e 10, RF025, RN013, RN015, RN016, L4): um calendário do mês, com o dia sem horário livre desativado, e os horários de início do dia escolhido, de 30 em 30 minutos, fora da pausa e sem os que já passaram, pelos horários de `GET /api/public/company`.
 - **Pagamento e resumo** (UC06 passos 7, 8, 11 e 12, RF023, RF024, RF026, RN011): o veículo, a data, a previsão de conclusão, as quatro formas de pagamento e o total, logo acima de "Confirmar agendamento", que envia `POST /api/me/appointments` e, na demonstração, mostra o aviso de `NOT_IMPLEMENTED`.
 - **Resumo do pedido** (RF021, RF024, RF026): o veículo, os serviços com o valor, o subtotal, o acréscimo ou desconto da forma de pagamento, o total, a duração estimada e a previsão de conclusão, todos da prévia.
 - **Confirmação** (UC06 passo 13): "Agendamento confirmado", com o link para "Meus agendamentos", depois do 201 da rota (fase 3).
-- **Formulário em etapas** (RNF002; PR <número>): no `StepForm`, a etapa atual ocupa a largura do seu título, que encolhe com reticências quando não cabe, sem transbordar a 360 px.
+- **Formulário em etapas** (RNF002; PR #76): no `StepForm`, a etapa atual ocupa a largura do seu título, que encolhe com reticências quando não cabe, sem transbordar a 360 px.
 
 ## Arquivos alterados
 
@@ -37,7 +37,7 @@ PR #75:
 - `tests/format/date.test.ts`, `tests/format/business-hours.test.ts` e `tests/lib/api-client.test.ts`: os casos novos.
 - `docs/agendamento/rotas.md`, `docs/padroes/componentes.md`, `docs/padroes/testes.md` e os README de `src/shared/format/`, `src/lib/demo/` e `tests/lib/`.
 
-PR <número>:
+PR #76:
 
 - `src/app/(portal)/booking/page.tsx`: criado.
 - `src/components/portal/appointments/booking-wizard.tsx`, `booking-vehicle-step.tsx`, `booking-services-step.tsx`, `booking-schedule-step.tsx`, `booking-payment-step.tsx` e `booking-summary.tsx`: criados.
@@ -49,7 +49,7 @@ Nos dois: `memoria/tarefas/59-agendar-e-editar/`, com o plano, as notas e este r
 
 ## Testes executados
 
-- `npm run check`: aprovado, com 411 testes. Os 16 novos (11 de `date.test.ts`, 5 de `business-hours.test.ts` e o do corpo em `api-client.test.ts`, PR #75) foram escritos antes do código e falharam antes dele (commit 5277c42); os de formatação passam também com o fuso do processo em Asia/Tokyo, UTC e America/Los_Angeles. Os componentes do PR <número> foram conferidos à mão (decisão 0052).
+- `npm run check`: aprovado, com 411 testes. Os 16 novos (11 de `date.test.ts`, 5 de `business-hours.test.ts` e o do corpo em `api-client.test.ts`, PR #75) foram escritos antes do código e falharam antes dele (commit 5277c42); os de formatação passam também com o fuso do processo em Asia/Tokyo, UTC e America/Los_Angeles. Os componentes do PR #76 foram conferidos à mão (decisão 0052).
 - `npm audit --omit=dev --audit-level=high` (o passo do CI): 0 falhas. `npx next build`: concluído, com `/booking` estática.
 - **Prévia de demonstração** (PR #75), conferida à mão por um teste temporário, sem commit, com os valores calculados à mão pelos horários do `seed.sql`:
   - Toyota SW4, "Polimento comercial", quarta às 09:00 → R$ 390,00, 4 h, previsão às 14:00 (atravessa a pausa);
@@ -58,7 +58,7 @@ Nos dois: `memoria/tarefas/59-agendar-e-editar/`, com o plano, as notas e este r
   - Fiat Toro, "Lavagem completa" e "Pretinho nos pneus", segunda às 16:00 → R$ 130,00, 1 h 40 min, previsão às 17:40;
   - 2 h às 16:00 → 18:00 (o encerramento); 40 min às 11:30 → 13:10 (a pausa);
   - sem a data, sem previsão; sem a forma de pagamento, sem percentual; um id que não é de serviço ativo fica de fora; o veículo de outra conta dá `NOT_FOUND`.
-- Local, no PR <número>, com o Supabase local, uma conta de teste de cliente só nele e o `next start`, no Chrome sem interface, a 360 × 800 e a 1440 × 900, claro e escuro, sem transbordar:
+- Local, no PR #76, com o Supabase local, uma conta de teste de cliente só nele e o `next start`, no Chrome sem interface, a 360 × 800 e a 1440 × 900, claro e escuro, sem transbordar:
   - **Fluxo principal:** as mensagens de RF019 e de RN005 com o foco na primeira opção; "Lavagem completa" oferece os quatro adicionais; com o Toyota SW4, "Lavagem completa" e "Hidratação de couro" na quarta 28/10 às 14:00 e Pix, o resumo dá R$ 190,00, 2 h 10 min e previsão às 16:10. **RNF002:** de volta aos serviços, com "Oxi-sanitização" no lugar da hidratação, a data, o horário e o Pix continuam escolhidos, e o resumo passa a R$ 200,00. "Confirmar agendamento" passa a "Agendando…" e mostra o aviso de `NOT_IMPLEMENTED` no topo, com o foco.
   - **FA03 e L8:** a troca do SW4 pelo Fiat Toro mantém os serviços e muda a lavagem de R$ 100,00 para R$ 120,00; a "Cera de carnaúba" das duas lavagens fica com uma delas e sai com as duas.
   - **Janela de cadastro de veículo** dentro do assistente: a consulta da placa e o envio não mudam a etapa nem mostram mensagem; Esc devolve o foco ao botão.
@@ -75,9 +75,9 @@ Nos dois: `memoria/tarefas/59-agendar-e-editar/`, com o plano, as notas e este r
 
 - **Módulos:**
   - `docs/agendamento/rotas.md`: os campos de `GET /api/me/bookable-services` e de `POST /api/me/appointments/preview` (PR #75);
-  - `docs/agendamento/agendar-servico.md`, novo: as etapas, os campos e os textos de `/booking` (PR <número>);
+  - `docs/agendamento/agendar-servico.md`, novo: as etapas, os campos e os textos de `/booking` (PR #76);
   - `docs/agendamento/CONTEXT.md`: o módulo novo;
-  - `docs/padroes/componentes.md`: a resposta de demonstração que depende do corpo e a conferência das etapas sem o esquema (PR #75); o título da etapa atual com reticências e a primeira etapa sem "Cancelar" numa página (PR <número>);
+  - `docs/padroes/componentes.md`: a resposta de demonstração que depende do corpo e a conferência das etapas sem o esquema (PR #75); o título da etapa atual com reticências e a primeira etapa sem "Cancelar" numa página (PR #76);
   - `docs/padroes/testes.md`: os casos novos do cliente da API e da formatação.
 - **Lacunas resolvidas** (opção 1 em todas):
   - L1 (campos dos serviços para agendar e da prévia) → `agendamento/rotas.md`;
