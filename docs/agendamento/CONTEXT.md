@@ -39,4 +39,5 @@ Leia só o que a tarefa pede: o caso de uso do fluxo, as regras que ele cita e, 
 | dados.md | Tabelas `appointments`, `appointment_services` |
 | rotas.md | Telas e rotas da API |
 | meus-agendamentos.md | Conteúdo e textos da página de agendamentos do cliente (`/appointments`) |
+| agendar-servico.md | Etapas, campos e textos do assistente de agendamento (`/booking`) |
 | calculos.md | Funções puras de preço, status, datas, edição e da análise do dashboard (testadas com TDD) |
