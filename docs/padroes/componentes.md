@@ -42,10 +42,10 @@ O campo monetário (`MoneyInput`) mostra sempre o valor formatado (`formatCurren
 ## Telas de demonstração (decisão 0055)
 
 - Enquanto a rota de uma tela não existe, `src/lib/demo/` responde no lugar dela. O `apiRequest` procura o método e o caminho na lista de demonstração antes de chamar a rede e, se os acha, devolve os dados fixos do módulo, tipados por `src/shared/api/`, depois de 400 ms, para os estados de carregamento aparecerem. Os dados de cada módulo só são carregados quando a tela os pede.
-- As leituras, inclusive os `POST` que não gravam, como a prévia de valores e a análise do dashboard, devolvem os dados fixos; as gravações respondem `NOT_IMPLEMENTED`, que a tela mostra como qualquer falha.
+- As leituras, inclusive os `POST` que não gravam, como a prévia de valores e a análise do dashboard, devolvem os dados fixos; a resposta que depende do corpo, como a prévia, é calculada sobre os dados fixos do módulo e as configurações do `seed.sql`, até a rota existir. As gravações respondem `NOT_IMPLEMENTED`, que a tela mostra como qualquer falha.
 - Os dados fixos usam os nomes, as placas e os serviços fictícios do `supabase/seed-demo.sql` (`guia/regras.md`, Dados).
 - Toda tela, aba ou seção com dados de demonstração mostra o aviso "Dados de demonstração: esta parte ainda não está ligada ao sistema, e nada do que você fizer nela é gravado.", com o ícone `FlaskConical`, sem botão de fechar (`DemoNotice`, em `src/components/shared/`). Ele fica logo abaixo do título da página, ou no topo do painel da aba, ou logo abaixo do título da seção, antes de qualquer dado ou formulário.
-- Na demonstração, a listagem pagina, busca e filtra sobre a lista fixa. O formulário tem os campos, as etapas, as máscaras e os diálogos, sem o esquema de validação, que entra com a rota; o envio mostra o aviso de `NOT_IMPLEMENTED`.
+- Na demonstração, a listagem pagina, busca e filtra sobre a lista fixa. O formulário tem os campos, as etapas, as máscaras e os diálogos, sem o esquema de validação, que entra com a rota; o envio mostra o aviso de `NOT_IMPLEMENTED`. No formulário em etapas, "Próximo" confere só se as escolhas obrigatórias da etapa foram feitas (`rules` do React Hook Form), para a etapa seguinte ter do que depender, como o veículo antes dos serviços (RF019); o esquema as substitui com a rota.
 - A tarefa que constrói rotas tira as entradas delas da lista e o aviso da tela no mesmo PR; a que tirar a última remove `src/lib/demo/`, o código `NOT_IMPLEMENTED` e o `DemoNotice`.
 
 ## Etiqueta de status (RN017)
