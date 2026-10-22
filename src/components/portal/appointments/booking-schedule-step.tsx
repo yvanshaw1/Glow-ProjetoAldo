@@ -17,6 +17,7 @@ import {
   formatCalendarDate,
   formatLongDate,
   formatMonth,
+  formatTime,
   toCompanyInstant,
 } from "@/shared/format/date";
 
@@ -38,7 +39,11 @@ const GROUP_CLASS =
 const OPTION_CLASS =
   "flex h-10 cursor-pointer items-center justify-center rounded-lg text-sm font-semibold transition-colors select-none peer-not-checked:peer-enabled:hover:text-link peer-checked:bg-background peer-checked:text-link peer-checked:shadow-neu-sm peer-disabled:cursor-not-allowed peer-disabled:font-normal peer-disabled:opacity-50 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring";
 
-export function BookingScheduleStep() {
+export function BookingScheduleStep({
+  originalScheduledAt = null,
+}: {
+  originalScheduledAt?: string | null;
+}) {
   const {
     data: company,
     error,
@@ -67,15 +72,26 @@ export function BookingScheduleStep() {
       </div>
     );
   }
-  return <ScheduleFields businessHours={company.businessHours} now={now} />;
+  return (
+    <ScheduleFields
+      businessHours={company.businessHours}
+      now={now}
+      originalScheduledAt={originalScheduledAt}
+    />
+  );
 }
 
 type ScheduleFieldsProps = {
   businessHours: BusinessDay[];
   now: string;
+  originalScheduledAt: string | null;
 };
 
-function ScheduleFields({ businessHours, now }: ScheduleFieldsProps) {
+function ScheduleFields({
+  businessHours,
+  now,
+  originalScheduledAt,
+}: ScheduleFieldsProps) {
   const { field: dateField, fieldState: dateState } = useController<
     BookingFormValues,
     "date"
@@ -92,15 +108,32 @@ function ScheduleFields({ businessHours, now }: ScheduleFieldsProps) {
   });
   const { setValue } = useFormContext<BookingFormValues>();
   const today = formatCalendarDate(now);
+  const originalDate = originalScheduledAt
+    ? formatCalendarDate(originalScheduledAt)
+    : null;
+  const originalTime = originalScheduledAt
+    ? formatTime(originalScheduledAt)
+    : null;
+  const earliestChange = Math.max(
+    Date.parse(now),
+    originalScheduledAt ? Date.parse(originalScheduledAt) : 0,
+  );
 
   // RN013, RN015: the start times of the day that have not passed.
   function findTimes(date: string): string[] {
     const weekday = new Date(`${date}T00:00:00Z`).getUTCDay();
     const day = businessHours.find((item) => item.weekday === weekday);
-    if (!day || date < today) return [];
-    return listStartTimes(day).filter(
-      (time) => Date.parse(toCompanyInstant(date, time)) > Date.parse(now),
-    );
+    const times = day
+      ? listStartTimes(day).filter(
+          (time) => Date.parse(toCompanyInstant(date, time)) > earliestChange,
+        )
+      : [];
+    // RN033: keeping the original instant is allowed even after it passed
+    // or the business hours changed. Other choices must postpone it.
+    if (date === originalDate && originalTime) {
+      return [...new Set([...times, originalTime])].sort();
+    }
+    return times;
   }
 
   // Another day takes out the time chosen for the previous one, without the
@@ -114,7 +147,7 @@ function ScheduleFields({ businessHours, now }: ScheduleFieldsProps) {
     <div className="grid gap-8 @lg:grid-cols-2 @lg:items-start">
       <DateField
         chosenDate={dateField.value}
-        firstMonth={today.slice(0, 7)}
+        firstMonth={(originalDate ?? today).slice(0, 7)}
         hasTimes={(date) => findTimes(date).length > 0}
         onChoose={chooseDate}
         onBlur={dateField.onBlur}

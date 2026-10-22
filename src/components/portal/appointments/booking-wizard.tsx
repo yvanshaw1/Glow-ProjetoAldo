@@ -11,17 +11,24 @@ import { BookingSummary } from "@/components/portal/appointments/booking-summary
 import { BookingVehicleStep } from "@/components/portal/appointments/booking-vehicle-step";
 import { FormAlert } from "@/components/shared/form-alert";
 import { StepForm, type FormStep } from "@/components/shared/step-form";
-import { buttonVariants } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useApiQuery } from "@/hooks/use-api-query";
 import { useFormFailure } from "@/hooks/use-form-failure";
-import { apiRequest } from "@/lib/api-client";
+import { apiRequest, toApiError, type ApiError } from "@/lib/api-client";
+import { cn } from "@/lib/utils";
 import type {
   AppointmentPreview,
   AppointmentVehicle,
   ClientAppointment,
 } from "@/shared/api/appointments";
 import type { PaymentMethod } from "@/shared/constants/payment-methods";
-import { formatDateTime, toCompanyInstant } from "@/shared/format/date";
+import {
+  formatCalendarDate,
+  formatDateTime,
+  formatTime,
+  toCompanyInstant,
+} from "@/shared/format/date";
 
 // UC06 (docs/agendamento/agendar-servico.md): the booking in four steps, one
 // form for all of them (RNF002), with the summary of the order beside it. The
@@ -76,13 +83,76 @@ type PreviewBody = {
   serviceIds: string[];
   paymentMethod?: PaymentMethod;
   scheduledAt?: string;
+  appointmentId?: string;
 };
 
-export function BookingWizard() {
+export type BookingChangeMode = "edit" | "reschedule";
+
+type BookingWizardProps =
+  | {
+      mode?: "new";
+    }
+  | {
+      mode: BookingChangeMode;
+      appointment: ClientAppointment;
+      onCancel: () => void;
+      onChanged: () => void;
+      onReloaded: (appointment: ClientAppointment) => void;
+      onSubmittingChange: (isSubmitting: boolean) => void;
+    };
+
+const MODES = {
+  new: {
+    steps: STEPS,
+    submitLabel: "Confirmar agendamento",
+    loadingLabel: "Agendando…",
+    method: "POST",
+  },
+  edit: {
+    steps: STEPS,
+    submitLabel: "Salvar alterações",
+    loadingLabel: "Salvando…",
+    method: "PATCH",
+  },
+  reschedule: {
+    steps: STEPS.slice(2),
+    submitLabel: "Confirmar reagendamento",
+    loadingLabel: "Reagendando…",
+    method: "POST",
+  },
+} as const;
+
+function initialValues(
+  appointment: ClientAppointment | null,
+  isEditing: boolean,
+): BookingFormValues {
+  if (!appointment) return EMPTY_VALUES;
+  return {
+    vehicle: appointment.vehicle,
+    serviceIds: appointment.services
+      .filter((item) => item.type !== "additional")
+      .map((item) => item.id),
+    additionalIds: appointment.services
+      .filter((item) => item.type === "additional")
+      .map((item) => item.id),
+    date: isEditing ? formatCalendarDate(appointment.scheduledAt) : null,
+    time: isEditing ? formatTime(appointment.scheduledAt) : null,
+    paymentMethod: isEditing ? appointment.paymentMethod : null,
+  };
+}
+
+export function BookingWizard(props: BookingWizardProps = {}) {
+  const mode = props.mode ?? "new";
+  const configuration = MODES[mode];
+  const change = "appointment" in props ? props : null;
+  const [record, setRecord] = useState(change?.appointment ?? null);
+  const [needsReload, setNeedsReload] = useState(false);
+  const [reloadError, setReloadError] = useState<ApiError | null>(null);
+  const [isReloading, setIsReloading] = useState(false);
   // The choice of a step checks it again, so its message leaves as soon as
   // it is made (RNF003).
   const form = useForm<BookingFormValues>({
-    defaultValues: EMPTY_VALUES,
+    defaultValues: initialValues(record, mode === "edit"),
     mode: "onChange",
   });
   const { failure, showFailure, clearFailure } = useFormFailure(form.setError);
@@ -109,6 +179,7 @@ export function BookingWizard() {
           serviceIds: [...serviceIds, ...additionalIds],
           paymentMethod: paymentMethod ?? undefined,
           scheduledAt: scheduledAt ?? undefined,
+          appointmentId: mode === "edit" ? record?.id : undefined,
         }
       : null;
   const preview = useApiQuery<AppointmentPreview>(
@@ -116,34 +187,97 @@ export function BookingWizard() {
     previewBody ?? undefined,
   );
 
+  const isPreviewReady =
+    !preview.isLoading && !preview.error && preview.data !== null;
+  const hasAvailableServices =
+    preview.data?.services.some((item) => item.type !== "additional") ?? false;
+  const isUnavailable =
+    mode === "reschedule" && isPreviewReady && !hasAvailableServices;
+  const isInvalidStatus = mode === "edit" && record?.status !== "scheduled";
+  const isBlocked = needsReload || (mode === "reschedule" && !isPreviewReady);
+
+  // RNF011: keep the conflict notice, but replace every value and the version.
+  // A failed reload leaves the old version unusable until a successful retry.
+  async function reloadAppointment() {
+    if (!record || !change) return;
+    setIsReloading(true);
+    setReloadError(null);
+    change.onSubmittingChange(true);
+    try {
+      const updated = await apiRequest<ClientAppointment>(
+        `${APPOINTMENTS_PATH}/${record.id}`,
+      );
+      form.reset(initialValues(updated, true));
+      setRecord(updated);
+      change.onReloaded(updated);
+      setNeedsReload(false);
+    } catch (error) {
+      setReloadError(toApiError(error));
+    } finally {
+      setIsReloading(false);
+      change.onSubmittingChange(false);
+    }
+  }
+
   async function submit(values: BookingFormValues) {
+    if (isBlocked || isUnavailable || isInvalidStatus) return;
     clearFailure();
     if (!values.vehicle || !values.date || !values.time) return;
+    const chosenInstant = toCompanyInstant(values.date, values.time);
+    // Preserve the original ISO instant exactly when its calendar fields are
+    // unchanged (RN033); updatedAt is also opaque text, never reformatted.
+    const keptInstant =
+      mode === "edit" &&
+      record &&
+      values.date === formatCalendarDate(record.scheduledAt) &&
+      values.time === formatTime(record.scheduledAt)
+        ? record.scheduledAt
+        : chosenInstant;
+    const paths = {
+      new: APPOINTMENTS_PATH,
+      edit: `${APPOINTMENTS_PATH}/${record?.id}`,
+      reschedule: `${APPOINTMENTS_PATH}/${record?.id}/reschedule`,
+    };
+    const paymentAndSchedule = {
+      paymentMethod: values.paymentMethod,
+      scheduledAt: keptInstant,
+    };
+    change?.onSubmittingChange(true);
     try {
-      const appointment = await apiRequest<ClientAppointment>(
-        APPOINTMENTS_PATH,
-        {
-          method: "POST",
-          body: {
-            vehicleId: values.vehicle.id,
-            serviceIds: [...values.serviceIds, ...values.additionalIds],
-            paymentMethod: values.paymentMethod,
-            scheduledAt: toCompanyInstant(values.date, values.time),
-          },
-        },
-      );
-      setConfirmedAppointment(appointment);
+      const appointment = await apiRequest<ClientAppointment>(paths[mode], {
+        method: configuration.method,
+        body:
+          mode === "reschedule"
+            ? paymentAndSchedule
+            : {
+                vehicleId: values.vehicle.id,
+                serviceIds: [...values.serviceIds, ...values.additionalIds],
+                ...paymentAndSchedule,
+                ...(mode === "edit" ? { updatedAt: record?.updatedAt } : {}),
+              },
+      });
+      if (change) change.onChanged();
+      else setConfirmedAppointment(appointment);
     } catch (error) {
       showFailure(error);
+      if (mode === "edit" && toApiError(error).code === "VERSION_CONFLICT") {
+        setNeedsReload(true);
+        await reloadAppointment();
+      }
+    } finally {
+      change?.onSubmittingChange(false);
     }
   }
 
   // One step on the screen at a time; the values of the others stay in the
   // form.
   const stepContents: ReactNode[] = [
-    <BookingVehicleStep key="vehicle" canAddVehicle />,
+    <BookingVehicleStep key="vehicle" canAddVehicle={mode === "new"} />,
     <BookingServicesStep key="services" />,
-    <BookingScheduleStep key="schedule" />,
+    <BookingScheduleStep
+      key="schedule"
+      originalScheduledAt={mode === "edit" ? record?.scheduledAt : null}
+    />,
     <BookingPaymentStep key="payment" preview={preview} />,
   ];
 
@@ -152,27 +286,94 @@ export function BookingWizard() {
   }
   return (
     <FormProvider {...form}>
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
+      <div
+        className={cn(
+          "grid min-w-0 gap-8",
+          !change && "lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start",
+        )}
+      >
         <section className="flex min-w-0 flex-col gap-5 rounded-xl bg-background p-5 shadow-neu-md md:p-8">
           {/* The heading between the page title and the h3 of each step. */}
           <h2 className="sr-only">Etapas do agendamento</h2>
           {failure && (
             <FormAlert key={failure.key}>{failure.error.message}</FormAlert>
           )}
-          <StepForm
-            form={form}
-            steps={STEPS}
-            onSubmit={submit}
-            submitLabel="Confirmar agendamento"
-            loadingLabel="Agendando…"
-          >
-            {(stepIndex) => stepContents[stepIndex]}
-          </StepForm>
+          {reloadError && (
+            <Alert variant="destructive">
+              <AlertDescription className="flex flex-col items-start gap-3">
+                {reloadError.message}
+                <Button
+                  variant="secondary"
+                  disabled={isReloading}
+                  onClick={() => void reloadAppointment()}
+                >
+                  Tentar novamente
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
+          {isInvalidStatus && (
+            <Alert>
+              <AlertDescription>
+                Este agendamento não pode mais ser alterado por aqui. Para mudar
+                algo, fale com a empresa.
+              </AlertDescription>
+            </Alert>
+          )}
+          {isUnavailable && (
+            <Alert>
+              <AlertDescription className="flex flex-col items-start gap-3">
+                Nenhum serviço principal ou complementar deste agendamento está
+                disponível. Para escolher outros serviços, faça um novo
+                agendamento.
+                <Link
+                  href="/booking"
+                  className={buttonVariants({ variant: "secondary" })}
+                >
+                  Agendar outro serviço
+                </Link>
+              </AlertDescription>
+            </Alert>
+          )}
+          {!isUnavailable && !isInvalidStatus && (
+            <fieldset
+              disabled={isBlocked}
+              aria-busy={isReloading}
+              className="min-w-0"
+            >
+              <StepForm
+                key={record?.updatedAt ?? "new"}
+                form={form}
+                steps={configuration.steps}
+                onSubmit={submit}
+                submitLabel={configuration.submitLabel}
+                loadingLabel={configuration.loadingLabel}
+                onCancel={change?.onCancel}
+              >
+                {(stepIndex) =>
+                  stepContents[stepIndex + (mode === "reschedule" ? 2 : 0)]
+                }
+              </StepForm>
+            </fieldset>
+          )}
+          {change && (isBlocked || isUnavailable || isInvalidStatus) && (
+            <Button
+              variant="ghost"
+              disabled={isReloading}
+              onClick={change.onCancel}
+            >
+              Cancelar
+            </Button>
+          )}
         </section>
         <BookingSummary
           vehicle={vehicle}
           hasServices={serviceIds.length > 0}
           preview={preview}
+          originalServices={
+            mode === "reschedule" ? record?.services : undefined
+          }
+          isInDialog={change !== null}
         />
       </div>
     </FormProvider>

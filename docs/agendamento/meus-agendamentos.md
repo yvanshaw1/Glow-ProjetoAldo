@@ -2,7 +2,7 @@
 titulo: Conteúdo da página de agendamentos do cliente
 assunto: agendamento
 origem: issue #58, plano memoria/tarefas/58-telas-do-cliente/01_plano.md (L3, L4)
-relacionados: [UC07, UC25, RF028, RF029, RF030, RF032, RN017, RN019, RN020]
+relacionados: [UC07, UC25, UC26, RF028, RF029, RF030, RF031, RF032, RN017, RN019, RN020, RN032]
 ---
 
 # Conteúdo da página de agendamentos do cliente
@@ -36,8 +36,12 @@ A etiqueta de status ([RN017](RN017-sequencia-de-status.md)), "<marca> <modelo>"
 
 Só no detalhe. A tela só orienta; quem decide é a API (RS008).
 
-- "Agendado": "Cancelar agendamento" ([RN019](RN019-cancelamento.md)).
-- Os outros: nenhuma nesta tela, além das da #59.
+- "Agendado": "Editar" ([UC26](UC26-editar-agendamento.md), [RN032](RN032-quem-edita-o-agendamento.md)) e "Cancelar agendamento" ([RN019](RN019-cancelamento.md)).
+- "Concluído": "Reagendar" ([UC25](UC25-reagendar-servico-concluido.md), [RN020](RN020-reagendamento.md)).
+- "Em espera", "Em execução" e "Finalizado": nenhuma ação, e a frase "Este agendamento não pode mais ser alterado por aqui. Para mudar algo, fale com a empresa." (UC26 FE01).
+- "Cancelado" e "Reagendado": nenhuma.
+
+"Editar" e "Reagendar" abrem, sobre o detalhe, a janela do [assistente de agendamento](agendar-servico.md). Esc ou "Cancelar" fecham só o assistente e devolvem o foco ao detalhe. Concluída a edição ou o reagendamento, as duas janelas fecham e a lista é lida de novo. Na demonstração, o envio mostra `NOT_IMPLEMENTED` e as janelas permanecem abertas, sem gravar.
 
 ## Cancelamento (UC07 FA01)
 
