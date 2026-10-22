@@ -29,6 +29,10 @@ export type AppointmentService = {
   durationMinutes: number;
 };
 
+// The scope of GET /api/me/appointments: the current appointments or the
+// history.
+export type AppointmentScope = "current" | "history";
+
 // One item of the page of GET /api/me/appointments, of the scope asked.
 export type ClientAppointmentSummary = {
   id: string;
