@@ -13,9 +13,9 @@ import {
 // Display of the dates of RN035 (column Exibição) and RNF016, in the company's
 // time zone, America/Maceio (UTC-3), whatever the zone of the device
 // (decision 0053). A calendar date has no time zone and shows as it is. The
-// booking (docs/agendamento/agendar-servico.md) reads the day and the time of
-// an instant there, and writes the instant of a chosen day and time as the
-// API takes it: ISO 8601 with the offset (docs/padroes/api.md).
+// booking (UC06) reads the day and the time of an instant there, and writes
+// the instant of a chosen day and time as the API takes it: ISO 8601 with the
+// offset (docs/padroes/api.md).
 
 describe("formatDate", () => {
   it("formats an instant as the date in the company's time zone", () => {

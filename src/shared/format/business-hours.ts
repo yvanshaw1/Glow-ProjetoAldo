@@ -21,10 +21,10 @@ export function formatBusinessHours(day: BusinessDay): string {
   return `${formatPeriod(opensAt, breakStartsAt)} e ${formatPeriod(breakEndsAt, closesAt)}`;
 }
 
-// docs/agendamento/agendar-servico.md, Data e horário: the start times of a
-// day, every 30 minutes from the opening (included) to the closing
-// (excluded), out of the break (RN013, RN035); none on a closed day. They only
-// guide the screen: the API checks the time (UC06 FE03).
+// UC06, step 9: the start times of a day the booking offers, every 30
+// minutes from the opening (included) to the closing (excluded), out of the
+// break (RN013, RN035); none on a closed day. They only guide the screen: the
+// API checks the time (UC06 FE03).
 export function listStartTimes(day: BusinessDay): string[] {
   const { isOpen, opensAt, closesAt, breakStartsAt, breakEndsAt } = day;
   if (!isOpen || opensAt === null || closesAt === null) return [];

@@ -7,9 +7,8 @@ import {
 
 // Business hours of one day on the home page (docs/catalogo/
 // paginas-publicas.md, Localização), and its start times in the booking
-// (docs/agendamento/agendar-servico.md), with the times as the API gives
-// them: HH:MM in the company's time zone. The days are those of
-// supabase/seed.sql.
+// (UC06), with the times as the API gives them: HH:MM in the company's time
+// zone. The days are those of supabase/seed.sql.
 
 const MONDAY: BusinessDay = {
   weekday: 1,
