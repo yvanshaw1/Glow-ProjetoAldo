@@ -25,9 +25,9 @@ Parte de [frontend.md](frontend.md). Estilo: [design.md](design.md). Código: `s
 ## Formulário em etapas (RNF002)
 
 - Um único formulário (`useForm`) para todas as etapas, no `StepForm`: voltar não perde nada.
-- A indicação mostra o número de cada etapa e o título da atual, com `aria-current="step"`; os outros títulos aparecem quando o formulário tem largura para eles. Ao mudar de etapa, o foco vai ao título dela.
+- A indicação mostra o número de cada etapa e o título da atual, com `aria-current="step"`; os outros títulos aparecem quando o formulário tem largura para eles. O título da atual encolhe com reticências quando não cabe, e o leitor de tela ouve o título inteiro. Ao mudar de etapa, o foco vai ao título dela.
 - "Próximo" confere só os campos da etapa; "Voltar" não confere nada; o último botão envia tudo. Um erro da API num campo de outra etapa leva a ela.
-- Na primeira etapa, "Cancelar" fica no lugar de "Voltar".
+- Na primeira etapa, "Cancelar" fica no lugar de "Voltar" quando o formulário está numa janela; numa página, como `/booking`, a primeira etapa não tem esse botão.
 
 ## Campo monetário (RN035)
 

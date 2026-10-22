@@ -142,7 +142,9 @@ type StepIndicatorProps<T extends FieldValues> = {
 
 // RNF002: the number of each step, the current one with aria-current and its
 // title. The other titles show when the form is 448 px wide or more, and
-// shrink with an ellipsis instead of overflowing.
+// shrink with an ellipsis instead of overflowing. The current step takes the
+// width of its title, which also shrinks with an ellipsis when the form is
+// narrow; the others keep their number and the line to the next one.
 function StepIndicator<T extends FieldValues>({
   steps,
   stepIndex,
@@ -158,7 +160,9 @@ function StepIndicator<T extends FieldValues>({
             aria-current={isCurrent ? "step" : undefined}
             className={cn(
               "flex min-w-0 items-center gap-2",
-              index < steps.length - 1 && "flex-1",
+              isCurrent && "flex-auto",
+              !isCurrent && index < steps.length - 1 && "min-w-13 flex-1",
+              !isCurrent && index === steps.length - 1 && "min-w-7",
             )}
           >
             <span
@@ -175,7 +179,7 @@ function StepIndicator<T extends FieldValues>({
               {isDone ? <CheckIcon className="size-4" /> : index + 1}
             </span>
             {isCurrent ? (
-              <span className="text-sm font-semibold whitespace-nowrap">
+              <span className="min-w-0 truncate text-sm font-semibold">
                 {step.title}
               </span>
             ) : (
