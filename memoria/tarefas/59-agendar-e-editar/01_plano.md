@@ -186,6 +186,7 @@ Como na #58 (notas da tarefa), em cada PR, com roteiros novos no scratchpad dest
 | `src/app/(portal)/booking/page.tsx` | criar | 2 |
 | `src/components/portal/appointments/booking-wizard.tsx` | criar (2); os modos de edição e reagendamento (3) | 2, 3 |
 | `src/components/portal/appointments/booking-vehicle-step.tsx`, `booking-services-step.tsx`, `booking-schedule-step.tsx`, `booking-payment-step.tsx`, `booking-summary.tsx` | criar | 2 |
+| `src/components/shared/step-form.tsx` | alterar: o título da etapa atual encolhe com reticências, sem transbordar a 360 px (acrescentado na construção, com o OK do Yvan na conversa em 22/10/2026) | 2 |
 | `src/components/portal/appointments/appointment-change-dialog.tsx` | criar | 3 |
 | `src/components/portal/appointments/appointment-details-dialog.tsx` | alterar: as ações e a frase de UC26 FE01 | 3 |
 | `src/components/portal/appointments/appointment-list.tsx` | alterar, se preciso: a lista lida de novo depois da edição e do reagendamento | 3 |
@@ -405,6 +406,6 @@ Escolhas locais, sem registro:
 - Partes do wireframe sem requisito: a janela que se abre sem veículo, o filtro por categoria nos serviços, os "Serviços sob orçamento", o código promocional, o "Limpar" do resumo, a previsão em cada horário e o seletor de horário em rolagem do celular.
 - O esquema de validação do agendamento (decisão 0055), que entra com as rotas.
 - O agendamento pelo funcionário e a edição e o reagendamento no painel (#62).
-- Mudança no `seed-demo.sql`, no `seed.sql`, nas regras de `src/server/rules/` ou no `StepForm`.
+- Mudança no `seed-demo.sql`, no `seed.sql` ou nas regras de `src/server/rules/`; no `StepForm`, só a indicação das etapas (Arquivos).
 - Testes automatizados de componentes (decisão 0052).
 - Os documentos formais (#67).
