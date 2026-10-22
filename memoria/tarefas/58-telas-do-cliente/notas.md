@@ -115,3 +115,49 @@ Verificação local do PR 2, aprovada:
 - **LCP no celular** de `/profile`: 3,1 s no modo padrão (simulado; desempenho 94, claro e escuro) e 1,8 s com o estrangulamento do DevTools; o LCP continua o texto do aviso de demonstração. No computador, 0,6 s. CLS de 0,007 no celular e 0,017 no computador, como no PR 1.
 - **Registro.** Acumulado (`>>`) nas quatro execuções do `next start` (normal, falha e paginação, vazio e final): 228 linhas, todas `info`, só com `requestId`, `userId`, `profile`, evento, método, caminho, status, código e duração; nenhuma com cookie, token, cabeçalho de autorização, chave ou o e-mail de teste. As palavras "password" são o caminho `/api/auth/change-password` e o código `INVALID_CURRENT_PASSWORD`.
 - **Encerramento.** `next start` encerrado por PID e `npx supabase stop`, com o backup (a conta de teste fica para o PR 3). `npm run check` sem erros nem avisos, com 392 testes; `npm audit --omit=dev --audit-level=high` com 0. Nenhum import de `src/server/` e nada em `src/app/api/`, `supabase/` ou `src/shared/validation/` (`git diff --stat origin/main...HEAD`: 16 arquivos, todos da lista do plano).
+
+## 2026-10-21 – descoberta
+
+Etapa 03 e etapa 04 do PR 2: PR #73, aberto como rascunho para pôr o número no relatório e depois marcado como pronto, com a revisão pedida a LFaustin0 e Kaykebr144; aprovado por joaomanoel999 e incorporado por yvanshaw1 em 0fbcf60 (00:30 UTC de 22/10). A publicação da Vercel do 0fbcf60 e o CI do commit (`check`) com `success`; em produção (https://glow-projetoaldo.vercel.app), `/`, `/services`, `/login` e `GET /api/public/company` com 200, e `/profile` sem sessão com 307 para `/login?next=%2Fprofile`. O fluxo com sessão em produção é passo do Yvan. Ramificação remota removida pelo GitHub; a local, apagada depois de conferida igual à `main`.
+
+## 2026-10-21 – decisão
+
+L4, opção 1: com o OK do Yvan na conversa ("pode editar os corpos"), os corpos da #58 e da #59 foram editados pelo texto proposto no plano e conferidos no GitHub. Na #58, saíram RF032 e RN020 dos requisitos, o "reagendar, só no 'Concluído'" do escopo e o "Reagendar" do terceiro critério, que passou a "nos outros status, não (RN019)", e o reagendamento entrou no "Fora do escopo". Na #59, entraram UC25, RF032 e RN020, o item de escopo do reagendamento pelo mesmo assistente e o critério do "Reagendar" no "Concluído". O UC25 continua também nos requisitos da #58, porque o texto aprovado só tirava RF032 e RN020.
+
+## 2026-10-21 – desvio
+
+Etapa 02, PR 3 (agendamentos), na ramificação `feat/58-client-appointments`, criada da `origin/main` (0fbcf60, com o PR 2) com `git switch --no-track -c`, sem vínculo, e `npx -y npm@11.21.1 ci`. Commits:
+
+- 7db9171: `tests/format/percent.test.ts` em vermelho (o arquivo sem módulo);
+- 691e0a7: `formatPercent` e `PAYMENT_METHODS` com `PAYMENT_METHOD_LABELS` (os 3 testes verdes);
+- 55e481e: `ClientAppointmentSummary`, `ClientAppointment`, `src/lib/demo/appointments.ts` e as três entradas de `DEMO_ROUTES`;
+- 324957f: `cancelLabel` no `ConfirmDialog` (L5);
+- c7c04fe: `/appointments`, com `appointment-tabs.tsx`, `appointment-list.tsx`, `appointment-card.tsx` e `appointment-details-dialog.tsx`, e `AppointmentScope`;
+- ee1c48c: `meus-agendamentos.md` (L3), `agendamento/CONTEXT.md`, L1 dos agendamentos em `agendamento/rotas.md`, L5 em `componentes.md`, `testes.md` e os README de `src/shared/format/` e `tests/format/`;
+- 0d38c43: quatro cartões reservados na carga, em vez de dois (correção da verificação, abaixo).
+
+Escolhas pequenas, sem mudar regra nem escopo:
+
+- **Página.** `max-w-3xl`, como `/profile`; o título e o aviso juntos, como em `/services`.
+- **Abas.** Ativação manual, como as outras do sistema (Base UI): as setas movem o foco, e Enter ou Espaço escolhe a aba. Sem `keepMounted`, para cada aba ler a rota de novo; o painel sem parada de foco própria, como em `/profile`.
+- **Cartão.** A etiqueta primeiro, depois "<marca> <modelo>" em `h2`; os rótulos "Data", "Previsão de conclusão" e "Serviços" em `--muted-foreground`; os serviços separados por vírgula. "Ver detalhes" leva a data em texto só para o leitor de tela ("Ver detalhes do agendamento de 28/10/2026 às 09:00").
+- **Detalhe.** Os dados em `dl`; os serviços com o valor de cada um; o "Acréscimo de <percentual>" ou "Desconto de <percentual>" sem o valor em reais, porque a resposta não o traz e a tela não calcula regra; as ações numa tabela de consulta por status (`STATUS_ACTIONS`). A confirmação abre sobre a janela de detalhe.
+- **Dados.** Ids dos agendamentos por `md5('glow-demo:client-appointment:<n>')`, porque os do seed são sorteados; o deslocamento `-03:00` do fuso da empresa nos instantes (Maceió não tem horário de verão); o detalhe de um id desconhecido responde o `ApiError` `NOT_FOUND`.
+- **Tamanho.** 1.010 linhas em `src/` (332 de dados fixos), acima da estimativa de ~650 do plano.
+
+## 2026-10-21 – descoberta
+
+Verificação local do PR 3, aprovada:
+
+- **Ambiente.** `npx supabase start` (do backup) e `db reset` (só o `seed.sql`); nova conta de teste de cliente por `POST /api/auth/register` (201), com e-mail e senha em `local/client.json` do scratchpad, nunca exibidos. `npx next build` (`/appointments` estática) e `npx next start -p 3058`. Roteiros novos: `verify-appointments.mjs`, `verify-appointment-states.mjs` e `lh-snapshots-appointments.mjs`.
+- **Conteúdo**, a 360 × 800 e 1440 × 900, claro e escuro: "Meus agendamentos – Glow", o aviso logo abaixo do `h1`; "Atuais" com três cartões na ordem de data (Em execução hoje às 08:00, Agendado em +9 dias às 09:00 com a previsão às 14:00, Agendado em +16 dias às 14:00 com a previsão no dia seguinte às 09:40) e "1–3 de 3"; "Histórico" com Concluído, Cancelado, Concluído e Reagendado, do mais recente ao mais antigo, e "1–4 de 4"; uma coluna a 360 px e duas a 1440 px; sem rolagem horizontal na página nem nas janelas. Na carga, os cartões reservados (`aria-busy`). Capturas em `local/shots/` do scratchpad.
+- **Detalhe.** Os sete detalhes com a etiqueta, data e horário, previsão, duração ("1 h 40 min", "4 h", "5 h 40 min"…), veículo (marca e modelo, placa, cor, ano, tipo e porte), serviços com os valores, forma de pagamento, subtotal e total; o lugar reservado na carga. "Cancelar agendamento" só nos dois "Agendado"; nem no "Em execução" nem nos quatro do histórico.
+- **Cancelamento.** A confirmação "Cancelar este agendamento?" abre com o foco em "Voltar", com o texto de L3; o Tab fica entre "Voltar" e "Cancelar agendamento"; Esc fecha só a confirmação e devolve o foco ao botão do detalhe; "Cancelar agendamento" passa a "Cancelando…" e mostra a mensagem de `NOT_IMPLEMENTED` dentro da confirmação, com o foco; "Voltar" devolve o foco ao botão, com o detalhe aberto; Esc no detalhe devolve o foco a "Ver detalhes".
+- **Teclado.** As setas e Enter nas abas; o Tab pelos "Ver detalhes" e pelo rodapé, com o contorno em todos. Voltar a "Atuais" monta a lista de novo, com os lugares reservados.
+- **Estados**, por alterações temporárias de `src/lib/demo/appointments.ts`, sem commit, a 360 px no claro e a 1440 px no escuro: a primeira leitura da lista lança erro, e o aviso com "Tentar novamente" traz a lista; com 23 itens, "1–10 de 23", a próxima página com os itens anteriores em `aria-busy` e depois "11–20 de 23", e a última "21–23 de 23", com o foco mantido; a primeira leitura do detalhe lança erro, com "Tentar novamente" dentro da janela; com percentuais temporários, "Desconto de 2,50%" no Pix e "Acréscimo de 5,00%" no crédito. Com as listas vazias, "Nenhum agendamento atual" e "Nenhum agendamento no histórico", com os textos de L3. Desfeitas com `git checkout` (`git status` limpo) e a aplicação compilada de novo para a passagem final, que conferiu também a aba "Meus veículos".
+- **Rede.** Nenhuma chamada a `/api/me/*`: só `/api/auth/me`, `/api/public/company`, `/api/auth/login` e o cadastro da conta de teste.
+- **Lighthouse 13.5.0, acessibilidade.** No modo de captura, depois dos cliques: "Atuais", o detalhe de um "Agendado", a confirmação com a falha, "Histórico" e o detalhe do "Reagendado", no celular e no computador, claro e escuro: 100 nas 20 capturas, sem auditoria reprovada. `/appointments` pela navegação, com o cookie da sessão de teste por `--extra-headers` (arquivo apagado com os JSON): 100 nos quatro modos.
+- **CLS corrigido.** A primeira medição no computador deu CLS de 0,106, acima da meta de 0,1 (RNF006): os dois cartões reservados ocupavam uma linha, e os três ou quatro que chegam, duas. Com quatro lugares (0d38c43), 0,002 no computador e 0 no celular.
+- **LCP no celular** de `/appointments`: 3,0 s no modo padrão (simulado; desempenho 94 e 95) e 1,8 s com o estrangulamento do DevTools; o LCP é o texto do aviso de demonstração. No computador, 0,6 e 0,7 s.
+- **Registro.** Acumulado (`>>`) nas cinco execuções do `next start` (normal, com a correção, falha e paginação, vazio e final): 207 linhas, todas `info`; nenhuma com cookie, token, cabeçalho de autorização, chave ou o e-mail de teste.
+- **Encerramento.** `next start` encerrado por PID e `npx supabase stop`, com o backup. `npm run check` sem erros nem avisos, com 395 testes; `npm audit --omit=dev --audit-level=high` com 0. Nenhum import de `src/server/` e nada em `src/app/api/`, `supabase/` ou `src/shared/validation/` (`git diff --stat origin/main...HEAD`: 19 arquivos, todos da lista do plano).
