@@ -38,4 +38,5 @@ Leia só o que a tarefa pede: o caso de uso do fluxo, as regras que ele cita e, 
 | RN039-conteudo-da-analise-do-dashboard.md | Conteúdo da análise do dashboard |
 | dados.md | Tabelas `appointments`, `appointment_services` |
 | rotas.md | Telas e rotas da API |
+| meus-agendamentos.md | Conteúdo e textos da página de agendamentos do cliente (`/appointments`) |
 | calculos.md | Funções puras de preço, status, datas, edição e da análise do dashboard (testadas com TDD) |

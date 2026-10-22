@@ -28,6 +28,9 @@ type ConfirmDialogProps = {
   description: string;
   confirmLabel: string;
   loadingLabel: string;
+  // "Voltar" when the action is to cancel, so the two buttons do not share
+  // the verb (docs/padroes/componentes.md, Diálogos).
+  cancelLabel?: string;
   isDestructive?: boolean;
   onConfirm: () => Promise<void>;
   onConfirmed?: () => void;
@@ -38,15 +41,17 @@ type ConfirmDialogProps = {
 // A new key on every failure, so the notice takes the focus each time.
 type Failure = { key: number; error: ApiError };
 
-// docs/padroes/componentes.md, Diálogos: the focus starts on "Cancelar" and
-// stays in the dialog until it closes (RNF005); while the action runs, the
-// dialog does not close, and a failure shows inside it (RNF003, RNF004).
+// docs/padroes/componentes.md, Diálogos: the focus starts on "Cancelar" (or
+// "Voltar") and stays in the dialog until it closes (RNF005); while the
+// action runs, the dialog does not close, and a failure shows inside it
+// (RNF003, RNF004).
 export function ConfirmDialog({
   trigger,
   title,
   description,
   confirmLabel,
   loadingLabel,
+  cancelLabel = "Cancelar",
   isDestructive = false,
   onConfirm,
   onConfirmed,
@@ -93,7 +98,7 @@ export function ConfirmDialog({
         )}
         <AlertDialogFooter>
           <AlertDialogCancel ref={cancelRef} disabled={isRunning}>
-            Cancelar
+            {cancelLabel}
           </AlertDialogCancel>
           <Button
             variant={isDestructive ? "destructive" : "default"}

@@ -64,4 +64,22 @@ export const DEMO_ROUTES: readonly DemoRoute[] = [
   },
   { method: "POST", path: "/api/me/vehicles" },
   { method: "PATCH", path: "/api/me/vehicles/:id" },
+  // docs/agendamento/rotas.md, built in phase 3.
+  {
+    method: "GET",
+    path: "/api/me/appointments",
+    load: () =>
+      import("@/lib/demo/appointments").then(
+        (appointments) => appointments.answerAppointments,
+      ),
+  },
+  {
+    method: "GET",
+    path: "/api/me/appointments/:id",
+    load: () =>
+      import("@/lib/demo/appointments").then(
+        (appointments) => appointments.answerAppointment,
+      ),
+  },
+  { method: "POST", path: "/api/me/appointments/:id/cancel" },
 ];
