@@ -53,6 +53,7 @@ const demo = vi.hoisted(() => {
     loadServiceList: vi.fn<() => Promise<DemoAnswer>>(),
     loadService: vi.fn<() => Promise<DemoAnswer>>(),
     loadPreview: vi.fn<() => Promise<DemoAnswer>>(),
+    loadClientPreview: vi.fn<() => Promise<DemoAnswer>>(),
   };
 });
 
@@ -69,6 +70,10 @@ vi.mock("@/lib/demo/routes", async () => {
     demo.services.find((service) => service.id === params.id),
   );
   demo.loadPreview.mockResolvedValue(() => demo.preview);
+  // An answer that depends on the body, as the preview of the booking.
+  demo.loadClientPreview.mockResolvedValue(({ body }) => ({
+    serviceCount: (body as { serviceIds: string[] }).serviceIds.length,
+  }));
   const routes: DemoRoute[] = [
     { method: "GET", path: "/api/admin/services", load: demo.loadServiceList },
     { method: "GET", path: "/api/admin/services/:id", load: demo.loadService },
@@ -76,6 +81,11 @@ vi.mock("@/lib/demo/routes", async () => {
       method: "POST",
       path: "/api/admin/appointments/preview",
       load: demo.loadPreview,
+    },
+    {
+      method: "POST",
+      path: "/api/me/appointments/preview",
+      load: demo.loadClientPreview,
     },
     { method: "POST", path: "/api/admin/services" },
   ];
@@ -453,6 +463,18 @@ describe("apiRequest with demo data", () => {
     );
 
     expect(preview).toEqual({ total: 85, durationMinutes: 90 });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("gives the body of a listed POST to its answer", async () => {
+    const preview = await afterDemoWait(
+      apiRequest("/api/me/appointments/preview", {
+        method: "POST",
+        body: { serviceIds: ["service-02", "service-17"] },
+      }),
+    );
+
+    expect(preview).toEqual({ serviceCount: 2 });
     expect(fetchMock).not.toHaveBeenCalled();
   });
 

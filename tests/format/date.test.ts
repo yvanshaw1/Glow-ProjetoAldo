@@ -1,9 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { formatDate, formatDateTime, formatYear } from "@/shared/format/date";
+import {
+  formatCalendarDate,
+  formatDate,
+  formatDateTime,
+  formatLongDate,
+  formatMonth,
+  formatTime,
+  formatYear,
+  toCompanyInstant,
+} from "@/shared/format/date";
 
 // Display of the dates of RN035 (column Exibição) and RNF016, in the company's
 // time zone, America/Maceio (UTC-3), whatever the zone of the device
-// (decision 0053). A calendar date has no time zone and shows as it is.
+// (decision 0053). A calendar date has no time zone and shows as it is. The
+// booking (docs/agendamento/agendar-servico.md) reads the day and the time of
+// an instant there, and writes the instant of a chosen day and time as the
+// API takes it: ISO 8601 with the offset (docs/padroes/api.md).
 
 describe("formatDate", () => {
   it("formats an instant as the date in the company's time zone", () => {
@@ -41,5 +53,64 @@ describe("formatYear", () => {
   it("uses the company's year near the new year", () => {
     expect(formatYear("2027-01-01T02:30:00Z")).toBe("2026");
     expect(formatYear("2027-01-01T03:00:00Z")).toBe("2027");
+  });
+});
+
+describe("formatCalendarDate", () => {
+  it("writes the calendar day of an instant in the company's time zone", () => {
+    expect(formatCalendarDate("2026-10-22T12:00:00Z")).toBe("2026-10-22");
+  });
+
+  it("uses the company's day near midnight", () => {
+    expect(formatCalendarDate("2026-10-22T02:30:00Z")).toBe("2026-10-21");
+    expect(formatCalendarDate("2026-10-22T03:00:00Z")).toBe("2026-10-22");
+  });
+});
+
+describe("formatTime", () => {
+  it("writes the time of an instant in the company's time zone", () => {
+    expect(formatTime("2026-10-22T12:00:00Z")).toBe("09:00");
+  });
+
+  it("writes a time near midnight", () => {
+    expect(formatTime("2026-10-22T02:30:00Z")).toBe("23:30");
+    expect(formatTime("2026-10-22T03:00:00Z")).toBe("00:00");
+  });
+});
+
+describe("toCompanyInstant", () => {
+  it("builds the instant of a day and a time in the company's time zone", () => {
+    const instant = toCompanyInstant("2026-10-28", "09:00");
+
+    expect(instant).toBe("2026-10-28T09:00:00-03:00");
+    expect(Date.parse(instant)).toBe(Date.parse("2026-10-28T12:00:00Z"));
+  });
+
+  it("keeps the day of a time late in the evening", () => {
+    expect(toCompanyInstant("2026-12-31", "17:30")).toBe(
+      "2026-12-31T17:30:00-03:00",
+    );
+  });
+});
+
+describe("formatMonth", () => {
+  it("writes the month and the year of a calendar day", () => {
+    expect(formatMonth("2026-10-01")).toBe("outubro de 2026");
+  });
+
+  it("writes the month of the last day as it is", () => {
+    expect(formatMonth("2026-12-31")).toBe("dezembro de 2026");
+  });
+});
+
+describe("formatLongDate", () => {
+  it("writes the weekday and the date of a calendar day", () => {
+    expect(formatLongDate("2026-10-28")).toBe(
+      "quarta-feira, 28 de outubro de 2026",
+    );
+  });
+
+  it("writes the first day of a month as it is", () => {
+    expect(formatLongDate("2026-11-01")).toBe("domingo, 1 de novembro de 2026");
   });
 });
