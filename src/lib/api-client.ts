@@ -53,7 +53,7 @@ export async function apiRequest<T>(
     isSessionLoad = false,
   }: ApiRequestOptions = {},
 ): Promise<T> {
-  const demoMatch = findDemoRoute(method, path);
+  const demoMatch = findDemoRoute(method, path, body);
   if (demoMatch) return answerDemo<T>(demoMatch, signal);
 
   const response = await send(path, { method, body, signal });

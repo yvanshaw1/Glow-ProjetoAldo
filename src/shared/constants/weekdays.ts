@@ -9,3 +9,14 @@ export const WEEKDAY_LABELS = [
   "Sexta-feira",
   "Sábado",
 ] as const;
+
+// The head of the columns of the booking calendar, in the same order.
+export const WEEKDAY_SHORT_LABELS = [
+  "dom",
+  "seg",
+  "ter",
+  "qua",
+  "qui",
+  "sex",
+  "sáb",
+] as const;

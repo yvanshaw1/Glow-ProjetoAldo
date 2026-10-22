@@ -2,15 +2,27 @@ import { ApiError } from "@/lib/api-client";
 import { demoPage } from "@/lib/demo/list";
 import type { DemoRequest } from "@/lib/demo/routes";
 import type {
+  AppointmentPreview,
   AppointmentService,
   AppointmentVehicle,
+  BookableService,
   ClientAppointment,
   ClientAppointmentSummary,
 } from "@/shared/api/appointments";
+import type { PublicCategory } from "@/shared/api/catalog";
 import type { Page } from "@/shared/api/pagination";
 import type { AppointmentStatus } from "@/shared/constants/appointment-statuses";
-import { SHORT_LIST_PAGE_SIZE } from "@/shared/constants/pagination";
+import {
+  CATALOG_PAGE_SIZE,
+  SHORT_LIST_PAGE_SIZE,
+} from "@/shared/constants/pagination";
+import type { PaymentMethod } from "@/shared/constants/payment-methods";
+import type { ServiceType } from "@/shared/constants/service-types";
 import { COMPANY_TIME_ZONE } from "@/shared/constants/time-zone";
+import {
+  VEHICLE_SIZES,
+  type VehicleSize,
+} from "@/shared/constants/vehicle-sizes";
 import { ERROR_CATALOG } from "@/shared/errors/catalog";
 
 // Demo data of the appointments module (decision 0055): seven appointments of
@@ -19,11 +31,17 @@ import { ERROR_CATALOG } from "@/shared/errors/catalog";
 // supabase/seed-demo.sql. The fees of supabase/seed.sql are all zero, so the
 // total is the subtotal. The dates are relative to the Monday of the current
 // week in the company's time zone, so the scheduled ones stay in the future,
-// always on the business days and hours of supabase/seed.sql.
+// always on the business days and hours of supabase/seed.sql. The booking
+// reads the services to book of his vehicles and the preview of its choice,
+// worked out over the same data.
 
 // Maceió has no daylight saving time: the offset of the company's time zone
 // (decision 0053) in the instants of the demo.
 const COMPANY_OFFSET = "-03:00";
+const MINUTES_PER_HOUR = 60;
+// The same offset, in minutes.
+const COMPANY_OFFSET_MINUTES = -3 * MINUTES_PER_HOUR;
+const MS_PER_MINUTE = 60_000;
 const MS_PER_DAY = 86_400_000;
 const DAYS_PER_WEEK = 7;
 const UPDATED_AT = "2026-06-23T12:00:00+00:00";
@@ -88,7 +106,7 @@ const SW4: AppointmentVehicle = {
   year: 2019,
 };
 
-// The services of the seed in these appointments, with its ids (md5 of
+// The active services of the seed, with its ids (md5 of
 // 'glow-demo:service:<name>' as a UUID).
 type DemoService = Omit<AppointmentService, "price">;
 
@@ -145,6 +163,42 @@ const LEATHER_CARE: DemoService = {
   name: "Hidratação de couro",
   type: "additional",
   durationMinutes: 40,
+};
+const TECHNICAL_POLISH: DemoService = {
+  id: "ff863a74-e17a-b011-5ae2-9e718d5612c3",
+  name: "Polimento técnico",
+  type: "main",
+  durationMinutes: 480,
+};
+const CERAMIC_COATING: DemoService = {
+  id: "00c3d0e7-79d0-a6b3-9b50-9598c9cadbe7",
+  name: "Vitrificação de pintura",
+  type: "main",
+  durationMinutes: 900,
+};
+const AIR_CONDITIONING_CLEANING: DemoService = {
+  id: "cff70583-8ed7-ad1c-ab6a-bc266b04f31f",
+  name: "Higienização do ar-condicionado",
+  type: "complementary",
+  durationMinutes: 60,
+};
+const ENGINE_WASH: DemoService = {
+  id: "d05d5475-d570-c23f-785d-9cdd9bc54bd3",
+  name: "Lavagem de motor",
+  type: "complementary",
+  durationMinutes: 40,
+};
+const HEADLIGHT_RESTORATION: DemoService = {
+  id: "9b46a99e-80d5-d981-ed80-ea6cd378d2c5",
+  name: "Revitalização de faróis",
+  type: "complementary",
+  durationMinutes: 60,
+};
+const RAIN_REPELLENT: DemoService = {
+  id: "4c854969-1a3a-ae32-c28a-e18ad83e465c",
+  name: "Repelente de chuva nos vidros",
+  type: "additional",
+  durationMinutes: 20,
 };
 
 // The service with its price for the size of the vehicle, or its fixed price.
@@ -261,6 +315,196 @@ const APPOINTMENTS: DemoAppointment[] = [
   },
 ];
 
+// The two vehicles of the account, for the booking.
+const VEHICLES: readonly AppointmentVehicle[] = [TORO, SW4];
+
+// The categories of the services to book, with the seed's ids, as in
+// src/lib/demo/catalog.ts.
+const WASH: PublicCategory = {
+  id: "4e31423b-fe30-cf42-7e5a-eebc618ac6e6",
+  name: "Lavagem",
+};
+const POLISH: PublicCategory = {
+  id: "c3cce2b8-4899-3cc5-90a5-5b36e0a9781e",
+  name: "Polimento e proteção",
+};
+const CLEANING: PublicCategory = {
+  id: "d3be5225-b9b0-41ef-210a-0d86a965f75d",
+  name: "Higienização",
+};
+
+// RN009: the price of the seed in reais, one for each size in the order of
+// VEHICLE_SIZES (P, M, G and GG), or a fixed one.
+type DemoPrice =
+  | number
+  | readonly [small: number, medium: number, large: number, extraLarge: number];
+
+type PricedService = DemoService & { price: DemoPrice };
+
+type DemoBookableService = PricedService & {
+  type: Exclude<ServiceType, "additional">;
+  description: string;
+  category: PublicCategory;
+  additionals: readonly PricedService[];
+};
+
+// RN006: the active additionals, always with a fixed price.
+const WAX: PricedService = { ...CARNAUBA_WAX, price: 35 };
+const SHINE: PricedService = { ...TIRE_SHINE, price: 10 };
+const LEATHER: PricedService = { ...LEATHER_CARE, price: 90 };
+const REPELLENT: PricedService = { ...RAIN_REPELLENT, price: 50 };
+
+// RN008, RN031: the active main and complementary services of active
+// categories, in the order of the seed, with the additionals linked to each
+// main one. "Película nos vidros" is of an inactive category.
+const BOOKABLE_SERVICES: readonly DemoBookableService[] = [
+  {
+    ...SIMPLE_WASH,
+    type: "main",
+    description:
+      "Lavagem externa com shampoo neutro, aspiração interna e limpeza dos vidros.",
+    category: WASH,
+    price: [40, 50, 60, 70],
+    additionals: [WAX, SHINE],
+  },
+  {
+    ...COMPLETE_WASH,
+    type: "main",
+    description:
+      "Lavagem externa e interna detalhada, com limpeza de painel, portas, rodas e caixas de roda.",
+    category: WASH,
+    price: [70, 85, 100, 120],
+    additionals: [WAX, SHINE, LEATHER, REPELLENT],
+  },
+  {
+    ...TECHNICAL_WASH,
+    type: "main",
+    description:
+      "Lavagem minuciosa com descontaminação da pintura e limpeza de frisos, emblemas e rodas.",
+    category: WASH,
+    price: [160, 190, 220, 260],
+    additionals: [SHINE, LEATHER, REPELLENT],
+  },
+  {
+    ...COMMERCIAL_POLISH,
+    type: "main",
+    description:
+      "Polimento em uma etapa que remove riscos leves e manchas e devolve o brilho da pintura.",
+    category: POLISH,
+    price: [280, 330, 390, 450],
+    additionals: [REPELLENT],
+  },
+  {
+    ...TECHNICAL_POLISH,
+    type: "main",
+    description:
+      "Correção de pintura em várias etapas, para riscos e marcas mais profundos.",
+    category: POLISH,
+    price: [550, 650, 750, 850],
+    additionals: [],
+  },
+  {
+    ...CERAMIC_COATING,
+    type: "main",
+    description:
+      "Polimento seguido de proteção cerâmica, que repele água e sujeira por até três anos.",
+    category: POLISH,
+    price: [1100, 1300, 1500, 1700],
+    additionals: [],
+  },
+  {
+    ...INTERIOR_CLEANING,
+    type: "main",
+    description:
+      "Limpeza profunda de bancos, carpetes, teto e portas, com extração e secagem.",
+    category: CLEANING,
+    price: [280, 330, 380, 450],
+    additionals: [LEATHER],
+  },
+  {
+    ...AIR_CONDITIONING_CLEANING,
+    type: "complementary",
+    description:
+      "Limpeza e desinfecção dos dutos e do evaporador do ar-condicionado.",
+    category: CLEANING,
+    price: 120,
+    additionals: [],
+  },
+  {
+    ...ENGINE_WASH,
+    type: "complementary",
+    description:
+      "Limpeza do compartimento do motor com produtos que protegem as partes elétricas.",
+    category: WASH,
+    price: 80,
+    additionals: [],
+  },
+  {
+    ...HEADLIGHT_RESTORATION,
+    type: "complementary",
+    description:
+      "Lixamento, polimento e proteção dos faróis amarelados ou opacos.",
+    category: POLISH,
+    price: 150,
+    additionals: [],
+  },
+  {
+    ...OZONE_SANITIZING,
+    type: "complementary",
+    description:
+      "Eliminação de odores, fungos e bactérias do interior com ozônio.",
+    category: CLEANING,
+    price: 100,
+    additionals: [],
+  },
+];
+
+// Every service the preview can price.
+const CATALOG: readonly PricedService[] = [
+  ...BOOKABLE_SERVICES,
+  WAX,
+  SHINE,
+  LEATHER,
+  REPELLENT,
+];
+
+// supabase/seed.sql: every payment method with 0% (RN012).
+const PAYMENT_FEES = {
+  credit: 0,
+  debit: 0,
+  pix: 0,
+  cash: 0,
+} as const satisfies Record<PaymentMethod, number>;
+
+// RN034, for the demo only: the working periods of supabase/seed.sql, in
+// minutes of the day, from Sunday (0) to Saturday (6). Monday to Friday from
+// 08:00 to 18:00 with a break from 12:00 to 13:00, Saturday from 08:00 to
+// 12:00, Sunday closed.
+const WEEKDAY_PERIODS: readonly (readonly [start: number, end: number])[] = [
+  [8 * MINUTES_PER_HOUR, 12 * MINUTES_PER_HOUR],
+  [13 * MINUTES_PER_HOUR, 18 * MINUTES_PER_HOUR],
+];
+const SEED_WORKING_PERIODS: readonly (readonly (readonly [
+  start: number,
+  end: number,
+])[])[] = [
+  [],
+  WEEKDAY_PERIODS,
+  WEEKDAY_PERIODS,
+  WEEKDAY_PERIODS,
+  WEEKDAY_PERIODS,
+  WEEKDAY_PERIODS,
+  [[8 * MINUTES_PER_HOUR, 12 * MINUTES_PER_HOUR]],
+];
+
+// The body of POST /api/me/appointments/preview, as the booking sends it.
+type PreviewBody = {
+  vehicleId: string;
+  serviceIds: string[];
+  paymentMethod?: PaymentMethod | null;
+  scheduledAt?: string | null;
+};
+
 // GET /api/me/appointments, with the scope of the tab.
 export function answerAppointments({
   query,
@@ -284,14 +528,147 @@ export function answerAppointment({ params }: DemoRequest): ClientAppointment {
   const appointment = listAppointments(new Date()).find(
     ({ id }) => id === params.id,
   );
-  if (!appointment) {
-    throw new ApiError({
-      status: ERROR_CATALOG.NOT_FOUND.status,
-      code: "NOT_FOUND",
-      detail: ERROR_CATALOG.NOT_FOUND.message,
-    });
-  }
+  if (!appointment) throw notFound();
   return appointment;
+}
+
+// GET /api/me/bookable-services, with the prices of the size of the vehicle
+// (RN009).
+export function answerBookableServices({
+  query,
+}: DemoRequest): Page<BookableService> {
+  const { size } = findVehicle(query.get("vehicleId"));
+  const services = BOOKABLE_SERVICES.map((service) =>
+    toBookableService(service, size),
+  );
+  return demoPage(services, query, { pageSize: CATALOG_PAGE_SIZE });
+}
+
+// POST /api/me/appointments/preview, worked out over the demo data: the
+// prices of the size of the vehicle, the fees of seed.sql and the duration
+// spread over its business hours. The rules that count are the API's.
+export function answerAppointmentPreview({
+  body,
+}: DemoRequest): AppointmentPreview {
+  const { vehicleId, serviceIds, paymentMethod, scheduledAt } =
+    body as PreviewBody;
+  const { size } = findVehicle(vehicleId);
+  // RN008, RN031: a service that cannot be booked is left out.
+  const services = serviceIds.flatMap((id) => {
+    const service = CATALOG.find((item) => item.id === id);
+    return service ? [toAppointmentService(service, size)] : [];
+  });
+  const subtotal = services.reduce((sum, { price }) => sum + price, 0);
+  const feePercent = paymentMethod ? PAYMENT_FEES[paymentMethod] : null;
+  const estimatedDurationMinutes = services.reduce(
+    (sum, { durationMinutes }) => sum + durationMinutes,
+    0,
+  );
+  return {
+    services,
+    subtotal,
+    feePercent,
+    // RN010: the total rounded to the cent once.
+    total:
+      feePercent === null
+        ? subtotal
+        : Math.round(subtotal * (100 + feePercent)) / 100,
+    estimatedDurationMinutes,
+    estimatedEndAt: scheduledAt
+      ? calculateDemoEnd(scheduledAt, estimatedDurationMinutes)
+      : null,
+  };
+}
+
+function notFound(): ApiError {
+  return new ApiError({
+    status: ERROR_CATALOG.NOT_FOUND.status,
+    code: "NOT_FOUND",
+    detail: ERROR_CATALOG.NOT_FOUND.message,
+  });
+}
+
+// RS009: only a vehicle of the account.
+function findVehicle(id: string | null): AppointmentVehicle {
+  const vehicle = VEHICLES.find((item) => item.id === id);
+  if (!vehicle) throw notFound();
+  return vehicle;
+}
+
+function priceFor(price: DemoPrice, size: VehicleSize): number {
+  return typeof price === "number" ? price : price[VEHICLE_SIZES.indexOf(size)];
+}
+
+function toAppointmentService(
+  { id, name, type, durationMinutes, price }: PricedService,
+  size: VehicleSize,
+): AppointmentService {
+  return { id, name, type, durationMinutes, price: priceFor(price, size) };
+}
+
+function toBookableService(
+  service: DemoBookableService,
+  size: VehicleSize,
+): BookableService {
+  const { id, name, type, description, category, durationMinutes } = service;
+  return {
+    id,
+    name,
+    type,
+    description,
+    category,
+    durationMinutes,
+    price: priceFor(service.price, size),
+    additionals: service.additionals.map((additional) => ({
+      id: additional.id,
+      name: additional.name,
+      durationMinutes: additional.durationMinutes,
+      price: priceFor(additional.price, size),
+    })),
+  };
+}
+
+// RN034, for the demo only, as calculateEstimatedEnd of
+// src/server/rules/scheduling.ts: the duration spent in the working periods
+// of seed.sql, from the start, skipping the break, the night and Sunday. Work
+// that ends exactly at the closing or at the break ends there.
+function calculateDemoEnd(scheduledAt: string, durationMinutes: number) {
+  // The clock of the company, read as UTC.
+  const start = new Date(
+    Date.parse(scheduledAt) + COMPANY_OFFSET_MINUTES * MS_PER_MINUTE,
+  );
+  const startDay = Date.UTC(
+    start.getUTCFullYear(),
+    start.getUTCMonth(),
+    start.getUTCDate(),
+  );
+  const startMinute =
+    start.getUTCHours() * MINUTES_PER_HOUR + start.getUTCMinutes();
+  let remainingMinutes = durationMinutes;
+  for (let dayOffset = 0; ; dayOffset += 1) {
+    const day = startDay + dayOffset * MS_PER_DAY;
+    const fromMinute = dayOffset === 0 ? startMinute : 0;
+    for (const [periodStart, periodEnd] of SEED_WORKING_PERIODS[
+      new Date(day).getUTCDay()
+    ]) {
+      const begin = Math.max(periodStart, fromMinute);
+      const availableMinutes = periodEnd - begin;
+      if (availableMinutes <= 0) continue;
+      if (remainingMinutes <= availableMinutes) {
+        return toDemoInstant(day, begin + remainingMinutes);
+      }
+      remainingMinutes -= availableMinutes;
+    }
+  }
+}
+
+// An instant of the demo, in the company's time zone, as the other dates of
+// this module.
+function toDemoInstant(day: number, minuteOfDay: number): string {
+  const calendarDay = new Date(day).toISOString().slice(0, 10);
+  const hours = String(Math.floor(minuteOfDay / MINUTES_PER_HOUR));
+  const minutes = String(minuteOfDay % MINUTES_PER_HOUR);
+  return `${calendarDay}T${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}:00${COMPANY_OFFSET}`;
 }
 
 // The appointments with their instants in the week of now.

@@ -1,6 +1,6 @@
 # `tests/lib/` – Testes do cliente da API
 
-Testes do cliente HTTP único das páginas (`src/lib/api-client.ts`): JSON, Problem Details, redirecionamentos do 401 e do 403 de troca de senha, nenhuma chamada repetida, a montagem dos parâmetros de consulta (`withQuery`) e as respostas da lista de demonstração (`src/lib/demo/`). Simulam o `fetch` e o `location` com `vi.stubGlobal`, a lista de demonstração com `vi.mock` e o relógio com `vi.useFakeTimers`, sem servidor, navegador, rede ou espera (decisões 0052 e 0055).
+Testes do cliente HTTP único das páginas (`src/lib/api-client.ts`): JSON, Problem Details, redirecionamentos do 401 e do 403 de troca de senha, nenhuma chamada repetida, a montagem dos parâmetros de consulta (`withQuery`) e as respostas da lista de demonstração (`src/lib/demo/`), com o corpo das leituras por `POST`. Simulam o `fetch` e o `location` com `vi.stubGlobal`, a lista de demonstração com `vi.mock` e o relógio com `vi.useFakeTimers`, sem servidor, navegador, rede ou espera (decisões 0052 e 0055).
 
 ## Vai aqui
 

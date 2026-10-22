@@ -1,3 +1,4 @@
+import type { PublicCategory } from "@/shared/api/catalog";
 import type { AppointmentStatus } from "@/shared/constants/appointment-statuses";
 import type { PaymentMethod } from "@/shared/constants/payment-methods";
 import type { ServiceType } from "@/shared/constants/service-types";
@@ -5,8 +6,9 @@ import type { VehicleSize } from "@/shared/constants/vehicle-sizes";
 import type { VehicleType } from "@/shared/constants/vehicle-types";
 
 // Bodies of the appointment routes of the client in
-// docs/agendamento/rotas.md (UC07). The vehicle and the services are the
-// copies made in the appointment (RN037); the dates are instants in ISO 8601.
+// docs/agendamento/rotas.md (UC06, UC07). The vehicle and the services of an
+// appointment are the copies made in it (RN037); the dates are instants in
+// ISO 8601.
 
 // The vehicle as it was when the appointment was made.
 export type AppointmentVehicle = {
@@ -60,4 +62,38 @@ export type ClientAppointment = Omit<
   services: AppointmentService[];
   // RNF011: treated as text.
   updatedAt: string;
+};
+
+// An active additional linked to a main service, always with a fixed price
+// (RN006, RN009).
+export type BookableAdditional = Pick<
+  AppointmentService,
+  "id" | "name" | "price" | "durationMinutes"
+>;
+
+// One item of the page of GET /api/me/bookable-services: an active main or
+// complementary service of an active category (RN008, RN031), with the price
+// of the size of the vehicle or the fixed one (RN009).
+export type BookableService = Omit<AppointmentService, "type"> & {
+  type: Exclude<ServiceType, "additional">;
+  description: string;
+  category: PublicCategory;
+  // Empty in a complementary service.
+  additionals: BookableAdditional[];
+};
+
+// POST /api/me/appointments/preview: the values of the choice, by the
+// current catalog, without writing.
+export type AppointmentPreview = {
+  // Only the services that can be booked (RN008, RN031).
+  services: AppointmentService[];
+  subtotal: number;
+  // RN012; null without the payment method.
+  feePercent: number | null;
+  // RN010; the subtotal without the payment method.
+  total: number;
+  // RN014
+  estimatedDurationMinutes: number;
+  // RN034; null without the date and time.
+  estimatedEndAt: string | null;
 };

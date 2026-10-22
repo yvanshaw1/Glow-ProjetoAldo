@@ -30,14 +30,14 @@ Acesso: Perfil `client`; opera só sobre os dados do cliente da sessão (RS009).
 Serviços disponíveis para o veículo, com valores e adicionais vinculados.
 
 - Entrada: `vehicleId*`
-- Resposta: **200** serviços com o valor aplicável ao porte e os adicionais de cada serviço principal.
+- Resposta: **200** lista paginada dos serviços principais e complementares ativos de categorias ativas (RN008, RN031), na ordem do catálogo público, com `id`, `name`, `description`, `type`, `category` (`id` e `name`), `price` (o do porte do veículo ou o valor fixo, RN009), `durationMinutes` e `additionals`: `id`, `name`, `price` e `durationMinutes` dos adicionais ativos vinculados ao principal (RN006); lista vazia no complementar.
 
 #### `POST /api/me/appointments/preview`
 
 Calcula os valores do carrinho ou da edição de um agendamento, sem gravar.
 
 - Entrada: `vehicleId*, serviceIds*, paymentMethod, scheduledAt`; `appointmentId`, na edição.
-- Resposta: **200** itens, subtotal, percentual da forma de pagamento, total, duração estimada e, com `scheduledAt`, previsão de conclusão.
+- Resposta: **200** `services` (`id`, `name`, `type`, `price` e `durationMinutes` de cada serviço pedido que pode ser agendado, pelo catálogo atual; o serviço inativo ou de categoria inativa fica de fora, RN008, RN031), `subtotal`, `feePercent` (o percentual da forma de pagamento, RN012, ou `null` sem `paymentMethod`), `total` (RN010; sem `paymentMethod`, igual ao subtotal), `estimatedDurationMinutes` (RN014) e `estimatedEndAt` (RN034, ou `null` sem `scheduledAt`).
 
 #### `POST /api/me/appointments`
 
