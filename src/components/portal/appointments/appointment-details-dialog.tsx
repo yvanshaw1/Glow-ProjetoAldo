@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { AppointmentChangeDialog } from "@/components/portal/appointments/appointment-change-dialog";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -36,16 +37,16 @@ import { formatPlate } from "@/shared/format/plate";
 
 const APPOINTMENTS_PATH = "/api/me/appointments";
 
-type AppointmentAction = "cancel";
+type AppointmentAction = "cancel" | "edit" | "reschedule";
 
 // The actions each status offers. They only guide the screen: the API
 // decides (RS008). RN019: the client cancels only a scheduled appointment.
 const STATUS_ACTIONS = {
-  scheduled: ["cancel"],
+  scheduled: ["edit", "cancel"],
   checked_in: [],
   in_progress: [],
   awaiting_payment: [],
-  completed: [],
+  completed: ["reschedule"],
   cancelled: [],
   rescheduled: [],
 } as const satisfies Record<AppointmentStatus, readonly AppointmentAction[]>;
@@ -53,21 +54,31 @@ const STATUS_ACTIONS = {
 // Rows held while the appointment loads.
 const LOADING_ROWS = 6;
 
+const SHOW_CHANGE_NOTICE: Record<AppointmentStatus, boolean> = {
+  scheduled: false,
+  checked_in: true,
+  in_progress: true,
+  awaiting_payment: true,
+  completed: false,
+  cancelled: false,
+  rescheduled: false,
+};
+
 type AppointmentDetailsDialogProps = {
   appointment: ClientAppointmentSummary;
-  onCancelled: () => void;
+  onChange: () => void;
 };
 
 export function AppointmentDetailsDialog({
   appointment,
-  onCancelled,
+  onChange,
 }: AppointmentDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   // UC07 FA01: once cancelled, both dialogs close and the list is read again.
-  function closeCancelled() {
+  function closeChanged() {
     setIsOpen(false);
-    onCancelled();
+    onChange();
   }
 
   return (
@@ -91,7 +102,7 @@ export function AppointmentDetailsDialog({
         <DialogHeader>
           <DialogTitle>Detalhes do agendamento</DialogTitle>
         </DialogHeader>
-        <AppointmentDetails id={appointment.id} onCancelled={closeCancelled} />
+        <AppointmentDetails id={appointment.id} onChange={closeChanged} />
       </DialogContent>
     </Dialog>
   );
@@ -99,16 +110,16 @@ export function AppointmentDetailsDialog({
 
 type AppointmentDetailsProps = {
   id: string;
-  onCancelled: () => void;
+  onChange: () => void;
 };
 
 // Mounted with the dialog, so each opening reads the route again.
-function AppointmentDetails({ id, onCancelled }: AppointmentDetailsProps) {
+function AppointmentDetails({ id, onChange }: AppointmentDetailsProps) {
   const { data, error, reload } = useApiQuery<ClientAppointment>(
     `${APPOINTMENTS_PATH}/${id}`,
   );
   if (data !== null) {
-    return <AppointmentContent appointment={data} onCancelled={onCancelled} />;
+    return <AppointmentContent appointment={data} onChange={onChange} />;
   }
   // RNF004: the place of the detail while loading; a failure offers a retry.
   if (error) {
@@ -135,13 +146,14 @@ function AppointmentDetails({ id, onCancelled }: AppointmentDetailsProps) {
 
 type AppointmentContentProps = {
   appointment: ClientAppointment;
-  onCancelled: () => void;
+  onChange: () => void;
 };
 
 function AppointmentContent({
   appointment,
-  onCancelled,
+  onChange,
 }: AppointmentContentProps) {
+  const [currentAppointment, setCurrentAppointment] = useState(appointment);
   const {
     id,
     status,
@@ -154,7 +166,7 @@ function AppointmentContent({
     subtotal,
     feePercent,
     total,
-  } = appointment;
+  } = currentAppointment;
   const actions: readonly AppointmentAction[] = STATUS_ACTIONS[status];
   return (
     <>
@@ -217,11 +229,33 @@ function AppointmentContent({
           </p>
         </div>
       </div>
-      {actions.includes("cancel") && (
-        <DialogFooter>
-          <CancelAppointment id={id} onCancelled={onCancelled} />
-        </DialogFooter>
+      {SHOW_CHANGE_NOTICE[status] && (
+        <Alert>
+          <AlertDescription>
+            Este agendamento não pode mais ser alterado por aqui. Para mudar
+            algo, fale com a empresa.
+          </AlertDescription>
+        </Alert>
       )}
+      <DialogFooter>
+        <AppointmentChangeDialog
+          mode="edit"
+          appointment={currentAppointment}
+          canOpen={actions.includes("edit")}
+          onChanged={onChange}
+          onReloaded={setCurrentAppointment}
+        />
+        <AppointmentChangeDialog
+          mode="reschedule"
+          appointment={currentAppointment}
+          canOpen={actions.includes("reschedule")}
+          onChanged={onChange}
+          onReloaded={setCurrentAppointment}
+        />
+        {actions.includes("cancel") && (
+          <CancelAppointment id={id} onChange={onChange} />
+        )}
+      </DialogFooter>
     </>
   );
 }
@@ -243,7 +277,7 @@ function DetailItem({ term, className, children }: DetailItemProps) {
 
 // UC07 FA01 and FE02: the cancellation asks for confirmation; a failure, as
 // the INVALID_STATUS of a status that changed, shows inside it.
-function CancelAppointment({ id, onCancelled }: AppointmentDetailsProps) {
+function CancelAppointment({ id, onChange }: AppointmentDetailsProps) {
   async function cancel() {
     await apiRequest(`${APPOINTMENTS_PATH}/${id}/cancel`, { method: "POST" });
   }
@@ -257,7 +291,7 @@ function CancelAppointment({ id, onCancelled }: AppointmentDetailsProps) {
       loadingLabel="Cancelando…"
       isDestructive
       onConfirm={cancel}
-      onConfirmed={onCancelled}
+      onConfirmed={onChange}
     />
   );
 }

@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { ApiQuery } from "@/hooks/use-api-query";
 import { cn } from "@/lib/utils";
-import type { AppointmentPreview } from "@/shared/api/appointments";
+import type {
+  AppointmentPreview,
+  AppointmentService,
+} from "@/shared/api/appointments";
 import { formatCurrency } from "@/shared/format/currency";
 import { formatDateTime } from "@/shared/format/date";
 import { formatDuration } from "@/shared/format/duration";
@@ -26,18 +29,33 @@ type BookingSummaryProps = {
   vehicle: BookingVehicle | null;
   hasServices: boolean;
   preview: ApiQuery<AppointmentPreview>;
+  originalServices?: AppointmentService[];
+  isInDialog?: boolean;
 };
 
 export function BookingSummary({
   vehicle,
   hasServices,
   preview,
+  originalServices,
+  isInDialog = false,
 }: BookingSummaryProps) {
   const titleId = useId();
+  // UC25 FE02: only the answer to the current choices identifies removals.
+  const unavailable =
+    originalServices && preview.data && !preview.isLoading && !preview.error
+      ? originalServices.filter(
+          (service) =>
+            !preview.data?.services.some((item) => item.id === service.id),
+        )
+      : [];
   return (
     <aside
       aria-labelledby={titleId}
-      className="flex flex-col gap-4 rounded-xl bg-background p-5 shadow-neu-md lg:sticky lg:top-24"
+      className={cn(
+        "flex min-w-0 flex-col gap-4 rounded-xl bg-background p-5 shadow-neu-md",
+        !isInDialog && "lg:sticky lg:top-24",
+      )}
     >
       <h2 id={titleId} className="font-semibold">
         Resumo do pedido
@@ -58,6 +76,14 @@ export function BookingSummary({
         <p className="text-sm text-muted-foreground">
           Nenhum serviço escolhido.
         </p>
+      )}
+      {unavailable.length > 0 && (
+        <Alert>
+          <AlertDescription>
+            Não estão mais disponíveis e ficaram de fora:{" "}
+            {unavailable.map((service) => service.name).join(", ")}.
+          </AlertDescription>
+        </Alert>
       )}
     </aside>
   );

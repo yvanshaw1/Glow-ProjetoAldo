@@ -112,3 +112,7 @@ Verificação local do PR 2, aprovada:
 ## 2026-10-22 – desvio
 
 Etapa 03 do PR 2 (PR #76), a pedido do Yvan. Na revisão do diff, três comentários do assistente citavam lacunas do plano ("L2/L4/L8 of the plan"); passaram a citar `agendar-servico.md` (46ecf16). `02_relatorio.md` parcial, com os dois PRs; o plano continua em `em_execucao` até o PR 3. PR aberto como rascunho para pôr o número no relatório e depois marcado como pronto, com a revisão pedida a LFaustin0 e Kaykebr144.
+
+## 2026-10-22 – descoberta: etapa 01 do PR 3 com Codex
+
+A pedido de Yvan, retomada a etapa 01 para o terceiro PR depois da incorporação de #75 e #76. Plano complementar e notas em `../59-editar-e-reagendar/`, com o recorte atualizado, a análise da ICM e a preferência de modelos informada pelo usuário. O plano geral e sua aprovação permanecem intactos. O complemento está em `aguardando_aprovacao` e inclui L9, sobre a experiência de reagendamento quando não sobra serviço principal ou complementar. Ramificação `feat/59-edit-and-reschedule`, a partir de `9e8a4a9`; nenhuma implementação nesta etapa. Ao retomar o PR 3, ler o complemento; na etapa 03, completar o relatório cumulativo desta pasta.

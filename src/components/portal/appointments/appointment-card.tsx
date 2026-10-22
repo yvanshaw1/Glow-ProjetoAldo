@@ -41,7 +41,7 @@ export function AppointmentCard({
       <div className="mt-auto flex flex-col pt-2">
         <AppointmentDetailsDialog
           appointment={appointment}
-          onCancelled={onChange}
+          onChange={onChange}
         />
       </div>
     </article>
