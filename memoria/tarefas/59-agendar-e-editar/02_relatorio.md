@@ -1,11 +1,11 @@
 ---
 issue: 59
-pull_request: <número>
+pull_request: 75
 ---
 
 # Relatório: Telas do cliente com dados de demonstração: agendar serviço e editar o agendamento
 
-Relatório parcial: PR 1 de 3, da base do assistente de agendamento (`Refs #59`), sem tela. O PR 2, de `/booking` (`Refs #59`), e o PR 3, da edição e do reagendamento em `/appointments` (`Closes #59`), vêm depois da incorporação deste e completam este relatório.
+Relatório parcial: PR 1 de 3, o PR #75, da base do assistente de agendamento (`Refs #59`), sem tela. O PR 2, de `/booking` (`Refs #59`), e o PR 3, da edição e do reagendamento em `/appointments` (`Closes #59`), vêm depois da incorporação deste e completam este relatório.
 
 ## O que foi feito
 

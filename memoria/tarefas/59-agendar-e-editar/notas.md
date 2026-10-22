@@ -66,4 +66,4 @@ Verificação do PR 1, aprovada: `npm run check` sem erros nem avisos, com 411 t
 
 ## 2026-10-21 – desvio
 
-Etapa 03 do PR 1, a pedido do Yvan. Na revisão do diff, os comentários de `listStartTimes` e dos testes de data citavam `docs/agendamento/agendar-servico.md`, que só nasce no PR 2; passaram a citar o UC06 (2b66843). `02_relatorio.md` parcial, como na #58, e o plano continua em `em_execucao` até o PR 3. A `origin/main` continuava em 58959f8, sem nada a incorporar. PR aberto como rascunho para pôr o número no relatório e depois marcado como pronto, com a revisão pedida a LFaustin0 e Kaykebr144.
+Etapa 03 do PR 1, a pedido do Yvan. Na revisão do diff, os comentários de `listStartTimes` e dos testes de data citavam `docs/agendamento/agendar-servico.md`, que só nasce no PR 2; passaram a citar o UC06 (2b66843). `02_relatorio.md` parcial, como na #58, e o plano continua em `em_execucao` até o PR 3. A `origin/main` continuava em 58959f8, sem nada a incorporar. PR #75 aberto como rascunho para pôr o número no relatório e depois marcado como pronto, com a revisão pedida a LFaustin0 e Kaykebr144.
