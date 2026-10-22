@@ -1,6 +1,6 @@
 ---
 issue: 59
-pull_request: pendente
+pull_request: 77
 ---
 
 # Relatório: Telas do cliente com dados de demonstração: agendar serviço e editar o agendamento
