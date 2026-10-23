@@ -58,3 +58,30 @@ No V8, `Date.parse("2026-02-30T00:00:00Z")` não é `NaN`: move a data para 02/0
 ## 2026-10-23 – descoberta: ids da agenda
 
 Os ids dos seis agendamentos de hoje são o md5 de `glow-demo:dashboard-agenda:<n>` em formato de UUID; a mesma conta reproduz o id de `client-appointment:1` de `src/lib/demo/appointments.ts`, o que confere a derivação.
+
+## 2026-10-23 – PR 1 incorporado; ramificação do PR 2
+
+O PR #80 foi aprovado e incorporado em 23/10/2026 (9e12184). O PR 2 saiu da `origin/main` nessa ponta, na ramificação `feat/60-dashboard-screen`, sem vínculo com a `main`.
+
+## 2026-10-23 – PR 2, o que a verificação cobriu
+
+Ambiente: Docker Desktop aberto; `npx supabase start` e `db reset` (só o `seed.sql`); variáveis pelo `local-env.sh` do scratchpad, que só aceita `http://127.0.0.1:` e não as exibe; admin pelo `create-admin.mjs`, com o e-mail fictício e a senha gerados em `admin.json` do scratchpad, nunca exibidos; `npx next build` e `npx next start -p 3060`. Telas no Chrome sem interface, pelo `puppeteer-core` do cache do Lighthouse; os roteiros da #78 (`browser.mjs`, `patch-states.mjs`, `lh-snapshot.mjs`) serviram de base e foram adaptados.
+
+- **As quatro combinações** (360 × 800 e 1440 × 900, claro e escuro): sem rolagem horizontal; o `h1` seguido do aviso de demonstração; quatro indicadores e seis itens na agenda; nada desativado no seletor; a ordem do Tab passa pelos atalhos. Os valores do mês de teste (23/10/2026): receita R$ 12.535,00, 74 agendamentos, ticket médio R$ 261,15 e taxa de 6,76%.
+- **Atalhos e campos:** cada atalho dá o período esperado e fica marcado sozinho; o foco continua no atalho nas quatro leituras (50, 150, 400 e 900 ms); a área de resultados fica com `aria-busy` durante a leitura; a mudança de "De" pela digitação de "15/08/2026" dá uma leitura só (o ano passa por datas intermediárias) e o foco fica no campo. Nas viradas, com `Date` fixada no navegador (`evaluateOnNewDocument`): 23/10/2026, 02/03/2026, 29/02/2028 e 01/01/2027, todos os atalhos como no plano (13 conferências).
+- **Estados:** período invertido e de 367 dias, com a mensagem junto ao campo (`aria-invalid` e `aria-describedby`) e o aviso da área de resultados; 366 dias aceitos; período sem dados (01/2025) zerado, com a mensagem e a agenda de hoje; falha da primeira leitura e de uma leitura depois de um atalho, com "Tentar novamente" (lê de novo) e o seletor intacto, com o atalho marcado e o foco nele; agenda vazia; primeira leitura lenta (sete lugares reservados, sem indicadores) e nova leitura lenta (conteúdo anterior com opacidade 0,7 e `pointer-events: none`). Os estados que a demonstração não produz vieram de `src/lib/demo/dashboard.ts` e `match.ts` alterados em `globalThis.__demo`, sem commit, desfeitos por `git checkout -- src/lib` e conferidos por `git status`; o build seguinte foi o limpo.
+- **Lighthouse 13.5.0**, `/admin` com o cookie da sessão de teste por `--extra-headers` (arquivo apagado no fim): acessibilidade 100 no celular e no computador, claro e escuro, sem auditoria reprovada; desempenho no celular 95, LCP 3,0 s (simulado), FCP 0,8 s, CLS 0 e TBT de 50 e 60 ms; no computador, 100, LCP 0,6 s. Modo de captura, depois de cada estado (período invertido, sem dados e atalho marcado), nas quatro combinações: 100 nas 12 capturas.
+- **Registro do `next start`:** 183 linhas, todas `info`; só `GET /api/auth/me`, `GET /api/public/company` e `POST /api/auth/login`; nenhuma requisição a `/api/admin/*` (a demonstração não usa a rede) e nenhuma linha com cookie, token, cabeçalho de autorização, senha ou e-mail de teste.
+
+## 2026-10-23 – desvio: dois ajustes de layout achados na verificação
+
+- A legenda "Período" ficava sobre a borda do `fieldset`, fora do cartão: o `FieldSet` passou para dentro de um `div` com a superfície.
+- A primeira leitura reservava 1566 px contra 2687 px da página carregada, e a linha de status do período, vazia, não ocupava altura: ao responder, o conteúdo descia. Os lugares passaram a `h-36` (indicadores) e `h-44 md:h-28` (agenda), e a linha de status ganhou `min-h-[1.5em]`; no Lighthouse do celular, o CLS ficou em 0.
+
+## 2026-10-23 – desvio: um arquivo fora da lista do plano e o tamanho
+
+O README de `src/components/admin/dashboard/` ganhou uma linha, porque `dashboard-period.ts` (função pura, não componente) não estava coberto pelo "Vai aqui". O PR 2 tem 509 linhas em `src/`, como o plano estimou (cerca de 510) e o P1 aprovou.
+
+## 2026-10-23 – descoberta: LCP do celular
+
+O LCP simulado do celular (3,0 s) está acima dos 2,5 s de `frontend.md`, como nas telas anteriores (3,1 s na #58). O elemento do LCP em `/admin` é o texto do aviso de demonstração (conferido no relatório do Lighthouse), com 91 ms até o primeiro byte e 172 ms de atraso de renderização do elemento. As metas se medem na pré-visualização, pelo Yvan.
