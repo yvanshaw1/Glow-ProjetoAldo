@@ -4,7 +4,7 @@ titulo: "Telas do cliente com dados de demonstração: agendar serviço e editar
 areas: [frontend, testes]
 tipo: funcionalidade
 requisitos: [UC05, UC06, UC25, UC26, RF019, RF020, RF021, RF022, RF023, RF024, RF025, RF026, RF027, RF031, RF032, RN003, RN004, RN005, RN006, RN008, RN009, RN010, RN011, RN012, RN013, RN014, RN015, RN016, RN020, RN032, RN033, RN034, RN035, RNF002]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 22:39 - 21/10/2026
 ---
