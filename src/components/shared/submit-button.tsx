@@ -9,6 +9,9 @@ type SubmitButtonProps = Pick<
 > & {
   isLoading: boolean;
   loadingLabel: string;
+  // The send waits for something else (RNF005): the button does not send but
+  // keeps the focus and its label.
+  isDisabled?: boolean;
   children: ReactNode;
 };
 
@@ -17,6 +20,7 @@ type SubmitButtonProps = Pick<
 export function SubmitButton({
   isLoading,
   loadingLabel,
+  isDisabled = false,
   children,
   size,
   className,
@@ -25,7 +29,7 @@ export function SubmitButton({
     <Button
       type="submit"
       size={size}
-      disabled={isLoading}
+      disabled={isLoading || isDisabled}
       focusableWhenDisabled
       className={cn(
         "aria-disabled:cursor-progress aria-disabled:opacity-70",

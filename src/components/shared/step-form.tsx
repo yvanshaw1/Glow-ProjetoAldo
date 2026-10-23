@@ -32,6 +32,9 @@ type StepFormProps<T extends FieldValues, R extends FieldValues> = {
   onSubmit: SubmitHandler<R>;
   submitLabel: string;
   loadingLabel: string;
+  // The last button waits for a reading of the API that follows the choices,
+  // while the fields stay enabled and keep the focus (RNF005).
+  isSubmitDisabled?: boolean;
   onCancel?: () => void;
   children: (stepIndex: number) => ReactNode;
 };
@@ -45,6 +48,7 @@ export function StepForm<T extends FieldValues, R extends FieldValues>({
   onSubmit,
   submitLabel,
   loadingLabel,
+  isSubmitDisabled = false,
   onCancel,
   children,
 }: StepFormProps<T, R>) {
@@ -117,6 +121,7 @@ export function StepForm<T extends FieldValues, R extends FieldValues>({
           <SubmitButton
             isLoading={isSubmitting}
             loadingLabel={loadingLabel}
+            isDisabled={isSubmitDisabled}
             className="sm:ml-auto"
           >
             {submitLabel}
