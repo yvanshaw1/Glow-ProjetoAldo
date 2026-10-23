@@ -103,4 +103,22 @@ export const DEMO_ROUTES: readonly DemoRoute[] = [
   { method: "POST", path: "/api/me/appointments" },
   { method: "PATCH", path: "/api/me/appointments/:id" },
   { method: "POST", path: "/api/me/appointments/:id/reschedule" },
+  // docs/agendamento/rotas.md, built by #51 and #66; the analysis is a POST
+  // that writes nothing.
+  {
+    method: "GET",
+    path: "/api/admin/dashboard",
+    load: () =>
+      import("@/lib/demo/dashboard").then(
+        (dashboard) => dashboard.answerDashboard,
+      ),
+  },
+  {
+    method: "POST",
+    path: "/api/admin/dashboard/analysis",
+    load: () =>
+      import("@/lib/demo/dashboard").then(
+        (dashboard) => dashboard.answerDashboardAnalysis,
+      ),
+  },
 ];

@@ -89,8 +89,8 @@ Acesso: Perfis `staff` ou `admin` com a permissão `dashboard`.
 
 Indicadores e agenda do dia (UC09).
 
-- Entrada: `from, to` (datas; padrão: mês atual).
-- Resposta: **200** receita, quantidade de agendamentos, ticket médio, taxa de cancelamento, receita por dia, agendamentos por status e agenda do dia; 400 período inválido ou maior que 12 meses.
+- Entrada: `from, to` (datas `aaaa-mm-dd`; padrão: o mês atual inteiro, no fuso da empresa).
+- Resposta: **200** `from` e `to` (o período aplicado), `revenue`, `appointmentCount`, `averageTicket`, `cancellationRate` (percentual, de 0 a 100, com duas casas), `revenueByDay` (`date` e `revenue` de cada dia do período, com 0 nos dias sem receita), `appointmentsByStatus` (`status` e `count` dos sete status, na ordem de RN017) e `agenda` (os agendamentos do dia corrente, por horário: `id`, `status`, `scheduledAt`, `estimatedEndAt`, `clientName`, `vehicle` com `plate`, `brand` e `model`, `services` com `id` e `name`, e `total`, com os dados copiados no agendamento, RN037); 400 período inválido ou maior que 12 meses.
 
 #### `POST /api/admin/dashboard/analysis`
 
