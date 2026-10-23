@@ -5,6 +5,10 @@ import {
   isSamePeriod,
   type Period,
 } from "@/components/admin/dashboard/dashboard-period";
+import {
+  RevenueChartCard,
+  StatusChartCard,
+} from "@/components/admin/dashboard/chart-card";
 import { IndicatorCards } from "@/components/admin/dashboard/indicator-cards";
 import { PeriodSelector } from "@/components/admin/dashboard/period-selector";
 import { TodaySchedule } from "@/components/admin/dashboard/today-schedule";
@@ -117,6 +121,12 @@ function DashboardContent({
         </p>
       )}
       <IndicatorCards dashboard={dashboard} />
+      <div className="grid gap-8 xl:grid-cols-3">
+        <div className="xl:col-span-2">
+          <RevenueChartCard days={dashboard.revenueByDay} />
+        </div>
+        <StatusChartCard statuses={dashboard.appointmentsByStatus} />
+      </div>
       <TodaySchedule agenda={dashboard.agenda} />
     </div>
   );
@@ -129,6 +139,10 @@ function LoadingPlaces() {
         {Array.from({ length: INDICATOR_PLACES }, (_, index) => (
           <Skeleton key={index} className="h-36 rounded-xl" />
         ))}
+      </div>
+      <div className="grid gap-8 xl:grid-cols-3">
+        <Skeleton className="h-84 rounded-xl md:h-92 xl:col-span-2" />
+        <Skeleton className="h-84 rounded-xl md:h-92" />
       </div>
       <div className="flex flex-col gap-3">
         {Array.from({ length: AGENDA_PLACES }, (_, index) => (
