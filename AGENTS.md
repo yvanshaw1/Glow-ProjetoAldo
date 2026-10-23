@@ -2,7 +2,7 @@
 
 Sistema web de uma empresa de estética automotiva: portal público e do cliente (catálogo, conta, veículos, agendamento e acompanhamento) e painel administrativo (dashboard, agendamentos, serviços, clientes, equipe e configurações). MVP acadêmico, com entrega final na AV3 (início de dezembro de 2026).
 
-Stack: Next.js 16.4 (App Router) e React 19.3 em TypeScript 6.0, Tailwind CSS 4.3 com shadcn/ui sobre Base UI, Zod 4.6, React Hook Form 7.90, Supabase (PostgreSQL, Auth e Storage) via supabase-js 2.117 e @supabase/ssr 0.12, com a CLI do Supabase 2.120 para as migrations, o Groq (modelo de linguagem da análise do dashboard, em plano gratuito), Vitest 5, ESLint 9, Prettier 3.9, Node.js 24 LTS e Vercel; Docker 29 e Docker Compose 5 para executar a aplicação em contêiner.
+Stack: Next.js 16.4 (App Router) e React 19.3 em TypeScript 6.0, Tailwind CSS 4.3 com shadcn/ui sobre Base UI, Zod 4.6, React Hook Form 7.90, Recharts 3.10 (gráficos do dashboard), Supabase (PostgreSQL, Auth e Storage) via supabase-js 2.117 e @supabase/ssr 0.12, com a CLI do Supabase 2.120 para as migrations, o Groq (modelo de linguagem da análise do dashboard, em plano gratuito), Vitest 5, ESLint 9, Prettier 3.9, Node.js 24 LTS e Vercel; Docker 29 e Docker Compose 5 para executar a aplicação em contêiner.
 
 ## Antes de qualquer tarefa
 
