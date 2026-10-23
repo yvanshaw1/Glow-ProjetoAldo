@@ -6,6 +6,7 @@ Indicadores, gráfico de receita por dia (Recharts, carregado sob demanda), agen
 
 - componentes `.tsx` deste módulo nesta interface, em `kebab-case` (ex.: `dashboard-form.tsx`)
 - formulários com React Hook Form e os esquemas de `src/shared/validation/`
+- funções puras só da tela do dashboard, como os atalhos do período (`dashboard-period.ts`)
 
 ## Não vai aqui
 
