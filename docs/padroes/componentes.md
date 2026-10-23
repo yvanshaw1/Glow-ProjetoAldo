@@ -1,6 +1,6 @@
 ---
 titulo: Componentes compartilhados das telas
-origem: issue #35, plano memoria/tarefas/35-base-do-painel/01_plano.md (L2, L3)
+origem: issue #35, plano memoria/tarefas/35-base-do-painel/01_plano.md (L2, L3); issue #78, plano memoria/tarefas/78-foco-no-reagendamento/01_plano.md (L2)
 relacionados: [RNF002, RNF003, RNF004, RNF005, RNF008, RNF011, RN017, RN035, 0055]
 ---
 
@@ -28,6 +28,7 @@ Parte de [frontend.md](frontend.md). Estilo: [design.md](design.md). Código: `s
 - A indicação mostra o número de cada etapa e o título da atual, com `aria-current="step"`; os outros títulos aparecem quando o formulário tem largura para eles. O título da atual encolhe com reticências quando não cabe, e o leitor de tela ouve o título inteiro. Ao mudar de etapa, o foco vai ao título dela.
 - "Próximo" confere só os campos da etapa; "Voltar" não confere nada; o último botão envia tudo. Um erro da API num campo de outra etapa leva a ela.
 - Na primeira etapa, "Cancelar" fica no lugar de "Voltar" quando o formulário está numa janela; numa página, como `/booking`, a primeira etapa não tem esse botão.
+- Enquanto o formulário lê a API de novo a cada escolha, como a prévia do agendamento, os campos continuam habilitados e o foco fica onde está (RNF005); só o botão de envio espera a resposta, indisponível com `aria-disabled`, sem perder o foco.
 
 ## Campo monetário (RN035)
 
