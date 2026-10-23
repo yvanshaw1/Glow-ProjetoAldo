@@ -1,6 +1,6 @@
 ---
 issue: 78
-pull_request: 
+pull_request: 79
 ---
 
 # Relatório: Foco perdido na janela de reagendamento de /appointments
