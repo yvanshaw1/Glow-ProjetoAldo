@@ -3,6 +3,7 @@ import {
   formatCalendarDate,
   formatDate,
   formatDateTime,
+  formatDayMonth,
   formatLongDate,
   formatMonth,
   formatTime,
@@ -112,5 +113,20 @@ describe("formatLongDate", () => {
 
   it("writes the first day of a month as it is", () => {
     expect(formatLongDate("2026-11-01")).toBe("domingo, 1 de novembro de 2026");
+  });
+});
+
+describe("formatDayMonth", () => {
+  it("writes a calendar day as the day and the month", () => {
+    expect(formatDayMonth("2026-10-05")).toBe("05/10");
+  });
+
+  it("keeps the calendar day, as an instant it would still be the day before", () => {
+    expect(formatDayMonth("2026-10-01")).toBe("01/10");
+  });
+
+  it("writes the last day of the year and a leap day", () => {
+    expect(formatDayMonth("2026-12-31")).toBe("31/12");
+    expect(formatDayMonth("2028-02-29")).toBe("29/02");
   });
 });
