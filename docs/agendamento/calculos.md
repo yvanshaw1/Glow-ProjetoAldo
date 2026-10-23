@@ -59,7 +59,9 @@ Os indicadores (seção 5) não ficam em `rules/`: são agregações por períod
 
 - Receita: soma de `total` dos agendamentos `completed` ou `rescheduled` com `completed_at` no período; receita por dia agrupada por `completed_at`.
 - Ticket médio: receita dividida pela quantidade desses agendamentos.
-- Taxa de cancelamento: cancelados sobre o total de agendamentos do período. A data que define o período para essa taxa (`scheduled_at` ou `created_at`) não está definida: perguntar no plano.
+- Taxa de cancelamento: cancelados sobre o total de agendamentos do período.
+- Quantidade de agendamentos e taxa de cancelamento: o período é o da data marcada (`scheduled_at`), e a quantidade conta todos os status. Sem agendamentos pagos, o ticket médio é zero.
+- Agenda do dia (RF043): os agendamentos de qualquer status marcados para o dia corrente no fuso da empresa.
 - Período padrão: mês atual; no máximo 12 meses (RN035).
 
 ## 6. Análise do dashboard (RN038, RN039)

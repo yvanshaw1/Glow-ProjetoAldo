@@ -3,7 +3,7 @@ id: RN035
 titulo: Formatos dos dados
 assunto: plataforma
 tema: Dados
-origem: Documentação de Análise do Sistema, seção 9.1 (Quadro 20)
+origem: Documentação de Análise do Sistema, seção 9.1 (Quadro 20); issue #60, plano memoria/tarefas/60-telas-do-dashboard/01_plano.md (L4)
 relacionados: [UC09, UC13, UC15, UC21]
 ---
 
@@ -35,7 +35,7 @@ Em todos os campos de texto, exceto a senha, a tabulação e a quebra de linha v
 | Nomes de serviço, categoria e cargo | De 2 a 60 caracteres, gravados com a inicial maiúscula e as demais letras como digitadas. O nome não pode se repetir entre os serviços não excluídos, entre as categorias nem entre os cargos. | Lavagem completa |
 | Descrição do cargo ocupado pelo funcionário | De 2 a 60 caracteres, gravada com a inicial maiúscula e as demais letras como digitadas. | Supervisor de lavagem |
 | Horários de funcionamento e pausa | Em hora cheia ou meia hora. Nos dias de funcionamento, a abertura e o encerramento são obrigatórios, o encerramento é posterior à abertura e a pausa, quando houver, fica dentro do expediente. | 08:00 às 18:00 |
-| Período do dashboard | Data inicial igual ou anterior à final, com intervalo de até 12 meses. Sem informação, vale o mês atual. | 01/10/2026 a 31/10/2026 |
+| Período do dashboard | Data inicial igual ou anterior à final, com intervalo de até 12 meses, ou seja, até 366 dias contando as duas datas. Sem informação, vale o mês atual. | 01/10/2026 a 31/10/2026 |
 | Nome da empresa, endereço e descrições | Até 100 caracteres no nome da empresa, 200 no endereço e 500 nas descrições, em texto puro. | Como informado. |
 | Termo de busca | Até 100 caracteres. | Como informado. |
 
