@@ -104,6 +104,12 @@ export function formatMonth(date: string): string {
   return monthFormat.format(new Date(`${date}T00:00:00Z`));
 }
 
+// A calendar day as 05/10, the label of the axis of the revenue by day of the
+// dashboard (UC09). It has no time zone, so the day never moves.
+export function formatDayMonth(date: string): string {
+  return date.replace(CALENDAR_DATE_PATTERN, "$3/$2");
+}
+
 // A calendar day in full, as quarta-feira, 28 de outubro de 2026: the name of
 // a day of the booking calendar for a screen reader.
 export function formatLongDate(date: string): string {
