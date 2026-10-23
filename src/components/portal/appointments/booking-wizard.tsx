@@ -194,7 +194,18 @@ export function BookingWizard(props: BookingWizardProps = {}) {
   const isUnavailable =
     mode === "reschedule" && isPreviewReady && !hasAvailableServices;
   const isInvalidStatus = mode === "edit" && record?.status !== "scheduled";
-  const isBlocked = needsReload || (mode === "reschedule" && !isPreviewReady);
+  // UC25 FE02 and RN005 are known only from the preview, so the rescheduling
+  // is not confirmed before it answers. Only the send waits: a disabled field
+  // would take the focus away from the choice that asked for the new preview
+  // (RNF005).
+  const isAwaitingPreview = mode === "reschedule" && !isPreviewReady;
+  const cancelRef = useRef<HTMLButtonElement>(null);
+
+  // The step form leaves the screen with the focus in it when no service is
+  // available, so the focus goes to the "Cancelar" that stays.
+  useEffect(() => {
+    if (isUnavailable) cancelRef.current?.focus();
+  }, [isUnavailable]);
 
   // RNF011: keep the conflict notice, but replace every value and the version.
   // A failed reload leaves the old version unusable until a successful retry.
@@ -220,7 +231,9 @@ export function BookingWizard(props: BookingWizardProps = {}) {
   }
 
   async function submit(values: BookingFormValues) {
-    if (isBlocked || isUnavailable || isInvalidStatus) return;
+    if (needsReload || isAwaitingPreview || isUnavailable || isInvalidStatus) {
+      return;
+    }
     clearFailure();
     if (!values.vehicle || !values.date || !values.time) return;
     const chosenInstant = toCompanyInstant(values.date, values.time);
@@ -337,7 +350,7 @@ export function BookingWizard(props: BookingWizardProps = {}) {
           )}
           {!isUnavailable && !isInvalidStatus && (
             <fieldset
-              disabled={isBlocked}
+              disabled={needsReload}
               aria-busy={isReloading}
               className="min-w-0"
             >
@@ -348,6 +361,7 @@ export function BookingWizard(props: BookingWizardProps = {}) {
                 onSubmit={submit}
                 submitLabel={configuration.submitLabel}
                 loadingLabel={configuration.loadingLabel}
+                isSubmitDisabled={isAwaitingPreview}
                 onCancel={change?.onCancel}
               >
                 {(stepIndex) =>
@@ -356,8 +370,9 @@ export function BookingWizard(props: BookingWizardProps = {}) {
               </StepForm>
             </fieldset>
           )}
-          {change && (isBlocked || isUnavailable || isInvalidStatus) && (
+          {change && (needsReload || isUnavailable || isInvalidStatus) && (
             <Button
+              ref={cancelRef}
               variant="ghost"
               disabled={isReloading}
               onClick={change.onCancel}

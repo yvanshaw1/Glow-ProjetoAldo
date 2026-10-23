@@ -1,6 +1,6 @@
 ---
 titulo: Padrões de testes e qualidade
-origem: Documentação de Desenvolvimento com IA, seção 8; Documentação de Arquitetura de Software, seção 9
+origem: Documentação de Desenvolvimento com IA, seção 8; Documentação de Arquitetura de Software, seção 9; issue #78, plano memoria/tarefas/78-foco-no-reagendamento/01_plano.md (L1)
 relacionados: [RN005, RN006, RN009, RN010, RN012, RN013, RN014, RN015, RN017, RN018, RN019, RN020, RN032, RN033, RN034, RN035, RN038, RN039]
 ---
 
@@ -37,7 +37,7 @@ Regras de negócio e esquemas são escritos com TDD: teste do caso, que falha (v
 - Um teste, um comportamento; o nome é a especificação, em inglês: `rejects a password without a number`, nunca `test validate 2`.
 - Casos de borda de cada regra: vazio e ausente, zero e negativo, primeiro e último horário do expediente, virada do dia, desconto de 100%.
 - Rápidos, independentes e repetíveis: sem banco, sem rede, sem espera, sem depender da ordem; a data atual é sempre passada pelo teste.
-- Todo defeito corrigido ganha um teste que falhava antes da correção.
+- Todo defeito corrigido ganha um teste que falhava antes da correção; o defeito de tela, que a decisão 0052 deixa à mão, ganha o roteiro manual do plano, executado antes da correção (reproduz o defeito) e depois dela, com o resultado nas notas e no relatório.
 - A suíte inteira roda em poucos segundos, para ser executada a cada alteração, não só no CI.
 
 ## Testes manuais e aceitação

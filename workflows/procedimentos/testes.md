@@ -16,7 +16,7 @@ Ciclo TDD em cada regra ou esquema:
 2. Escrever o mínimo de código para passar.
 3. Melhorar o código com todos os testes passando.
 
-Defeito corrigido: primeiro um teste que reproduz o defeito e falha; depois a correção.
+Defeito corrigido: primeiro um teste que reproduz o defeito e falha; depois a correção. No defeito de tela, o teste é o roteiro manual do plano, que reproduz o defeito antes e passa depois.
 
 ## Contêiner (Docker)
 

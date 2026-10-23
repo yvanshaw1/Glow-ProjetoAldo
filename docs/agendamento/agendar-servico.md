@@ -1,7 +1,7 @@
 ---
 titulo: Conteúdo do assistente de agendamento
 assunto: agendamento
-origem: issue #59, plano memoria/tarefas/59-agendar-e-editar/01_plano.md (L2, L3, L4, L7, L8) e complemento memoria/tarefas/59-editar-e-reagendar/01_plano.md (L9)
+origem: issue #59, plano memoria/tarefas/59-agendar-e-editar/01_plano.md (L2, L3, L4, L7, L8), complemento memoria/tarefas/59-editar-e-reagendar/01_plano.md (L9) e issue #78, plano memoria/tarefas/78-foco-no-reagendamento/01_plano.md (L2)
 relacionados: [UC05, UC06, UC25, UC26, RF019, RF020, RF021, RF022, RF023, RF024, RF025, RF026, RF027, RF031, RF032, RN004, RN005, RN006, RN008, RN011, RN013, RN015, RN016, RN020, RN032, RN033, RNF002, RNF011]
 ---
 
@@ -73,7 +73,7 @@ Título "Agendamento confirmado", texto "O seu agendamento para <data> às <hora
 As ações do [detalhe de `/appointments`](meus-agendamentos.md) abrem o mesmo assistente numa janela sobre ele: "Editar agendamento" ou "Reagendar serviço". "Cancelar" na primeira etapa ou Esc voltam ao detalhe; a janela não fecha durante o envio. No celular, fica ancorada embaixo, com rolagem interna até 90% da altura. O aviso de demonstração continua sendo o da página.
 
 - **Edição (UC26):** as quatro etapas vêm preenchidas com veículo, serviços e adicionais, data, horário e pagamento do registro. O cadastro de veículo não é oferecido, para não abrir uma terceira janela. O calendário abre no mês do agendamento; manter o instante original é permitido mesmo se já passou ou a disponibilidade mudou (RN033). Ele continua selecionável ao navegar entre meses. As outras opções respeitam o funcionamento atual e precisam ser futuras e posteriores ao original. A prévia recebe `appointmentId`; o envio leva `updatedAt` sem conversão. Botão "Salvar alterações" ("Salvando…").
-- **Reagendamento (UC25):** só "Data e horário" e "Pagamento e resumo", com essas escolhas vazias. Veículo e serviços do original ficam fixos; valores e duração vêm da prévia pelo catálogo atual (RN020). Botão "Confirmar reagendamento" ("Reagendando…"). O envio leva somente pagamento e instante.
+- **Reagendamento (UC25):** só "Data e horário" e "Pagamento e resumo", com essas escolhas vazias. Veículo e serviços do original ficam fixos; valores e duração vêm da prévia pelo catálogo atual (RN020). Botão "Confirmar reagendamento" ("Reagendando…"). O envio leva somente pagamento e instante. Enquanto a prévia não responde, ou se ela falha, "Confirmar reagendamento" fica indisponível; as escolhas continuam habilitadas, e o resumo mostra o carregamento ou a falha com "Tentar novamente".
 - **Indisponíveis (UC25 FE02):** depois da resposta atual da prévia, mostrar no resumo "Não estão mais disponíveis e ficaram de fora: <nomes>." para os serviços do original ausentes. Não anunciar remoções durante carregamento ou falha.
 - **Sem principal/complementar (RN005):** impedir a confirmação e exibir "Nenhum serviço principal ou complementar deste agendamento está disponível. Para escolher outros serviços, faça um novo agendamento.", com "Agendar outro serviço" para `/booking` e a opção de voltar ao detalhe. Não substituir serviços automaticamente.
 - **Conflito (RNF011):** `VERSION_CONFLICT` mantém o aviso no topo, com foco, e relê o registro, substituindo os campos e a versão. Falha da releitura oferece "Tentar novamente" e impede envio com a versão antiga; mudança para outro status impede continuar a edição. As ações do detalhe também acompanham o registro relido.
