@@ -1,6 +1,7 @@
 "use client";
 
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
+import { ServiceFormDialog } from "@/components/admin/catalog/service-form-dialog";
 import { ServiceActiveButton } from "@/components/admin/catalog/service-active-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,9 +19,15 @@ type ServiceCardProps = {
   service: AdminServiceSummary;
   onChange: () => void;
   onFailed: (error: ApiError) => void;
+  onGoToCategories: () => void;
 };
 
-export function ServiceCard({ service, onChange, onFailed }: ServiceCardProps) {
+export function ServiceCard({
+  service,
+  onChange,
+  onFailed,
+  onGoToCategories,
+}: ServiceCardProps) {
   const { id, name, type, description, category, isActive } = service;
   return (
     <article className="flex h-full flex-col gap-3 rounded-xl bg-background p-5 shadow-neu-md">
@@ -53,6 +60,12 @@ export function ServiceCard({ service, onChange, onFailed }: ServiceCardProps) {
       </p>
       <p className="font-semibold">{formatPrice(service)}</p>
       <div className="mt-auto flex flex-wrap gap-2 pt-2">
+        <ServiceFormDialog
+          serviceId={id}
+          onSaved={onChange}
+          onGoToCategories={onGoToCategories}
+          trigger={<Button variant="outline">Editar</Button>}
+        />
         <ServiceActiveButton
           id={id}
           isActive={isActive}
