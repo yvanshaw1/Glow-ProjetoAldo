@@ -47,14 +47,14 @@ Acesso: Perfis `staff` ou `admin` com a permissão `services`.
 Lista os serviços (UC14).
 
 - Entrada: `type, includeInactive, search`
-- Resposta: **200** lista de serviços.
+- Resposta: **200** lista paginada, em ordem alfabética, de `id`, `type`, `name`, `description` (ou `null`), `category` (`id` e `name`, ou `null`), `avgDurationMinutes`, `pricingMode` (ou `null`), `fixedPrice` (ou `null`), `startingPrice` (o menor valor por porte, ou `null`), `isActive`, `isCategoryActive` (ou `null`) e `updatedAt`. O serviço de categoria inativa consta na lista (RN031).
 
 #### `GET /api/admin/services/:id`
 
 Detalha um serviço, com valores e vínculos.
 
 - Entrada: Nenhuma.
-- Resposta: **200** serviço completo.
+- Resposta: **200** os campos da lista e `imageUrl` (ou `null`), `prices` (um valor por porte, com as chaves `small`, `medium`, `large` e `extra_large`, ou `null`), `additionalIds` (principal) e `mainServiceIds` (adicional), vazios no tipo que não os tem.
 
 #### `POST /api/admin/services`
 
@@ -89,7 +89,7 @@ Envia a imagem de um serviço.
 Lista as categorias.
 
 - Entrada: `includeInactive`
-- Resposta: **200** lista de categorias.
+- Resposta: **200** lista paginada, em ordem alfabética, de `id`, `name`, `description`, `isActive` e `updatedAt`.
 
 #### `POST /api/admin/categories`
 
