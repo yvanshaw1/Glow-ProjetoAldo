@@ -140,6 +140,9 @@ export function StepForm<T extends FieldValues, R extends FieldValues>({
   );
 }
 
+// Up to this many steps, the line to the next one shows at any width.
+const MAX_STEPS_WITH_LINES = 4;
+
 type StepIndicatorProps<T extends FieldValues> = {
   steps: FormStep<T>[];
   stepIndex: number;
@@ -154,6 +157,9 @@ function StepIndicator<T extends FieldValues>({
   steps,
   stepIndex,
 }: StepIndicatorProps<T>) {
+  // With more than four steps, the lines between the others give way to the
+  // title of the current one on a narrow form.
+  const isCompact = steps.length > MAX_STEPS_WITH_LINES;
   return (
     <ol aria-label="Etapas" className="flex items-center gap-2">
       {steps.map((step, index) => {
@@ -166,7 +172,11 @@ function StepIndicator<T extends FieldValues>({
             className={cn(
               "flex min-w-0 items-center gap-2",
               isCurrent && "flex-auto",
-              !isCurrent && index < steps.length - 1 && "min-w-13 flex-1",
+              !isCurrent &&
+                index < steps.length - 1 &&
+                (isCompact
+                  ? "min-w-7 @md:min-w-13 @md:flex-1"
+                  : "min-w-13 flex-1"),
               !isCurrent && index === steps.length - 1 && "min-w-7",
             )}
           >
@@ -202,7 +212,13 @@ function StepIndicator<T extends FieldValues>({
               </>
             )}
             {index < steps.length - 1 && (
-              <span aria-hidden className="h-px min-w-4 flex-1 bg-border" />
+              <span
+                aria-hidden
+                className={cn(
+                  "h-px min-w-4 flex-1 bg-border",
+                  isCompact && !isCurrent && "hidden @md:block",
+                )}
+              />
             )}
           </li>
         );
