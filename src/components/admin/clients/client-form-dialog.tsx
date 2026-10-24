@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactElement } from "react";
+import { useEffect, useRef, useState, type ReactElement } from "react";
 import { useForm } from "react-hook-form";
 import {
   EmailField,
@@ -70,28 +70,32 @@ export function ClientFormDialog({
   onConflict,
 }: ClientFormDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { control, handleSubmit, setError, reset, formState } =
-    useForm<ClientFormValues>({
-      mode: "onTouched",
-      defaultValues: toFormValues(client),
-    });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { control, handleSubmit, setError, reset } = useForm<ClientFormValues>({
+    defaultValues: toFormValues(client),
+  });
   const { failure, showFailure, clearFailure } = useFormFailure(setError);
 
   // After a version conflict the client is read again, and its current data
   // replaces what was typed.
+  const shownClient = useRef(client);
   useEffect(() => {
+    if (shownClient.current === client) return;
+    shownClient.current = client;
     reset(toFormValues(client));
   }, [client, reset]);
 
   // docs/padroes/componentes.md, Diálogos: the dialog does not close during
-  // the call. Each opening starts from the data of the client.
+  // the call. The window opens again with the data of the client, not with
+  // what was typed and discarded; the fields only register once it is open,
+  // so the reset comes when it closes.
   function changeOpen(open: boolean) {
-    if (formState.isSubmitting) return;
-    if (open) {
+    if (isSubmitting) return;
+    setIsOpen(open);
+    if (!open) {
       reset(toFormValues(client));
       clearFailure();
     }
-    setIsOpen(open);
   }
 
   async function submit({
@@ -102,6 +106,7 @@ export function ClientFormDialog({
     password,
   }: ClientFormValues) {
     clearFailure();
+    setIsSubmitting(true);
     try {
       if (client) {
         await apiRequest<AdminClient>(`${CLIENTS_PATH}/${client.id}`, {
@@ -121,13 +126,15 @@ export function ClientFormDialog({
       if (error instanceof ApiError && error.code === "VERSION_CONFLICT") {
         onConflict?.();
       }
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={changeOpen}>
       <DialogTrigger render={trigger} />
-      <DialogContent showCloseButton={!formState.isSubmitting}>
+      <DialogContent showCloseButton={!isSubmitting}>
         <DialogHeader>
           <DialogTitle>
             {client ? "Editar cliente" : "Novo cliente"}
@@ -148,17 +155,13 @@ export function ClientFormDialog({
           <DialogFooter>
             <DialogClose
               render={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  disabled={formState.isSubmitting}
-                />
+                <Button type="button" variant="ghost" disabled={isSubmitting} />
               }
             >
               Cancelar
             </DialogClose>
             <SubmitButton
-              isLoading={formState.isSubmitting}
+              isLoading={isSubmitting}
               loadingLabel={client ? "Salvando…" : "Cadastrando…"}
             >
               {client ? "Salvar alterações" : "Cadastrar cliente"}
