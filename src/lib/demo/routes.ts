@@ -42,6 +42,36 @@ export const DEMO_ROUTES: readonly DemoRoute[] = [
         (catalog) => catalog.answerPublicServices,
       ),
   },
+  // docs/catalogo/rotas.md, built by #40 and #44.
+  {
+    method: "GET",
+    path: "/api/admin/services",
+    load: () =>
+      import("@/lib/demo/admin-catalog").then(
+        (catalog) => catalog.answerAdminServices,
+      ),
+  },
+  {
+    method: "GET",
+    path: "/api/admin/services/:id",
+    load: () =>
+      import("@/lib/demo/admin-catalog").then(
+        (catalog) => catalog.answerAdminService,
+      ),
+  },
+  {
+    method: "GET",
+    path: "/api/admin/categories",
+    load: () =>
+      import("@/lib/demo/admin-catalog").then(
+        (catalog) => catalog.answerAdminCategories,
+      ),
+  },
+  { method: "POST", path: "/api/admin/services" },
+  { method: "PATCH", path: "/api/admin/services/:id" },
+  { method: "DELETE", path: "/api/admin/services/:id" },
+  { method: "POST", path: "/api/admin/categories" },
+  { method: "PATCH", path: "/api/admin/categories/:id" },
   // docs/clientes/rotas.md, built in phase 3.
   {
     method: "GET",
