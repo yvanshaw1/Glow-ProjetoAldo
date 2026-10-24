@@ -1,8 +1,8 @@
 ---
 titulo: Conteúdo da página de agendamentos do painel
 assunto: agendamento
-origem: issue #61, plano memoria/tarefas/61-agendamentos-do-painel/01_plano.md (L1, L3, L4, L5)
-relacionados: [UC10, UC12, UC25, RF044, RF045, RF046, RF047, RF048, RF049, RF052, RF053, RF054, RF056, RN010, RN012, RN017, RN018, RN019, RN020, RN037, RNF004, RNF008]
+origem: issue #61, plano memoria/tarefas/61-agendamentos-do-painel/01_plano.md (L1, L3, L4, L5), e issue #62, plano memoria/tarefas/62-novo-agendamento-e-edicao/01_plano.md (L3)
+relacionados: [UC10, UC11, UC12, UC25, RF044, RF045, RF046, RF047, RF048, RF049, RF052, RF050, RF051, RF053, RF054, RF056, RN003, RN004, RN010, RN012, RN017, RN018, RN019, RN020, RN037, RNF004, RNF008]
 ---
 
 # Conteúdo da página de agendamentos do painel
@@ -83,6 +83,19 @@ Janela sobre o detalhe de um agendamento "Finalizado", que lê o agendamento ao 
 - "Forma de pagamento": "Crédito", "Débito", "Pix" e "Dinheiro", cada uma com o total que a rota devolve para ela e a marca de escolhida (a cor nunca é a única pista); começa na forma escolhida no agendamento. O "Total" é o da forma marcada, com "Acréscimo de <percentual>" ou "Desconto de <percentual>" quando ela tem percentual ([RN012](../configuracoes/RN012-percentual-da-forma-de-pagamento.md), [RN010](RN010-valor-total.md)).
 - Botões "Cancelar" (com o foco ao abrir) e "Confirmar conclusão" ("Concluindo…", indisponível sem perder o foco). A janela não fecha durante o envio; a falha aparece no topo, com o foco, e, concluído, as duas janelas fecham. Se o agendamento já não está "Finalizado" (409), a janela mostra a mensagem de `INVALID_STATUS` e o detalhe segue o status atual.
 
+## Novo agendamento (UC11, RF050, RF051)
+
+Botão "Novo agendamento", com o ícone `CalendarPlus`, ao lado das abas (abaixo delas no celular, na largura toda). Abre a janela "Novo agendamento", ancorada embaixo no celular, com rolagem interna até 90% da altura. O foco começa em "Cancelar", que, como Esc, fecha a janela; a janela não fecha durante o envio, e o foco volta ao botão. O "Resumo do pedido" fica abaixo das etapas, com a linha "Cliente" antes do veículo, e os valores, a duração e a previsão vêm sempre da prévia (`POST /api/admin/appointments/preview`, [rotas.md](rotas.md)); a tela não soma nem calcula.
+
+Cinco etapas no formulário em etapas, como o wireframe: "Cliente", "Veículo", "Serviços", "Data e horário" e "Pagamento e resumo". A forma de pagamento fica na última etapa, junto do total que ela muda, como no assistente do cliente ([agendar-servico.md](agendar-servico.md), Etapas). "Próximo" confere a escolha da etapa, e a mensagem some assim que ela é feita; voltar a uma etapa antes de confirmar mantém as outras (RF051, FA01).
+
+- **Cliente** (passo 2): legenda "Para qual cliente é o agendamento?"; campo "Buscar cliente", com a ajuda "Nome ou e-mail" (300 ms depois da última tecla, até 100 caracteres); Enter nele não avança a etapa. Antes do texto, "Digite o nome ou o e-mail para buscar o cliente." e nenhuma leitura. Cada opção traz o nome e o e-mail, em páginas de 10. Escolhido, aparece "Cliente escolhido: <nome> · <e-mail>". Sem resultado (FE01), "Nenhum cliente encontrado" e "Confira o que foi digitado ou cadastre o cliente em Clientes.", com o link "Cadastrar cliente" para `/admin/clients`. Sem escolha, "Escolha o cliente.". Trocar o cliente tira o veículo, os serviços e os adicionais, que são dele (RN003, RN004).
+- **Veículo** (passo 3): legenda "Qual veículo de <nome do cliente> será atendido?"; as opções como no assistente do cliente. Sem veículo (FE02), "Nenhum veículo cadastrado" e "Cadastre o veículo nos detalhes do cliente, em Clientes, e volte para agendar.", com o link "Ir para Clientes". Sem escolha, "Escolha o veículo.".
+- **Serviços** (passo 4, FA02): legenda "Quais serviços serão feitos?"; o resto, como no assistente do cliente (RN005, RN006, RN009). Trocar o veículo mantém os serviços marcados e mostra os valores do novo porte.
+- **Data e horário e Pagamento e resumo** (passos 5 e 6): como no assistente do cliente (RN013, RN015, RN016). Botão "Confirmar agendamento" ("Agendando…"), indisponível sem perder o foco enquanto a prévia não responde. A falha, como o `NOT_IMPLEMENTED` da demonstração, aparece no topo, com a janela aberta; concluído, a janela fecha e as listagens são lidas de novo (passo 8).
+
+Com mais de quatro etapas, o indicador mostra a linha entre as outras etapas só a partir de 448 px de largura, para o título da etapa atual caber a 360 px ([../padroes/componentes.md](../padroes/componentes.md), Formulário em etapas).
+
 ## Estados (RNF004)
 
 - Na primeira leitura, o lugar dos cartões fica reservado; numa nova leitura, os anteriores continuam na tela, em "Carregando".
@@ -91,10 +104,10 @@ Janela sobre o detalhe de um agendamento "Finalizado", que lê o agendamento ao 
 
 ## Fora da tela, sem requisito
 
-O "Box", os avisos de atraso e de aguardando faturamento, a marca "Multi-dia", "Ver mais" e "Ver serviços" e os botões de ação no cartão, do wireframe.
+O "Box", os avisos de atraso e de aguardando faturamento, a marca "Multi-dia", "Ver mais" e "Ver serviços" e os botões de ação no cartão, do wireframe; no novo agendamento, o filtro por categoria, o "Sob orçamento", o "Total estimado" na etapa de serviços e o horário de término em cada horário.
 
 ## Onde se aplica
 
 - Requisitos: [RF044 a RF049](requisitos.md), [RF052 a RF054](requisitos.md), [RF056](requisitos.md)
-- Casos de uso: [UC10](UC10-consultar-agendamentos.md), [UC12](UC12-atualizar-status-do-agendamento.md), [UC25](UC25-reagendar-servico-concluido.md)
+- Casos de uso: [UC10](UC10-consultar-agendamentos.md), [UC11](UC11-registrar-agendamento-para-cliente.md), [UC12](UC12-atualizar-status-do-agendamento.md), [UC25](UC25-reagendar-servico-concluido.md)
 - Regras: [RN010](RN010-valor-total.md), [RN017](RN017-sequencia-de-status.md), [RN018](RN018-conclusao-com-pagamento.md), [RN019](RN019-cancelamento.md), [RN020](RN020-reagendamento.md), [RN037](RN037-copia-no-agendamento.md)

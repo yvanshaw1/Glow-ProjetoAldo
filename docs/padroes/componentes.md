@@ -25,7 +25,7 @@ Parte de [frontend.md](frontend.md). Estilo: [design.md](design.md). Código: `s
 ## Formulário em etapas (RNF002)
 
 - Um único formulário (`useForm`) para todas as etapas, no `StepForm`: voltar não perde nada.
-- A indicação mostra o número de cada etapa e o título da atual, com `aria-current="step"`; os outros títulos aparecem quando o formulário tem largura para eles. O título da atual encolhe com reticências quando não cabe, e o leitor de tela ouve o título inteiro. Ao mudar de etapa, o foco vai ao título dela.
+- A indicação mostra o número de cada etapa e o título da atual, com `aria-current="step"`; os outros títulos aparecem quando o formulário tem largura para eles. O título da atual encolhe com reticências quando não cabe, e o leitor de tela ouve o título inteiro. Com mais de quatro etapas, as linhas entre as etapas que não são a atual só aparecem a partir de 448 px, para o título da atual caber no celular. Ao mudar de etapa, o foco vai ao título dela.
 - "Próximo" confere só os campos da etapa; "Voltar" não confere nada; o último botão envia tudo. Um erro da API num campo de outra etapa leva a ela.
 - Na primeira etapa, "Cancelar" fica no lugar de "Voltar" quando o formulário está numa janela; numa página, como `/booking`, a primeira etapa não tem esse botão.
 - Enquanto o formulário lê a API de novo a cada escolha, como a prévia do agendamento, os campos continuam habilitados e o foco fica onde está (RNF005); só o botão de envio espera a resposta, indisponível com `aria-disabled`, sem perder o foco.

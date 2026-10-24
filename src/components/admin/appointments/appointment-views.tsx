@@ -1,6 +1,11 @@
 "use client";
 
+import { CalendarPlusIcon } from "lucide-react";
+import { useState } from "react";
+import { AppointmentFormDialog } from "@/components/admin/appointments/appointment-form-dialog";
 import { AppointmentList } from "@/components/admin/appointments/appointment-list";
+import { AppointmentWizard } from "@/components/admin/appointments/appointment-wizard";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   APPOINTMENT_VIEW_LABELS,
@@ -42,15 +47,39 @@ const VIEW_TEXTS = {
 
 export function AppointmentViews() {
   const [firstView] = APPOINTMENT_VIEWS;
+  // UC11 step 8: a new appointment makes the lists be read again.
+  const [readCount, setReadCount] = useState(0);
   return (
     <Tabs defaultValue={firstView} className="gap-6">
-      <TabsList className="w-full md:w-fit">
-        {APPOINTMENT_VIEWS.map((view) => (
-          <TabsTrigger key={view} value={view}>
-            {APPOINTMENT_VIEW_LABELS[view]}
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <TabsList className="w-full md:w-fit">
+          {APPOINTMENT_VIEWS.map((view) => (
+            <TabsTrigger key={view} value={view}>
+              {APPOINTMENT_VIEW_LABELS[view]}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <AppointmentFormDialog
+          trigger={
+            <Button className="w-full md:w-auto">
+              <CalendarPlusIcon aria-hidden />
+              Novo agendamento
+            </Button>
+          }
+          title="Novo agendamento"
+        >
+          {({ close, setSubmitting }) => (
+            <AppointmentWizard
+              onCancel={close}
+              onCreated={() => {
+                close();
+                setReadCount((count) => count + 1);
+              }}
+              onSubmittingChange={setSubmitting}
+            />
+          )}
+        </AppointmentFormDialog>
+      </div>
       {/* Each tab mounts its list when chosen, so it reads the route again
           and starts with no search or filter. The cards have their own
           buttons, so the panel takes no focus stop of its own. */}
@@ -65,6 +94,7 @@ export function AppointmentViews() {
             {VIEW_TEXTS[view].description}
           </p>
           <AppointmentList
+            key={readCount}
             view={view}
             emptyTitle={VIEW_TEXTS[view].emptyTitle}
             emptyDescription={VIEW_TEXTS[view].emptyDescription}
