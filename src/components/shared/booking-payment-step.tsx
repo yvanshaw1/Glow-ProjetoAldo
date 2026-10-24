@@ -2,7 +2,7 @@
 
 import { useId, type ReactNode } from "react";
 import { useController, useWatch } from "react-hook-form";
-import type { BookingFormValues } from "@/components/portal/appointments/booking-wizard";
+import type { BookingFormValues } from "@/components/shared/booking-form-values";
 import {
   FieldDescription,
   FieldError,

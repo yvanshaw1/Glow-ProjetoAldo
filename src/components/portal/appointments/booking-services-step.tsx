@@ -3,7 +3,7 @@
 import { CheckIcon, ClipboardXIcon } from "lucide-react";
 import { useEffect, useId, useRef, type Ref } from "react";
 import { useController, useWatch } from "react-hook-form";
-import type { BookingFormValues } from "@/components/portal/appointments/booking-wizard";
+import type { BookingFormValues } from "@/components/shared/booking-form-values";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ListPagination } from "@/components/shared/list-pagination";
 import { Alert, AlertDescription } from "@/components/ui/alert";

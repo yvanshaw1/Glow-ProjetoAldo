@@ -131,3 +131,26 @@ O PR 3 tem 792 linhas em `src/` (detalhe 364, conclusão 354, "Avançar" 56 e 18
 ## 2026-10-24 – desvio: etapa 03 do PR 3
 
 A pedido do Yvan, que escolheu abrir o PR inteiro (792 linhas em `src/`), com a justificativa do tamanho na descrição: ramificação `feat/61-appointment-actions` enviada e o PR aberto como rascunho (`Refs #61`), sem pedido de revisão. `02_relatorio.md` atualizado com os PRs 1 a 3; a `origin/main` continuava em 93a24ae e `npm run check` passou de novo. O PR 4 espera a incorporação deste.
+
+
+## 2026-10-24 – decisão: PR 3 incorporado, PR 4 começado
+
+O PR #86 foi incorporado em d42d01c (24/10/2026, 15:16 UTC). Etapa 02 do PR 4 (reagendamento), na ramificação `feat/61-appointment-reschedule`, criada da `origin/main` com `git switch --no-track -c`; a local `feat/61-appointment-actions` foi apagada depois de conferir que a árvore era igual à da `origin/main`.
+
+## 2026-10-24 – desvio: PR 4, o que mudou em relação ao plano
+
+- **Formulário do painel.** O `RescheduleAppointmentDialog` (242 linhas) repete a prévia, o envio e o aviso de UC25 FE02 do modo `reschedule` do `BookingWizard`, como P2 (opção 1) previu; a unificação num formulário compartilhado fica para quando a #62 trouxer o segundo assistente completo.
+- **Tipos movidos.** `BookingFormValues` e `BookingVehicle` saem de `booking-wizard.tsx` para `src/components/shared/booking-form-values.ts`, porque as etapas movidas os importavam do assistente do portal (o `shared/` não importa de `portal/`). O assistente do cliente e as etapas de veículo e de serviços só trocam a importação; nada mais mudou neles.
+- **Aviso sem serviço disponível.** Fica sem o botão "Agendar outro serviço" do cliente (o `/booking` é do cliente) e diz só "faça um novo agendamento"; o botão "Novo agendamento" do painel é da #62.
+- **Plano.** `status: concluido` neste PR, como o plano manda (etapa 03, passo 4); `aprovado_por` e `aprovado_em` não mudaram.
+
+## 2026-10-24 – descoberta: PR 4, o que a verificação cobriu
+
+Mesmo ambiente dos PRs anteriores (banco local, admin de teste, `next start`, Chrome sem interface; roteiros `verify-reschedule.mjs`, `verify-unavailable.mjs` e `lh-snapshots-reschedule.mjs`, mais `verify-detail.mjs` de novo):
+
+- **Reagendamento do painel**, nas quatro combinações, sem rolagem horizontal e com a janela dentro da tela: o detalhe do "Concluído" tem só "Reagendar"; a janela tem os títulos "Reagendar serviço", "Etapas do reagendamento" e "Resumo do pedido" e o foco em "Cancelar"; a etapa 1 "Data e horário", "Próximo" sem escolha pede "Escolha a data."; com a data e o horário, o resumo traz "Previsão de conclusão"; a etapa 2 "Pagamento e resumo" tem "Crédito", "Débito", "Pix" e "Dinheiro"; confirmar sem forma pede "Escolha a forma de pagamento."; com "Pix", "Reagendando…" fica `aria-disabled` e a recusa do `NOT_IMPLEMENTED` aparece no topo, com o foco e a janela aberta; Esc fecha só o reagendamento, e o foco volta a "Reagendar". "Cancelado" e "Reagendado" não têm ação. Nenhuma requisição a `/api/admin/*`.
+- **Serviços fora do catálogo** (`patch-preview.mjs`, sem commit, desfeita por `git checkout -- src` e conferida por `git status`): com o primeiro serviço de fora, o resumo diz "Não estão mais disponíveis e ficaram de fora: Lavagem completa." e o formulário continua; sem nenhum, o aviso de nenhum serviço disponível, sem "Próximo" nem "Confirmar reagendamento", com o foco em "Cancelar".
+- **Regressão do cliente** (conta de teste criada por `POST /api/auth/register` no banco local, credenciais no scratchpad): `/appointments`, aba "Histórico", detalhe do "Concluído" e "Reagendar" abrem nas duas etapas, com o foco em "Cancelar", e a confirmação mostra a recusa; `/booking` lista 2 veículos e 11 serviços e chega ao "Pagamento e resumo" com "Previsão de conclusão" no resumo, sem transbordar.
+- **Detalhe e ações do PR 3** conferidos de novo em 360 × 800 claro e 1440 × 900 escuro, agora com "Reagendar" no "Concluído".
+- **Lighthouse 13.5.0:** acessibilidade 100 nas 16 capturas de estado (detalhe do "Concluído", etapas 1 e 2 e falha do reagendamento, no celular e no computador, claro e escuro).
+- **Registro do `next start`:** 241 linhas, sem cookie, token, senha nem e-mail de teste e sem linha de erro ou aviso.

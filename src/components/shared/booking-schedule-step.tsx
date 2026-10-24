@@ -3,7 +3,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useId, useState, type Ref } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import type { BookingFormValues } from "@/components/portal/appointments/booking-wizard";
+import type { BookingFormValues } from "@/components/shared/booking-form-values";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { FieldError, FieldLegend, FieldSet } from "@/components/ui/field";

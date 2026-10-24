@@ -4,11 +4,12 @@ import { CircleCheckIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { BookingPaymentStep } from "@/components/portal/appointments/booking-payment-step";
-import { BookingScheduleStep } from "@/components/portal/appointments/booking-schedule-step";
 import { BookingServicesStep } from "@/components/portal/appointments/booking-services-step";
-import { BookingSummary } from "@/components/portal/appointments/booking-summary";
 import { BookingVehicleStep } from "@/components/portal/appointments/booking-vehicle-step";
+import { BookingPaymentStep } from "@/components/shared/booking-payment-step";
+import { BookingScheduleStep } from "@/components/shared/booking-schedule-step";
+import { BookingSummary } from "@/components/shared/booking-summary";
+import type { BookingFormValues } from "@/components/shared/booking-form-values";
 import { FormAlert } from "@/components/shared/form-alert";
 import { StepForm, type FormStep } from "@/components/shared/step-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -19,7 +20,6 @@ import { apiRequest, toApiError, type ApiError } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 import type {
   AppointmentPreview,
-  AppointmentVehicle,
   ClientAppointment,
 } from "@/shared/api/appointments";
 import type { PaymentMethod } from "@/shared/constants/payment-methods";
@@ -38,25 +38,6 @@ import {
 
 const APPOINTMENTS_PATH = "/api/me/appointments";
 const PREVIEW_PATH = "/api/me/appointments/preview";
-
-// The vehicle as the steps and the summary show it.
-export type BookingVehicle = Pick<
-  AppointmentVehicle,
-  "id" | "plate" | "brand" | "model" | "color"
->;
-
-export type BookingFormValues = {
-  vehicle: BookingVehicle | null;
-  // RN005: the main and complementary services.
-  serviceIds: string[];
-  // RN006: the additionals of the checked main services.
-  additionalIds: string[];
-  // The day (aaaa-mm-dd) and the start time (HH:MM) in the company's time
-  // zone; the API takes them as one instant.
-  date: string | null;
-  time: string | null;
-  paymentMethod: PaymentMethod | null;
-};
 
 const EMPTY_VALUES: BookingFormValues = {
   vehicle: null,

@@ -2,12 +2,12 @@
 titulo: Conteúdo da página de agendamentos do painel
 assunto: agendamento
 origem: issue #61, plano memoria/tarefas/61-agendamentos-do-painel/01_plano.md (L1, L3, L4, L5)
-relacionados: [UC10, UC12, RF044, RF045, RF046, RF047, RF048, RF049, RF052, RF053, RF054, RN010, RN012, RN017, RN018, RN019, RN037, RNF004, RNF008]
+relacionados: [UC10, UC12, UC25, RF044, RF045, RF046, RF047, RF048, RF049, RF052, RF053, RF054, RF056, RN010, RN012, RN017, RN018, RN019, RN020, RN037, RNF004, RNF008]
 ---
 
 # Conteúdo da página de agendamentos do painel
 
-Visões, filtros, cartão, detalhe, ações de status e estados de `/admin/appointments`, do [UC10](UC10-consultar-agendamentos.md) e do [UC12](UC12-atualizar-status-do-agendamento.md). Cabeçalho e navegação: [../padroes/layouts.md](../padroes/layouts.md); estilo: [../padroes/design.md](../padroes/design.md); listagem, etiqueta de status e telas de demonstração: [../padroes/componentes.md](../padroes/componentes.md); contrato da rota: [rotas.md](rotas.md).
+Visões, filtros, cartão, detalhe, ações de status e estados de `/admin/appointments`, do [UC10](UC10-consultar-agendamentos.md), do [UC12](UC12-atualizar-status-do-agendamento.md) e do [UC25](UC25-reagendar-servico-concluido.md). Cabeçalho e navegação: [../padroes/layouts.md](../padroes/layouts.md); estilo: [../padroes/design.md](../padroes/design.md); listagem, etiqueta de status e telas de demonstração: [../padroes/componentes.md](../padroes/componentes.md); contrato da rota: [rotas.md](rotas.md).
 
 Enquanto as rotas `/api/admin/appointments` usarem os dados de demonstração de `src/lib/demo/admin-appointments.ts` (decisão 0055), o aviso de demonstração fica logo abaixo do título da página.
 
@@ -57,7 +57,7 @@ Só no detalhe. A tela só orienta; quem decide é a API (RS008).
 | Em espera | "Avançar para Em execução" e "Cancelar agendamento" ([RN019](RN019-cancelamento.md)) |
 | Em execução | "Avançar para Finalizado" |
 | Finalizado | "Concluir" ([RN018](RN018-conclusao-com-pagamento.md)) |
-| Concluído | nenhuma por enquanto ("Reagendar", [UC25](UC25-reagendar-servico-concluido.md)) |
+| Concluído | "Reagendar" ([UC25](UC25-reagendar-servico-concluido.md) FA01, [RN020](RN020-reagendamento.md)) |
 | Cancelado, Reagendado | nenhuma |
 
 "Editar" ([UC26](UC26-editar-agendamento.md), qualquer status) fica ao lado delas quando a tela de edição existir.
@@ -65,6 +65,14 @@ Só no detalhe. A tela só orienta; quem decide é a API (RS008).
 - **Avançar** ([UC12](UC12-atualizar-status-do-agendamento.md) passos 2 a 5, [RN017](RN017-sequencia-de-status.md)): sem confirmação. O botão passa a "Avançando…", fica indisponível sem perder o foco (`aria-disabled`), e, concluído, a janela fecha e a listagem é lida de novo.
 - **Cancelamento** (FA02): confirmação com o título "Cancelar este agendamento?", o texto "O agendamento passa a Cancelado e vai para o histórico. Esta ação não pode ser desfeita.", e os botões "Voltar" e "Cancelar agendamento" ("Cancelando…"), na cor de erro; a falha aparece dentro da confirmação, e, concluído, as duas janelas fecham.
 - **Falha** (FE01): o aviso com a mensagem da API fica no topo da janela, com o foco. No 409 `INVALID_STATUS`, o detalhe lê o agendamento de novo, então a etiqueta e as ações passam a ser as do status atual.
+
+## Reagendar (UC25 FA01, RF056)
+
+Janela "Reagendar serviço" sobre o detalhe de um agendamento "Concluído", que se abre pelo histórico. É o reagendamento do cliente ([agendar-servico.md](agendar-servico.md), "Edição e reagendamento"), feito pelo funcionário:
+
+- Duas etapas, "Data e horário" e "Pagamento e resumo", com as escolhas vazias; o veículo e os serviços são os do agendamento original, e os valores, a duração e a previsão vêm da prévia pelo catálogo atual (`POST /api/admin/appointments/preview`, [RN020](RN020-reagendamento.md)), ao lado das etapas, no "Resumo do pedido".
+- Os serviços que o catálogo atual não oferece ficam de fora, e o resumo diz "Não estão mais disponíveis e ficaram de fora: <nomes>."; sem nenhum principal ou complementar, "Nenhum serviço principal ou complementar deste agendamento está disponível. Para escolher outros serviços, faça um novo agendamento.", sem o botão de confirmar (UC25 FE02).
+- Botão "Confirmar reagendamento" ("Reagendando…"), indisponível sem perder o foco enquanto a prévia não responde; o foco começa em "Cancelar", e Esc ou "Cancelar" voltam ao detalhe. A janela não fecha durante o envio. A falha, como o `NOT_IMPLEMENTED` da demonstração, aparece no topo, com a janela aberta; concluído, as duas janelas fecham e a listagem é lida de novo.
 
 ## Concluir (UC12 FA01, RF053)
 
@@ -87,6 +95,6 @@ O "Box", os avisos de atraso e de aguardando faturamento, a marca "Multi-dia", "
 
 ## Onde se aplica
 
-- Requisitos: [RF044 a RF049](requisitos.md), [RF052 a RF054](requisitos.md)
-- Casos de uso: [UC10](UC10-consultar-agendamentos.md), [UC12](UC12-atualizar-status-do-agendamento.md)
-- Regras: [RN010](RN010-valor-total.md), [RN017](RN017-sequencia-de-status.md), [RN018](RN018-conclusao-com-pagamento.md), [RN019](RN019-cancelamento.md), [RN037](RN037-copia-no-agendamento.md)
+- Requisitos: [RF044 a RF049](requisitos.md), [RF052 a RF054](requisitos.md), [RF056](requisitos.md)
+- Casos de uso: [UC10](UC10-consultar-agendamentos.md), [UC12](UC12-atualizar-status-do-agendamento.md), [UC25](UC25-reagendar-servico-concluido.md)
+- Regras: [RN010](RN010-valor-total.md), [RN017](RN017-sequencia-de-status.md), [RN018](RN018-conclusao-com-pagamento.md), [RN019](RN019-cancelamento.md), [RN020](RN020-reagendamento.md), [RN037](RN037-copia-no-agendamento.md)

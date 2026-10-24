@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { AdvanceButton } from "@/components/admin/appointments/advance-button";
 import { CompleteAppointmentDialog } from "@/components/admin/appointments/complete-appointment-dialog";
+import { RescheduleAppointmentDialog } from "@/components/admin/appointments/reschedule-appointment-dialog";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { FormAlert } from "@/components/shared/form-alert";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -42,17 +43,18 @@ import { formatPlate } from "@/shared/format/plate";
 
 const APPOINTMENTS_PATH = "/api/admin/appointments";
 
-type AppointmentAction = "advance" | "cancel" | "complete";
+type AppointmentAction = "advance" | "cancel" | "complete" | "reschedule";
 
 // The actions each status offers. They only guide the screen: the API decides
 // (RS008). RN017: the sequence; RN019: the staff cancels a scheduled or
-// waiting appointment; RN018: the conclusion is from the Finalizado.
+// waiting appointment; RN018: the conclusion is from the Finalizado; RN020:
+// only the Concluído is rescheduled.
 const STATUS_ACTIONS = {
   scheduled: ["advance", "cancel"],
   checked_in: ["advance", "cancel"],
   in_progress: ["advance"],
   awaiting_payment: ["complete"],
-  completed: [],
+  completed: ["reschedule"],
   cancelled: [],
   rescheduled: [],
 } as const satisfies Record<AppointmentStatus, readonly AppointmentAction[]>;
@@ -309,6 +311,11 @@ function AppointmentContent({
             onFailed={failAdvance}
           />
         )}
+        <RescheduleAppointmentDialog
+          appointment={appointment}
+          canOpen={actions.includes("reschedule")}
+          onRescheduled={onChange}
+        />
         <CompleteAppointmentDialog
           id={id}
           canOpen={actions.includes("complete")}
