@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useApiQuery } from "@/hooks/use-api-query";
 import { cn } from "@/lib/utils";
 import type { BusinessDay, PublicCompany } from "@/shared/api/settings";
+import type { DateLimit } from "@/shared/constants/appointment-date-limits";
 import { WEEKDAY_SHORT_LABELS } from "@/shared/constants/weekdays";
 import { listStartTimes } from "@/shared/format/business-hours";
 import {
@@ -39,11 +40,18 @@ const GROUP_CLASS =
 const OPTION_CLASS =
   "flex h-10 cursor-pointer items-center justify-center rounded-lg text-sm font-semibold transition-colors select-none peer-not-checked:peer-enabled:hover:text-link peer-checked:bg-background peer-checked:text-link peer-checked:shadow-neu-sm peer-disabled:cursor-not-allowed peer-disabled:font-normal peer-disabled:opacity-50 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-ring";
 
+type BookingScheduleStepProps = {
+  originalScheduledAt?: string | null;
+  // The edition by the staff (UC26 FA01, RN033): how far the date and the
+  // time may move, by the status of the appointment. Without it, the rule of
+  // the client: only later than now and than the original.
+  limit?: DateLimit;
+};
+
 export function BookingScheduleStep({
   originalScheduledAt = null,
-}: {
-  originalScheduledAt?: string | null;
-}) {
+  limit,
+}: BookingScheduleStepProps) {
   const {
     data: company,
     error,
@@ -77,6 +85,7 @@ export function BookingScheduleStep({
       businessHours={company.businessHours}
       now={now}
       originalScheduledAt={originalScheduledAt}
+      limit={limit}
     />
   );
 }
@@ -85,12 +94,14 @@ type ScheduleFieldsProps = {
   businessHours: BusinessDay[];
   now: string;
   originalScheduledAt: string | null;
+  limit: DateLimit | undefined;
 };
 
 function ScheduleFields({
   businessHours,
   now,
   originalScheduledAt,
+  limit,
 }: ScheduleFieldsProps) {
   const { field: dateField, fieldState: dateState } = useController<
     BookingFormValues,
@@ -119,13 +130,23 @@ function ScheduleFields({
     originalScheduledAt ? Date.parse(originalScheduledAt) : 0,
   );
 
+  // RN015, RN033: the instants the screen offers. The staff may also go back
+  // in the calendar when the limit allows the past.
+  function isOffered(instant: number): boolean {
+    if (limit === undefined) return instant > earliestChange;
+    if (limit === "not_before_now") return instant > Date.parse(now);
+    if (limit === "not_after_now") return instant <= Date.parse(now);
+    return true;
+  }
+  const canGoBack = limit === null || limit === "not_after_now";
+
   // RN013, RN015: the start times of the day that have not passed.
   function findTimes(date: string): string[] {
     const weekday = new Date(`${date}T00:00:00Z`).getUTCDay();
     const day = businessHours.find((item) => item.weekday === weekday);
     const times = day
-      ? listStartTimes(day).filter(
-          (time) => Date.parse(toCompanyInstant(date, time)) > earliestChange,
+      ? listStartTimes(day).filter((time) =>
+          isOffered(Date.parse(toCompanyInstant(date, time))),
         )
       : [];
     // RN033: keeping the original instant is allowed even after it passed
@@ -148,6 +169,7 @@ function ScheduleFields({
       <DateField
         chosenDate={dateField.value}
         firstMonth={(originalDate ?? today).slice(0, 7)}
+        canGoBack={canGoBack}
         hasTimes={(date) => findTimes(date).length > 0}
         onChoose={chooseDate}
         onBlur={dateField.onBlur}
@@ -172,6 +194,8 @@ type DateFieldProps = {
   chosenDate: string | null;
   // aaaa-mm: the month of today, the first one the calendar shows.
   firstMonth: string;
+  // The staff moving a date to the past may leave the first month.
+  canGoBack: boolean;
   hasTimes: (date: string) => boolean;
   onChoose: (date: string) => void;
   onBlur: () => void;
@@ -185,6 +209,7 @@ type DateFieldProps = {
 function DateField({
   chosenDate,
   firstMonth,
+  canGoBack,
   hasTimes,
   onChoose,
   onBlur,
@@ -208,7 +233,7 @@ function DateField({
           type="button"
           variant="secondary"
           size="icon"
-          disabled={month <= firstMonth}
+          disabled={!canGoBack && month <= firstMonth}
           onClick={() => setMonth(addMonths(month, -1))}
         >
           <ChevronLeftIcon aria-hidden />

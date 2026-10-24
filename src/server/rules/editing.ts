@@ -6,6 +6,10 @@ import {
 } from "@/server/rules/scheduling";
 import type { AppointmentActor } from "@/server/rules/status-transitions";
 import type { AppointmentStatus } from "@/shared/constants/appointment-statuses";
+import {
+  STAFF_DATE_LIMITS,
+  type DateLimit,
+} from "@/shared/constants/appointment-date-limits";
 
 // docs/agendamento/calculos.md, section 4 (RN032, RN033). An edit never
 // changes the status: only findNextStatus does. The prices, the duration and
@@ -13,21 +17,6 @@ import type { AppointmentStatus } from "@/shared/constants/appointment-statuses"
 
 export type ScheduleChangeError =
   AvailabilityError | "NOT_AFTER_SCHEDULED" | "IN_THE_PAST" | "AFTER_NOW";
-
-type DateLimit = "not_before_now" | "not_after_now" | null;
-
-// RN033: in scheduled, never in the past; once the vehicle has arrived, never
-// after the moment of the change. A cancelled appointment may not have seen
-// the vehicle, so only the hours apply to it.
-const STAFF_DATE_LIMITS = {
-  scheduled: "not_before_now",
-  checked_in: "not_after_now",
-  in_progress: "not_after_now",
-  awaiting_payment: "not_after_now",
-  completed: "not_after_now",
-  rescheduled: "not_after_now",
-  cancelled: null,
-} as const satisfies Record<AppointmentStatus, DateLimit>;
 
 // RN032: the client edits only a scheduled appointment; the staff, in any
 // status. false is a 409 INVALID_STATUS.
