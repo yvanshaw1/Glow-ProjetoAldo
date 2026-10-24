@@ -62,3 +62,7 @@ A página ainda não existe, então as respostas foram conferidas por um teste t
 - `routes.ts`: as três leituras têm `load`, as quatro gravações não e uma delas, pelo `apiRequest`, responde `NOT_IMPLEMENTED`; `POST /api/admin/appointments` e `PATCH /api/admin/appointments/:id` continuam fora da lista (#62).
 
 `npm run check` (414 testes) e `npx next build` sem erros nem avisos; nenhum import de `src/server/` e nada em `src/app/api/`, `supabase/` nem `src/shared/validation/`.
+
+## 2026-10-24 – desvio: etapa 03 do PR 1
+
+A pedido do Yvan: ramificação `feat/61-appointments-demo` enviada com cinco commits (três de código e documentação, dois da pasta da tarefa) e o PR #84 aberto como rascunho (`Refs #61`), sem pedido de revisão, como no #80. `02_relatorio.md` parcial, com `pull_request: 84`; o plano continua em `em_execucao` até o PR 4. A `origin/main` continuava em cf093c6, sem nada a incorporar. O PR tem 538 linhas em `src/`, cerca de 90 delas de dados fixos. Os PRs 2 a 4 esperam a incorporação do #84.
