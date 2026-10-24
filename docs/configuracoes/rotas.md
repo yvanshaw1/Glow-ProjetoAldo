@@ -68,11 +68,11 @@ Grava a disponibilidade.
 Percentuais das formas de pagamento (UC24).
 
 - Entrada: Nenhuma.
-- Resposta: **200** as quatro formas, com o percentual de cada uma.
+- Resposta: **200** as quatro formas, na ordem crédito, débito, Pix e dinheiro, com `paymentMethod` e `percent` (com sinal, de −100 a 100).
 
 #### `PUT /api/admin/settings/payment-fees`
 
 Grava os percentuais.
 
 - Entrada: Lista com `paymentMethod*, percent*`; percentual negativo para desconto.
-- Resposta: **200** percentuais atualizados; 400 percentual fora do intervalo de −100 a 100.
+- Resposta: **200** o mesmo corpo do `GET`, atualizado; 400 percentual fora do intervalo de −100 a 100.

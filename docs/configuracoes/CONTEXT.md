@@ -14,3 +14,4 @@ Leia só o que a tarefa pede: o caso de uso do fluxo, as regras que ele cita e, 
 | RN028-dados-institucionais.md | Dados institucionais |
 | dados.md | Tabelas `business_settings`, `business_hours`, `payment_fees` |
 | rotas.md | Telas e rotas da API |
+| configuracoes-do-painel.md | Conteúdo e textos das abas Disponibilidade e Formas de pagamento do painel |

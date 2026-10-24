@@ -16,3 +16,4 @@ Leia só o que a tarefa pede: o caso de uso do fluxo, as regras que ele cita e, 
 | RN027-administrador.md | Administrador |
 | dados.md | Tabelas `staff`, `roles`, `role_permissions` |
 | rotas.md | Telas e rotas da API |
+| equipe-do-painel.md | Conteúdo e textos da página de funcionários e cargos do painel (`/admin/staff`) |
