@@ -95,3 +95,35 @@ Banco local (`npx supabase start`, `db reset` só com o `seed.sql`), admin de te
 ## 2026-10-24 – desvio: etapa 03 do PR 2
 
 A pedido do Yvan: `02_relatorio.md` atualizado com os PRs 1 e 2 (o `pull_request` passa ao número do PR 2), ramificação `feat/61-appointments-list` enviada e o PR aberto como rascunho (`Refs #61`), sem pedido de revisão. A `origin/main` continuava em ead3ea4, sem nada a incorporar, e `npm run check` passou de novo (414 testes). O PR tem 316 linhas em `src/`. Os PRs 3 e 4 esperam a incorporação deste.
+
+## 2026-10-24 – decisão: PR 2 incorporado, PR 3 começado
+
+O PR #85 foi incorporado em 93a24ae (24/10/2026, 14:43 UTC). Etapa 02 do PR 3 (detalhe e ações), na ramificação `feat/61-appointment-actions`, criada da `origin/main` com `git switch --no-track -c`; a local `feat/61-appointments-list` foi apagada depois de conferir que a árvore era igual à da `origin/main`.
+
+## 2026-10-24 – desvio: PR 3, o que mudou em relação ao plano
+
+- **Janelas sempre montadas.** "Concluir" e "Cancelar agendamento" ficam montadas no rodapé do detalhe, com o botão `hidden` quando o status não as permite, como o `AppointmentChangeDialog` do cliente: se o 409 faz o detalhe ler o status novo, a janela aberta continua para o aviso ser lido, em vez de sumir com a ação. "Avançar" não tem janela e só aparece no status que a permite.
+- **Escolha da forma de pagamento.** Quatro `radio` em dois por linha, cada um com o nome e o total da rota, com um sinal de marcado (`CheckIcon`) além da borda em `--link`, porque a primeira versão (relevo no marcado) não distinguia a opção; `useState` em vez do React Hook Form, porque o formulário tem uma escolha só e a validação é da rota.
+- **Cancelar na conclusão.** O botão "Cancelar" da janela fica sempre no rodapé, mesmo durante o carregamento e a falha da leitura, para o foco inicial ter onde cair; "Confirmar conclusão" só aparece com o resumo e o agendamento "Finalizado".
+- **`DetailItem` repetido.** O detalhe do painel tem o próprio `DetailItem` (6 linhas), como o do cliente; unificar pede mexer em `portal/appointments/`, fora do plano, e fica para a #62 ou depois.
+- **Foco depois do sucesso.** Quando a ação conclui, as janelas fecham e o foco volta ao "Ver detalhes" do cartão que as abriu; se o agendamento sai da visão (cancelado, por exemplo), o botão some com a releitura e o foco cai no `body`. Não mudei o `PaginatedList` (fora do plano); registrado para a #46 e a #50, quando a escrita for real.
+
+## 2026-10-24 – descoberta: PR 3, o que a verificação cobriu
+
+Mesmo ambiente do PR 2 (banco local, admin de teste, `next start`, Chrome sem interface, roteiros `verify-detail.mjs` e `verify-detail-states.mjs`):
+
+- **Ações por status**, nas quatro combinações (360 × 800 e 1440 × 900, claro e escuro), sem rolagem horizontal e com a janela dentro da tela: Agendado, "Avançar para Em espera" e "Cancelar agendamento"; Em espera, "Avançar para Em execução" e "Cancelar agendamento"; Em execução, "Avançar para Finalizado"; Finalizado, "Concluir"; Concluído, Cancelado e Reagendado, nenhuma. "Total por forma de pagamento" só no "Finalizado", com as quatro formas e R$ 85,00 em cada (taxas do seed zero).
+- **Avançar** no "Agendado": "Avançando…" com `aria-disabled` (sem `:disabled`), depois "Esta ação ainda não está disponível nesta versão de demonstração." no topo da janela, com o foco; a etiqueta continua "Agendado".
+- **Cancelar:** a confirmação com o título, o texto e "Voltar" com o foco; confirmar mostra a recusa dentro dela, sem fechar; "Voltar" fecha e o foco volta ao botão que a abriu.
+- **Concluir:** título e texto, as quatro opções ("Crédito" marcada), foco inicial em "Cancelar"; Shift+Tab leva às opções e as setas escolhem "Pix"; "Concluindo…" com `aria-disabled`; a recusa no topo, com o foco; Esc fecha só a conclusão e o foco volta a "Concluir".
+- **Cenários por alteração temporária** (`patch-detail.mjs`, sem commit, desfeita por `git checkout -- src` e conferida por `git status`):
+  - taxas de 3, 1,5, −5 e −10%: a lista do detalhe e as opções mostram R$ 87,55, 86,28, 80,75 e 76,50 com "Acréscimo de …" e "Desconto de …"; escolher "Pix" dá "Desconto de 5,00%" e "Total R$ 80,75", e o subtotal fica R$ 85,00;
+  - falha da leitura do detalhe e da conclusão, com "Tentar novamente";
+  - gravação com sucesso (200): avançar, cancelar e concluir fecham as janelas e a listagem é lida de novo (uma leitura a mais cada vez);
+  - 409 `INVALID_STATUS`: avançar mostra a mensagem do catálogo, e o detalhe passa a "Em espera", com "Avançar para Em execução" e "Cancelar agendamento"; concluir mostra a mensagem dentro da conclusão, que continua aberta, e o detalhe atrás passa a "Concluído", sem ação.
+- **Lighthouse 13.5.0:** acessibilidade 100 em `/admin/appointments`, no celular e no computador, claro e escuro, e 100 nas 24 capturas de estado (detalhe "Agendado" e "Finalizado", confirmação do cancelamento, conclusão, falha da conclusão e falha de "Avançar"). Desempenho: celular 93 (LCP 3,2 s simulado, CLS 0, TBT 80 a 90 ms) e computador 100.
+- **Registro do `next start`:** 285 linhas, só campos de requisição; nenhum cookie, token, senha nem e-mail de teste; a única linha de erro é de uma tentativa de `next start` sem compilação (o `next build` com o patch falhou no tipo, e foi corrigido antes da execução que vale), fora do código do PR. Nenhuma requisição a `/api/admin/*`.
+
+## 2026-10-24 – desvio: PR 3, tamanho
+
+O PR 3 tem 792 linhas em `src/` (detalhe 364, conclusão 354, "Avançar" 56 e 18 do cartão e da lista), quase o dobro das ~440 do plano (P1, opção 1) e acima das ~400 de `pull-request.md`. A opção 2 de P1 (a conclusão num PR próprio) daria cerca de 440 e 355 linhas. A decisão de dividir é do Yvan antes da etapa 03; sem resposta, o PR sai inteiro, com a justificativa na descrição.
