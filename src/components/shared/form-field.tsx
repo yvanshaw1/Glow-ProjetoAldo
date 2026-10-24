@@ -4,6 +4,7 @@ import { useId, type ReactNode } from "react";
 import {
   Controller,
   type Control,
+  type ControllerProps,
   type ControllerRenderProps,
   type FieldPath,
   type FieldValues,
@@ -34,6 +35,8 @@ type FormFieldProps<
   name: N;
   label: string;
   description?: string;
+  // The checks of a form with no schema yet, as in the demo screens.
+  rules?: ControllerProps<T, N, R>["rules"];
   renderInput: (props: FieldInputProps<T, N>) => ReactNode;
 };
 
@@ -43,7 +46,14 @@ export function FormField<
   T extends FieldValues,
   N extends FieldPath<T>,
   R extends FieldValues = T,
->({ control, name, label, description, renderInput }: FormFieldProps<T, N, R>) {
+>({
+  control,
+  name,
+  label,
+  description,
+  rules,
+  renderInput,
+}: FormFieldProps<T, N, R>) {
   const id = useId();
   const descriptionId = `${id}-description`;
   const errorId = `${id}-error`;
@@ -51,6 +61,7 @@ export function FormField<
     <Controller
       control={control}
       name={name}
+      rules={rules}
       render={({ field, fieldState }) => {
         const describedBy = [
           description && descriptionId,
