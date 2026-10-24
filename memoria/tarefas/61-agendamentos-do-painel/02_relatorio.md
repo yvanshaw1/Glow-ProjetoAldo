@@ -1,11 +1,11 @@
 ---
 issue: 61
-pull_request: 86
+pull_request: 87
 ---
 
 # Relatório: Telas de agendamentos do painel com dados de demonstração: consulta, detalhe e status
 
-Em quatro PRs: o PR #84, da base (`Refs #61`, incorporado em ead3ea4); o PR #85, da listagem (`Refs #61`, incorporado em 93a24ae); o PR #86, do detalhe e das ações (`Refs #61`, incorporado em d42d01c); e o PR 4, do reagendamento (`Closes #61`, este). Este relatório está completo, e o plano passou a `concluido` neste PR.
+Em quatro PRs: o PR #84, da base (`Refs #61`, incorporado em ead3ea4); o PR #85, da listagem (`Refs #61`, incorporado em 93a24ae); o PR #86, do detalhe e das ações (`Refs #61`, incorporado em d42d01c); e o PR #87, do reagendamento (`Closes #61`, este). Este relatório está completo, e o plano passou a `concluido` neste PR.
 
 ## O que foi feito
 
