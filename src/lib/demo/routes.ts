@@ -72,6 +72,45 @@ export const DEMO_ROUTES: readonly DemoRoute[] = [
   { method: "DELETE", path: "/api/admin/services/:id" },
   { method: "POST", path: "/api/admin/categories" },
   { method: "PATCH", path: "/api/admin/categories/:id" },
+  // docs/clientes/rotas.md, built by #42 and #45; the plate lookup is the
+  // one of the client area.
+  {
+    method: "GET",
+    path: "/api/admin/clients",
+    load: () =>
+      import("@/lib/demo/admin-clients").then(
+        (clients) => clients.answerAdminClients,
+      ),
+  },
+  {
+    method: "GET",
+    path: "/api/admin/clients/:id",
+    load: () =>
+      import("@/lib/demo/admin-clients").then(
+        (clients) => clients.answerAdminClient,
+      ),
+  },
+  {
+    method: "GET",
+    path: "/api/admin/clients/:id/vehicles",
+    load: () =>
+      import("@/lib/demo/admin-clients").then(
+        (clients) => clients.answerAdminClientVehicles,
+      ),
+  },
+  {
+    method: "GET",
+    path: "/api/admin/vehicles/lookup",
+    load: () =>
+      import("@/lib/demo/vehicles").then(
+        (vehicles) => vehicles.answerVehicleLookup,
+      ),
+  },
+  { method: "POST", path: "/api/admin/clients" },
+  { method: "PATCH", path: "/api/admin/clients/:id" },
+  { method: "DELETE", path: "/api/admin/clients/:id" },
+  { method: "POST", path: "/api/admin/clients/:id/vehicles" },
+  { method: "PATCH", path: "/api/admin/vehicles/:id" },
   // docs/clientes/rotas.md, built in phase 3.
   {
     method: "GET",

@@ -8,7 +8,8 @@ import {
 } from "@/lib/demo/appointments";
 import { demoPage } from "@/lib/demo/list";
 import type { DemoRequest } from "@/lib/demo/routes";
-import { SEED_VEHICLES } from "@/lib/demo/vehicles";
+import { SEED_CLIENTS } from "@/lib/demo/clients";
+import { SEED_VEHICLES, SIZE_BY_TYPE, VEHICLE_IDS } from "@/lib/demo/vehicles";
 import type {
   AdminAppointment,
   AdminAppointmentSummary,
@@ -41,7 +42,6 @@ import {
   type PaymentMethod,
 } from "@/shared/constants/payment-methods";
 import type { VehicleSize } from "@/shared/constants/vehicle-sizes";
-import type { VehicleType } from "@/shared/constants/vehicle-types";
 import { ERROR_CATALOG } from "@/shared/errors/catalog";
 import { formatCalendarDate, toCompanyInstant } from "@/shared/format/date";
 
@@ -61,129 +61,37 @@ const DAYS_PER_WEEK = 7;
 const UPDATED_AT = "2026-06-23T12:00:00+00:00";
 const VIEW_MESSAGE = "Escolha uma visão válida.";
 
-// RN002: the size the database derives from the type (decision 0013).
-const SIZE_BY_TYPE = {
-  hatch: "small",
-  sedan: "medium",
-  suv: "large",
-  pickup: "extra_large",
-} as const satisfies Record<VehicleType, VehicleSize>;
-
-// The ids are the seed's (md5 of 'glow-demo:vehicle:<plate>' as a UUID), and
-// the client is the one in whose name the appointments of the vehicle are (the
-// SW4 is also in the account of Isabela Melo, RN036).
-const ACCOUNTS: Record<string, [id: string, clientName: string]> = {
-  GLW1A01: ["52697984-4a36-5e0a-8d64-c791dee31a2b", "Ana Souza"],
-  GLW2B02: ["3909c1ba-30f5-1e8b-e50f-bb09ca12e1d4", "Bruno Lima"],
-  GLW3C03: ["5c168feb-a9c0-91d9-f989-dd8b85b48c28", "Carla Mendes"],
-  GLW4D04: ["fd673331-08e6-5c34-caeb-393e3cad961f", "Diego Ferreira"],
-  GLW5E05: ["265c94d0-f92e-ede6-4c31-724a59100f76", "Eduarda Santos"],
-  GLW6F06: ["a4465e8d-97a9-edc3-412e-99a605abcc32", "Felipe Araújo"],
-  GLW7G07: ["c9398a22-566d-2ece-94b1-aa1a6d4874bc", "Gabriela Rocha"],
-  GLW8H08: ["a229a2b8-eb46-90df-1285-bcd05a9570a0", "Henrique Costa"],
-  GLW9J09: ["b5cc9755-56bc-3069-585c-5ef100d07aaa", "Isabela Melo"],
-  GLW1010: ["28ab2b1f-29da-26da-0cdb-fd0bf368c2f8", "João Pedro Barros"],
-  GLW2020: ["422d165d-2555-9576-8c7c-930748de9569", "Larissa Cavalcanti"],
-  GLW3030: ["f0829d46-fc4b-ebf1-1ce0-675cdbd9180f", "Marcos Tenório"],
-  GLW4K14: ["da326a11-65e9-b083-759d-50f4c6188bb6", "Ana Souza"],
-  GLW5L15: ["c27d6551-0c94-5624-d779-0cad75a490a3", "Henrique Costa"],
+// The client in whose name the appointments of the vehicle are (the SW4 is
+// also in the account of Isabela Melo, RN036).
+const ACCOUNT_NAMES: Record<string, string> = {
+  GLW1A01: "Ana Souza",
+  GLW2B02: "Bruno Lima",
+  GLW3C03: "Carla Mendes",
+  GLW4D04: "Diego Ferreira",
+  GLW5E05: "Eduarda Santos",
+  GLW6F06: "Felipe Araújo",
+  GLW7G07: "Gabriela Rocha",
+  GLW8H08: "Henrique Costa",
+  GLW9J09: "Isabela Melo",
+  GLW1010: "João Pedro Barros",
+  GLW2020: "Larissa Cavalcanti",
+  GLW3030: "Marcos Tenório",
+  GLW4K14: "Ana Souza",
+  GLW5L15: "Henrique Costa",
 };
 
-// The 13 clients of supabase/seed-demo.sql, with the ids of the seed (md5 of
-// 'glow-demo:client:<email>' as a UUID) and the plates of their vehicles in the
-// order of the seed's links; the last one has no vehicle (UC11 FE02). The SW4
-// is in two accounts (RN036).
-const CLIENTS: readonly [
-  id: string,
-  name: string,
-  email: string,
-  plates: readonly string[],
-][] = [
-  [
-    "6e3af2f0-d5f6-8ccb-6a0b-23a032adb9c7",
-    "Ana Souza",
-    "ana.souza@example.com",
-    ["GLW1A01", "GLW4K14"],
-  ],
-  [
-    "54040f09-6a13-bb29-31ad-2c7e13af9e30",
-    "Bruno Lima",
-    "bruno.lima@example.com",
-    ["GLW2B02"],
-  ],
-  [
-    "18d16cc3-0cb0-2238-4129-579385a400e8",
-    "Carla Mendes",
-    "carla.mendes@example.com",
-    ["GLW3C03"],
-  ],
-  [
-    "497825dd-5cc8-172e-dfa5-97ef95a40991",
-    "Diego Ferreira",
-    "diego.ferreira@example.com",
-    ["GLW4D04"],
-  ],
-  [
-    "9d30163b-6d1b-987b-db12-fe3e0042c86f",
-    "Eduarda Santos",
-    "eduarda.santos@example.com",
-    ["GLW5E05"],
-  ],
-  [
-    "4cb1c61e-c001-1bb5-394b-6f077d2190d8",
-    "Felipe Araújo",
-    "felipe.araujo@example.com",
-    ["GLW6F06"],
-  ],
-  [
-    "2a286f70-a103-d75b-4b1e-ae5fd0857331",
-    "Gabriela Rocha",
-    "gabriela.rocha@example.com",
-    ["GLW7G07"],
-  ],
-  [
-    "af2402c3-cfea-a4a6-01d7-468023f806e9",
-    "Henrique Costa",
-    "henrique.costa@example.com",
-    ["GLW8H08", "GLW5L15"],
-  ],
-  [
-    "dcf4adbe-5da6-0ea0-f32a-443838286984",
-    "Isabela Melo",
-    "isabela.melo@example.com",
-    ["GLW9J09", "GLW5L15"],
-  ],
-  [
-    "2e3719a4-d9ac-f3e0-ceb7-8d70c629ccbc",
-    "João Pedro Barros",
-    "joao.barros@example.com",
-    ["GLW1010"],
-  ],
-  [
-    "d2b39c31-3c7c-a8a9-ca46-f2171d461a35",
-    "Larissa Cavalcanti",
-    "larissa.cavalcanti@example.com",
-    ["GLW2020"],
-  ],
-  [
-    "dff70c83-9281-0c27-0984-2109b7db829b",
-    "Marcos Tenório",
-    "marcos.tenorio@example.com",
-    ["GLW3030"],
-  ],
-  [
-    "62b6df5e-572d-b2ad-5f69-aa600cf6dcac",
-    "Natália Pires",
-    "natalia.pires@example.com",
-    [],
-  ],
-];
+// The 13 clients of supabase/seed-demo.sql (src/lib/demo/clients.ts), by full
+// name; the last one has no vehicle (UC11 FE02).
+const CLIENTS = SEED_CLIENTS.map(
+  ({ id, firstName, lastName, email, plates }) =>
+    [id, `${firstName} ${lastName}`, email, plates] as const,
+);
 
 const SHARED_PLATE = "GLW5L15";
 
 const VEHICLES: readonly AppointmentVehicle[] = SEED_VEHICLES.map(
   ([plate, type, brand, model, color, year]) => ({
-    id: ACCOUNTS[plate][0],
+    id: VEHICLE_IDS[plate],
     plate,
     type,
     size: SIZE_BY_TYPE[type],
@@ -414,8 +322,8 @@ function listAppointments(now: Date): AdminAppointment[] {
         isToday ? daysBetween(monday, today) : 0,
       ),
       estimatedDurationMinutes: preview.estimatedDurationMinutes,
-      clientId: findClientId(ACCOUNTS[plate][1]),
-      clientName: ACCOUNTS[plate][1],
+      clientId: findClientId(ACCOUNT_NAMES[plate]),
+      clientName: ACCOUNT_NAMES[plate],
       paymentMethod,
       subtotal: preview.subtotal,
       // A method was given, so the preview has the fee.
