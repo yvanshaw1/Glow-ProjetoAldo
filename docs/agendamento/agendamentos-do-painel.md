@@ -1,8 +1,8 @@
 ---
 titulo: Conteúdo da página de agendamentos do painel
 assunto: agendamento
-origem: issue #61, plano memoria/tarefas/61-agendamentos-do-painel/01_plano.md (L1, L3, L4, L5), e issue #62, plano memoria/tarefas/62-novo-agendamento-e-edicao/01_plano.md (L3)
-relacionados: [UC10, UC11, UC12, UC25, RF044, RF045, RF046, RF047, RF048, RF049, RF052, RF050, RF051, RF053, RF054, RF056, RN003, RN004, RN010, RN012, RN017, RN018, RN019, RN020, RN037, RNF004, RNF008]
+origem: issue #61, plano memoria/tarefas/61-agendamentos-do-painel/01_plano.md (L1, L3, L4, L5), e issue #62, plano memoria/tarefas/62-novo-agendamento-e-edicao/01_plano.md (L3, L4, L5)
+relacionados: [UC10, UC11, UC12, UC25, UC26, RF044, RF045, RF046, RF047, RF048, RF049, RF052, RF050, RF051, RF053, RF054, RF055, RF056, RN003, RN004, RN010, RN012, RN017, RN018, RN019, RN020, RN032, RN033, RN037, RNF004, RNF008]
 ---
 
 # Conteúdo da página de agendamentos do painel
@@ -60,7 +60,7 @@ Só no detalhe. A tela só orienta; quem decide é a API (RS008).
 | Concluído | "Reagendar" ([UC25](UC25-reagendar-servico-concluido.md) FA01, [RN020](RN020-reagendamento.md)) |
 | Cancelado, Reagendado | nenhuma |
 
-"Editar" ([UC26](UC26-editar-agendamento.md), qualquer status) fica ao lado delas quando a tela de edição existir.
+"Editar" ([UC26](UC26-editar-agendamento.md) FA01, [RN032](RN032-quem-edita-o-agendamento.md)) aparece em todos os status, no rodapé do detalhe, antes das outras ações.
 
 - **Avançar** ([UC12](UC12-atualizar-status-do-agendamento.md) passos 2 a 5, [RN017](RN017-sequencia-de-status.md)): sem confirmação. O botão passa a "Avançando…", fica indisponível sem perder o foco (`aria-disabled`), e, concluído, a janela fecha e a listagem é lida de novo.
 - **Cancelamento** (FA02): confirmação com o título "Cancelar este agendamento?", o texto "O agendamento passa a Cancelado e vai para o histórico. Esta ação não pode ser desfeita.", e os botões "Voltar" e "Cancelar agendamento" ("Cancelando…"), na cor de erro; a falha aparece dentro da confirmação, e, concluído, as duas janelas fecham.
@@ -96,6 +96,14 @@ Cinco etapas no formulário em etapas, como o wireframe: "Cliente", "Veículo", 
 
 Com mais de quatro etapas, o indicador mostra a linha entre as outras etapas só a partir de 448 px de largura, para o título da etapa atual caber a 360 px ([../padroes/componentes.md](../padroes/componentes.md), Formulário em etapas).
 
+## Editar (UC26 FA01, RF055)
+
+Botão "Editar" no rodapé do detalhe, em qualquer status. Abre sobre o detalhe a janela "Editar agendamento", com o mesmo assistente do novo agendamento, sem a etapa "Cliente", que não muda (RN003): "Veículo", "Serviços", "Data e horário" e "Pagamento e resumo", preenchidas com as escolhas do agendamento. O veículo é um dos do cliente (`lookup/vehicles` pelo `clientId` do detalhe), e o cliente aparece no "Resumo do pedido". O calendário abre no mês do agendamento; a prévia leva `appointmentId`, e o envio leva `updatedAt` sem conversão. Botão "Salvar alterações" ("Salvando…"). Esc ou "Cancelar" na primeira etapa voltam ao detalhe, com o foco em "Editar"; a janela não fecha durante o envio.
+
+- **Data e horário** (RN033): a tela só orienta, e quem confere é a API. Em "Agendado", os horários de funcionamento a partir de agora, adiantando ou postergando. Em "Em espera", "Em execução", "Finalizado", "Concluído" e "Reagendado", os de funcionamento até o momento da edição, em dias de hoje ou anteriores, e o calendário permite voltar a meses passados. Em "Cancelado", todo horário de funcionamento. O instante marcado continua sempre selecionável.
+- **Conflito** (`VERSION_CONFLICT`, RNF011): o aviso fica no topo, com o foco, e o agendamento é lido de novo, trocando os campos e a versão; o detalhe também é lido de novo. Se a releitura falhar, "Tentar novamente", e o envio com a versão antiga fica bloqueado.
+- **Resultado:** sucesso fecha as duas janelas e a listagem é lida de novo. Falhas, como o `NOT_IMPLEMENTED` da demonstração, aparecem no topo do formulário, com a janela aberta; a gravação não é repetida sozinha.
+
 ## Estados (RNF004)
 
 - Na primeira leitura, o lugar dos cartões fica reservado; numa nova leitura, os anteriores continuam na tela, em "Carregando".
@@ -109,5 +117,5 @@ O "Box", os avisos de atraso e de aguardando faturamento, a marca "Multi-dia", "
 ## Onde se aplica
 
 - Requisitos: [RF044 a RF049](requisitos.md), [RF052 a RF054](requisitos.md), [RF056](requisitos.md)
-- Casos de uso: [UC10](UC10-consultar-agendamentos.md), [UC11](UC11-registrar-agendamento-para-cliente.md), [UC12](UC12-atualizar-status-do-agendamento.md), [UC25](UC25-reagendar-servico-concluido.md)
+- Casos de uso: [UC10](UC10-consultar-agendamentos.md), [UC11](UC11-registrar-agendamento-para-cliente.md), [UC12](UC12-atualizar-status-do-agendamento.md), [UC25](UC25-reagendar-servico-concluido.md), [UC26](UC26-editar-agendamento.md)
 - Regras: [RN010](RN010-valor-total.md), [RN017](RN017-sequencia-de-status.md), [RN018](RN018-conclusao-com-pagamento.md), [RN019](RN019-cancelamento.md), [RN020](RN020-reagendamento.md), [RN037](RN037-copia-no-agendamento.md)

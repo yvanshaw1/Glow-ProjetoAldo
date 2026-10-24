@@ -71,7 +71,7 @@ export function AppointmentViews() {
           {({ close, setSubmitting }) => (
             <AppointmentWizard
               onCancel={close}
-              onCreated={() => {
+              onDone={() => {
                 close();
                 setReadCount((count) => count + 1);
               }}
