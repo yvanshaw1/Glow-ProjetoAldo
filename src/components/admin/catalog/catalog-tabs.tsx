@@ -4,6 +4,7 @@ import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { CategoryFormDialog } from "@/components/admin/catalog/category-form-dialog";
 import { CategoryList } from "@/components/admin/catalog/category-list";
+import { ServiceFormDialog } from "@/components/admin/catalog/service-form-dialog";
 import { ServiceList } from "@/components/admin/catalog/service-list";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,7 +22,8 @@ type Section = (typeof SECTIONS)[number]["value"];
 
 export function CatalogTabs() {
   const [section, setSection] = useState<Section>("services");
-  // A new category makes the list be read again.
+  // A new service or category makes its list be read again.
+  const [serviceReadCount, setServiceReadCount] = useState(0);
   const [categoryReadCount, setCategoryReadCount] = useState(0);
   return (
     <Tabs
@@ -37,6 +39,18 @@ export function CatalogTabs() {
             </TabsTrigger>
           ))}
         </TabsList>
+        {section === "services" && (
+          <ServiceFormDialog
+            onSaved={() => setServiceReadCount((count) => count + 1)}
+            onGoToCategories={() => setSection("categories")}
+            trigger={
+              <Button className="w-full md:w-auto">
+                <PlusIcon aria-hidden />
+                Novo serviço
+              </Button>
+            }
+          />
+        )}
         {section === "categories" && (
           <CategoryFormDialog
             onSaved={() => setCategoryReadCount((count) => count + 1)}
@@ -53,7 +67,10 @@ export function CatalogTabs() {
           starts with no search or filter. The cards have their own buttons,
           so the panel takes no focus stop of its own. */}
       <TabsContent value="services" tabIndex={-1}>
-        <ServiceList />
+        <ServiceList
+          key={serviceReadCount}
+          onGoToCategories={() => setSection("categories")}
+        />
       </TabsContent>
       <TabsContent value="categories" tabIndex={-1}>
         <CategoryList key={categoryReadCount} />

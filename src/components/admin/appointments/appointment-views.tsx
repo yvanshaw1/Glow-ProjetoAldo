@@ -2,7 +2,7 @@
 
 import { CalendarPlusIcon } from "lucide-react";
 import { useState } from "react";
-import { AppointmentFormDialog } from "@/components/admin/appointments/appointment-form-dialog";
+import { FormDialog } from "@/components/shared/form-dialog";
 import { AppointmentList } from "@/components/admin/appointments/appointment-list";
 import { AppointmentWizard } from "@/components/admin/appointments/appointment-wizard";
 import { Button } from "@/components/ui/button";
@@ -59,7 +59,7 @@ export function AppointmentViews() {
             </TabsTrigger>
           ))}
         </TabsList>
-        <AppointmentFormDialog
+        <FormDialog
           trigger={
             <Button className="w-full md:w-auto">
               <CalendarPlusIcon aria-hidden />
@@ -78,7 +78,7 @@ export function AppointmentViews() {
               onSubmittingChange={setSubmitting}
             />
           )}
-        </AppointmentFormDialog>
+        </FormDialog>
       </div>
       {/* Each tab mounts its list when chosen, so it reads the route again
           and starts with no search or filter. The cards have their own

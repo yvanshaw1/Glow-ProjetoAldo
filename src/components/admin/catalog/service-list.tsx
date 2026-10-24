@@ -25,7 +25,11 @@ type ServiceFilters = {
 // A new key on every failure, so the notice takes the focus each time.
 type Failure = { key: number; error: ApiError };
 
-export function ServiceList() {
+type ServiceListProps = {
+  onGoToCategories: () => void;
+};
+
+export function ServiceList({ onGoToCategories }: ServiceListProps) {
   const list = usePaginatedList<AdminServiceSummary, ServiceFilters>({
     path: "/api/admin/services",
     pageSize: ADMIN_LIST_PAGE_SIZE,
@@ -78,6 +82,7 @@ export function ServiceList() {
                 <ServiceCard
                   service={service}
                   onChange={changed}
+                  onGoToCategories={onGoToCategories}
                   onFailed={(error) =>
                     setFailure((current) => ({
                       key: (current?.key ?? 0) + 1,

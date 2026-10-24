@@ -44,15 +44,15 @@ Primeiro a escolha do tipo, em três botões de opção com o nome e uma frase: 
 |---|---|
 | Principal | "Informações", "Valores" e "Adicionais" |
 | Complementar | "Informações" e "Valores" (sem vínculo de adicionais, FA02) |
-| Adicional | uma só, sem título de etapa (FA01) |
+| Adicional | uma só, "Dados do serviço" (FA01) |
 
 - **Informações** (RF061 e RF063): "Categoria" (só as ativas), "Forma de precificação" ("Por porte" ou "Valor fixo", em botões de opção), "Duração média (minutos)" (de 5 a 2.400), "Nome", "Descrição" e "Imagem (opcional)".
 - **Valores** ([RN009](RN009-precificacao.md)): "Valor fixo", ou "Pequeno (P)", "Médio (M)", "Grande (G)" e "Extra grande (GG)", todos obrigatórios, no campo monetário e maiores que zero.
 - **Adicionais**, só no principal: os adicionais cadastrados, para marcar, sem obrigatoriedade. Sem nenhum: "Nenhum serviço adicional cadastrado."
 - **Adicional** (RF062): "Nome", "Duração média (minutos)", "Valor fixo" e, opcional, "Serviços principais vinculados"; sem categoria, descrição, imagem nem forma de precificação. Sem principal cadastrado: "Nenhum serviço principal cadastrado."
-- Sem categoria ativa, no principal e no complementar, a janela diz "Cadastre uma categoria antes de criar este serviço." (FE03), com o botão "Ir para as categorias".
+- Sem categoria ativa, no principal e no complementar, o formulário diz "Cadastre uma categoria antes de criar este serviço." (FE03), com o botão "Ir para as categorias".
 - O último botão é "Salvar serviço" ("Salvando…"). A falha aparece no topo da janela, com o foco, e os dados informados continuam nos campos.
-- **Imagem** (UC13 passo 4 e FE02, [RS015](../plataforma/seguranca.md)): o botão "Escolher imagem" (JPEG, PNG ou WebP, até 2 MB), a prévia abaixo do campo, "Trocar imagem" e "Remover imagem". Arquivo de outro tipo ou maior que 2 MB: "Use uma imagem JPEG, PNG ou WebP de até 2 MB." Na demonstração a imagem só aparece na prévia, e nada é enviado.
+- **Imagem** (UC13 passo 4 e FE02, [RS015](../plataforma/seguranca.md)): o campo de arquivo (JPEG, PNG ou WebP, até 2 MB), a prévia abaixo do campo, a troca por outro arquivo e "Remover imagem". Arquivo de outro tipo ou maior que 2 MB: "Use uma imagem JPEG, PNG ou WebP de até 2 MB." Na demonstração a imagem só aparece na prévia, e nada é enviado.
 
 ## Editar serviço (UC14 passos 4 a 7, RF064)
 
