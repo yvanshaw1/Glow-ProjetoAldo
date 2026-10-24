@@ -107,15 +107,15 @@ Acesso: Perfis `staff` ou `admin` com a permissão `appointments`.
 
 Lista os agendamentos (UC10).
 
-- Entrada: `view*`: `today`, `future` ou `history`; `status, search, sort, page, pageSize`.
-- Resposta: **200** lista paginada com cliente, veículo, serviços, total, status e previsão de conclusão.
+- Entrada: `view*`: `today` (Agendado, Em espera, Em execução e Finalizado, marcados para o dia corrente, no fuso da empresa, ou para dias anteriores), `future` (os mesmos status, marcados para depois do dia corrente) ou `history` (Concluído, Cancelado e Reagendado, de qualquer data); `status` (um dos status da visão); `search` (parte do nome do cliente, da placa, da marca ou do modelo do veículo, sem distinção de maiúsculas); `sort`: `time` (padrão: pela data marcada, da mais próxima à mais distante e, no `history`, da mais recente à mais antiga) ou `status` (na ordem de RN017 e, dentro de cada status, por `time`); `page`, `pageSize`.
+- Resposta: **200** lista paginada de `id`, `status`, `scheduledAt`, `estimatedEndAt`, `clientName`, `vehicle` (`plate`, `brand` e `model`), `services` (`id` e `name`) e `total`, com os dados copiados no agendamento (RN037).
 
 #### `GET /api/admin/appointments/:id`
 
 Detalha um agendamento.
 
 - Entrada: Nenhuma.
-- Resposta: **200** agendamento completo; no status `awaiting_payment`, inclui o total para cada forma de pagamento, usado no resumo de conclusão.
+- Resposta: **200** `id`, `status`, `scheduledAt`, `estimatedEndAt`, `estimatedDurationMinutes`, `clientName`, `paymentMethod`, `subtotal`, `feePercent`, `total`, `vehicle` (`id`, `plate`, `type`, `size`, `brand`, `model`, `color` e `year`), `services` (`id`, `name`, `type`, `price` e `durationMinutes`) e `updatedAt`, com os dados copiados no agendamento (RN037); no status `awaiting_payment`, também `paymentOptions`: `paymentMethod`, `feePercent` e `total` de cada uma das quatro formas, na ordem de RN011, usado no resumo de conclusão; nos outros status, `paymentOptions` é `null`. As quatro rotas de gravação abaixo respondem com este formato.
 
 #### `POST /api/admin/appointments/preview`
 
@@ -143,28 +143,28 @@ Edita um agendamento em qualquer status (UC26).
 Avança para o próximo status, até `awaiting_payment` (UC12).
 
 - Entrada: Nenhuma.
-- Resposta: **200** agendamento com o novo status; 409 `INVALID_STATUS`.
+- Resposta: **200** agendamento com o novo status, no formato do detalhe; 409 `INVALID_STATUS`.
 
 #### `POST /api/admin/appointments/:id/complete`
 
 Conclui o atendimento e registra a forma de pagamento utilizada (UC12).
 
 - Entrada: `paymentMethod*`
-- Resposta: **200** agendamento `completed`, com o total recalculado se a forma de pagamento mudou; 409 `INVALID_STATUS` se não estiver em `awaiting_payment`.
+- Resposta: **200** agendamento `completed`, no formato do detalhe, com o total recalculado se a forma de pagamento mudou; 409 `INVALID_STATUS` se não estiver em `awaiting_payment`.
 
 #### `POST /api/admin/appointments/:id/cancel`
 
 Cancela um agendamento agendado ou em espera.
 
 - Entrada: Nenhuma.
-- Resposta: **200** agendamento cancelado; 409 `INVALID_STATUS`.
+- Resposta: **200** agendamento cancelado, no formato do detalhe; 409 `INVALID_STATUS`.
 
 #### `POST /api/admin/appointments/:id/reschedule`
 
 Reagenda um serviço concluído (UC25).
 
 - Entrada: `paymentMethod*, scheduledAt*`
-- Resposta: **201** novo agendamento, com valores e duração calculados pelo catálogo atual; 409 `INVALID_STATUS`.
+- Resposta: **201** novo agendamento, no formato do detalhe, com valores e duração calculados pelo catálogo atual; 409 `INVALID_STATUS`.
 
 #### `GET /api/admin/appointments/lookup/clients`
 

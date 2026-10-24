@@ -64,6 +64,40 @@ export type ClientAppointment = Omit<
   updatedAt: string;
 };
 
+// One item of the page of GET /api/admin/appointments (UC10), with the data
+// copied in the appointment (RN037); the same fields as the agenda of the
+// dashboard.
+export type AdminAppointmentSummary = {
+  id: string;
+  status: AppointmentStatus;
+  scheduledAt: string;
+  // RN034
+  estimatedEndAt: string;
+  clientName: string;
+  vehicle: Pick<AppointmentVehicle, "plate" | "brand" | "model">;
+  services: Pick<AppointmentService, "id" | "name">[];
+  total: number;
+};
+
+// The total of one payment method of an appointment Finalizado, as the route
+// worked it out (RN010, RN012): the screen shows it and never sums it.
+export type PaymentOption = {
+  paymentMethod: PaymentMethod;
+  // Positive for a surcharge, negative for a discount, zero for none.
+  feePercent: number;
+  total: number;
+};
+
+// GET /api/admin/appointments/:id and the answer of the four writes of the
+// panel (UC12, UC25): the appointment of the client, with the name of the
+// client and, only when it is Finalizado, the total of each payment method
+// for the conclusion (RF053).
+export type AdminAppointment = ClientAppointment & {
+  clientName: string;
+  // In the order of RN011; null in any other status.
+  paymentOptions: PaymentOption[] | null;
+};
+
 // An active additional linked to a main service, always with a fixed price
 // (RN006, RN009).
 export type BookableAdditional = Pick<
