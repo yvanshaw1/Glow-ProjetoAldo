@@ -40,5 +40,6 @@ Leia só o que a tarefa pede: o caso de uso do fluxo, as regras que ele cita e, 
 | rotas.md | Telas e rotas da API |
 | meus-agendamentos.md | Conteúdo e textos da página de agendamentos do cliente (`/appointments`) |
 | dashboard-do-painel.md | Conteúdo e textos da tela do dashboard (`/admin`): período, indicadores, agenda do dia e estados |
+| agendamentos-do-painel.md | Conteúdo e textos da página de agendamentos do painel (`/admin/appointments`): visões, controles, cartão e estados |
 | agendar-servico.md | Etapas, campos e textos do assistente de agendamento (`/booking`), edição e reagendamento (`/appointments`) |
 | calculos.md | Funções puras de preço, status, datas, edição e da análise do dashboard (testadas com TDD) |

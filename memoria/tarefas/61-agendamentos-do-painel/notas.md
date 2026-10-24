@@ -66,3 +66,32 @@ A página ainda não existe, então as respostas foram conferidas por um teste t
 ## 2026-10-24 – desvio: etapa 03 do PR 1
 
 A pedido do Yvan: ramificação `feat/61-appointments-demo` enviada com cinco commits (três de código e documentação, dois da pasta da tarefa) e o PR #84 aberto como rascunho (`Refs #61`), sem pedido de revisão, como no #80. `02_relatorio.md` parcial, com `pull_request: 84`; o plano continua em `em_execucao` até o PR 4. A `origin/main` continuava em cf093c6, sem nada a incorporar. O PR tem 538 linhas em `src/`, cerca de 90 delas de dados fixos. Os PRs 2 a 4 esperam a incorporação do #84.
+
+## 2026-10-24 – decisão: PR 1 incorporado, PR 2 começado
+
+O PR #84 foi incorporado em ead3ea4 (24/10/2026, 14:04 UTC), com a aprovação de yvantoledo1 e o CI passando. Etapa 02 do PR 2 (listagem), na ramificação `feat/61-appointments-list`, criada da `origin/main` com `git switch --no-track -c`; a local `feat/61-appointments-demo` foi apagada depois de conferir que a árvore era igual à da `origin/main`.
+
+## 2026-10-24 – desvio: PR 2, o que mudou em relação ao plano
+
+- **"Ver detalhes" fica para o PR 3.** O cartão do PR 2 não tem o botão, porque o detalhe só existe no PR 3; um botão sem efeito não entra. O PR 3 acrescenta o botão e a janela.
+- **Nome do `Select`.** Um `combobox` não tira o nome do texto dele (o Lighthouse reprovou `button-name` no seletor de ordem): os dois seletores levam `aria-label`, o do status com "Filtrar por status: <status mostrado>" e o da ordem com o próprio texto visível ("Ordenar por horário"), para o nome conter o que se vê (WCAG 2.5.3). Corrigido no mesmo commit.
+- **Texto de ajuda da busca.** "Cliente, placa, marca ou modelo", no módulo da tela; L5 só fixava o rótulo "Buscar por cliente ou veículo".
+- **Lugar reservado.** A primeira leitura usa os três lugares do `PaginatedList` compartilhado (altura de 80 px, em coluna), e não a forma do cartão; o CLS medido é 0.
+
+## 2026-10-24 – descoberta: PR 2, o que a verificação cobriu
+
+Banco local (`npx supabase start`, `db reset` só com o `seed.sql`), admin de teste criado por `supabase/scripts/create-admin.mjs` (credenciais no scratchpad, nunca exibidas), `npx next build` e `next start -p 3060`, num Chrome sem interface (`puppeteer-core`), com os roteiros da #60 adaptados (`verify-list.mjs`, `verify-list-states.mjs`, `lh-snapshots-list.mjs`):
+
+- **Página** nas quatro combinações (360 × 800 e 1440 × 900, claro e escuro), sem rolagem horizontal: título "Agendamentos – Glow", `h1`, o aviso de demonstração logo abaixo do `h1`, as três abas, a descrição da visão; Hoje com 6 cartões ("1–6 de 6"; Agendado 2, Em espera 2, Finalizado 1, Em execução 1), Futuros com 8, Histórico com 20 ("1–20 de 36") e 16 na página 2 ("21–36 de 36").
+- **Critério da issue:** em "Histórico", o filtro "Cancelado" mostra "1–7 de 7", todos "Cancelado"; "Limpar filtros" volta a "1–20 de 36", o botão some e o foco vai à busca. O filtro "Em espera" em "Hoje" mostra os 2, com o nome "Filtrar por status: Em espera"; só a ordem alterada já mostra "Limpar filtros".
+- **Opções do filtro:** "Todos os status" e os quatro em aberto em Hoje; "Todos os status", "Concluído", "Cancelado" e "Reagendado" no Histórico.
+- **Ordem:** por status, Agendado, Agendado, Em espera, Em espera, Em execução, Finalizado. **Busca:** "souza", a placa, "HILUX" (sem distinção de maiúsculas) e "zzz" (a mensagem de nenhum agendamento encontrado), voltando à primeira página.
+- **Atualizar:** a listagem fica `aria-busy` (anteriores em "Carregando"), o foco continua no botão e nada fica desativado (`:disabled` zero).
+- **Estados**, por alteração temporária de `src/lib/demo` (`patch-appointments.mjs`, sem commit, desfeita por `git checkout -- src/lib` e conferida por `git status`): a falha traz "Não foi possível concluir a operação. Tente novamente em instantes." com "Tentar novamente", as abas e a busca continuam, uma leitura só (nada se repete sozinho) e a nova leitura, pelo teclado, traz os 6; as três visões vazias com os textos de L5 e a busca sem resultado; a leitura lenta (2,5 s) mostra os três lugares reservados na primeira vez e os cartões anteriores em "Carregando" depois, com o foco no seletor e na busca.
+- **Teclado:** Tab percorre busca, status, ordem e "Atualizar"; Enter abre a lista do seletor com 5 opções, setas e Enter escolhem, Esc fecha, e o foco fica no seletor.
+- **Lighthouse 13.5.0** em `/admin/appointments`, com o cookie da sessão de teste (arquivo apagado no fim): acessibilidade 100 no celular e no computador, claro e escuro, e 100 nas 20 capturas de estado (lista do status aberta, lista da ordem aberta, Histórico com "Cancelado", página 2 e busca sem resultado). Desempenho: celular 94 (LCP 3,1 s simulado, CLS 0, TBT de 40 a 50 ms) e computador 100 (LCP 0,7 s). O LCP do celular repete as telas anteriores (o aviso de demonstração); a medida na pré-visualização é do Yvan.
+- **Registro do `next start`:** 249 linhas acumuladas, só `requestId`, `userId`, método, caminho, status e código; nenhuma de erro ou aviso, e nenhuma com cookie, token, cabeçalho de autorização, senha nem e-mail de teste. As requisições da tela: `GET /api/auth/me` e `GET /api/public/company`; nenhuma a `/api/admin/*`.
+
+## 2026-10-24 – desvio: etapa 03 do PR 2
+
+A pedido do Yvan: `02_relatorio.md` atualizado com os PRs 1 e 2 (o `pull_request` passa ao número do PR 2), ramificação `feat/61-appointments-list` enviada e o PR aberto como rascunho (`Refs #61`), sem pedido de revisão. A `origin/main` continuava em ead3ea4, sem nada a incorporar, e `npm run check` passou de novo (414 testes). O PR tem 316 linhas em `src/`. Os PRs 3 e 4 esperam a incorporação deste.
