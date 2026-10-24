@@ -91,3 +91,7 @@ Banco local (`npx supabase start`, `db reset` só com o `seed.sql`), admin de te
 - **Teclado:** Tab percorre busca, status, ordem e "Atualizar"; Enter abre a lista do seletor com 5 opções, setas e Enter escolhem, Esc fecha, e o foco fica no seletor.
 - **Lighthouse 13.5.0** em `/admin/appointments`, com o cookie da sessão de teste (arquivo apagado no fim): acessibilidade 100 no celular e no computador, claro e escuro, e 100 nas 20 capturas de estado (lista do status aberta, lista da ordem aberta, Histórico com "Cancelado", página 2 e busca sem resultado). Desempenho: celular 94 (LCP 3,1 s simulado, CLS 0, TBT de 40 a 50 ms) e computador 100 (LCP 0,7 s). O LCP do celular repete as telas anteriores (o aviso de demonstração); a medida na pré-visualização é do Yvan.
 - **Registro do `next start`:** 249 linhas acumuladas, só `requestId`, `userId`, método, caminho, status e código; nenhuma de erro ou aviso, e nenhuma com cookie, token, cabeçalho de autorização, senha nem e-mail de teste. As requisições da tela: `GET /api/auth/me` e `GET /api/public/company`; nenhuma a `/api/admin/*`.
+
+## 2026-10-24 – desvio: etapa 03 do PR 2
+
+A pedido do Yvan: `02_relatorio.md` atualizado com os PRs 1 e 2 (o `pull_request` passa ao número do PR 2), ramificação `feat/61-appointments-list` enviada e o PR aberto como rascunho (`Refs #61`), sem pedido de revisão. A `origin/main` continuava em ead3ea4, sem nada a incorporar, e `npm run check` passou de novo (414 testes). O PR tem 316 linhas em `src/`. Os PRs 3 e 4 esperam a incorporação deste.
