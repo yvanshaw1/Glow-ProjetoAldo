@@ -9,8 +9,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-// The window of the form of the panel, new or edited (docs/agendamento/
-// agendamentos-do-painel.md): it does not close while the request runs, and
+// The window of a form of the panel, new or edited (docs/agendamento/
+// agendamentos-do-painel.md, docs/catalogo/servicos-do-painel.md): it does not close while the request runs, and
 // the focus starts in "Cancelar" of the first step and returns to the button
 // that opened it (RNF005).
 
@@ -20,18 +20,14 @@ type FormControls = {
   setSubmitting: (isSubmitting: boolean) => void;
 };
 
-type AppointmentFormDialogProps = {
+type FormDialogProps = {
   // The button that opens the window, as the `render` of the trigger.
   trigger: ReactElement;
   title: string;
   children: (controls: FormControls) => ReactNode;
 };
 
-export function AppointmentFormDialog({
-  trigger,
-  title,
-  children,
-}: AppointmentFormDialogProps) {
+export function FormDialog({ trigger, title, children }: FormDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const popupRef = useRef<HTMLDivElement>(null);

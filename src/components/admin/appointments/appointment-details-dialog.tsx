@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { AdvanceButton } from "@/components/admin/appointments/advance-button";
-import { AppointmentFormDialog } from "@/components/admin/appointments/appointment-form-dialog";
+import { FormDialog } from "@/components/shared/form-dialog";
 import { AppointmentWizard } from "@/components/admin/appointments/appointment-wizard";
 import { CompleteAppointmentDialog } from "@/components/admin/appointments/complete-appointment-dialog";
 import { RescheduleAppointmentDialog } from "@/components/admin/appointments/reschedule-appointment-dialog";
@@ -307,7 +307,7 @@ function AppointmentContent({
       <DialogFooter>
         {/* UC26 FA01, RN032: the staff edits in any status. A nested window,
             so "Cancelar" and Esc return to the detail. */}
-        <AppointmentFormDialog
+        <FormDialog
           trigger={<Button variant="secondary">Editar</Button>}
           title="Editar agendamento"
         >
@@ -323,7 +323,7 @@ function AppointmentContent({
               onSubmittingChange={setSubmitting}
             />
           )}
-        </AppointmentFormDialog>
+        </FormDialog>
         {nextStatus && actions.includes("advance") && (
           <AdvanceButton
             id={id}
