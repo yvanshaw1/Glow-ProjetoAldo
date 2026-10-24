@@ -23,13 +23,12 @@ import { CATALOG_PAGE_SIZE } from "@/shared/constants/pagination";
 import { formatCurrency } from "@/shared/format/currency";
 import { formatDuration } from "@/shared/format/duration";
 
-// UC06 steps 4 to 6 (docs/agendamento/agendar-servico.md): the services to
-// book with the price of the size of the chosen vehicle (RF020, RN009), as
+// UC06 steps 4 to 6 (docs/agendamento/agendar-servico.md) and UC11 step 4: the
+// services to book with the price of the size of the chosen vehicle (RF020, RN009), as
 // native check boxes. A checked main service offers its additionals (FA01,
 // RN006); unchecking it takes out the ones no other checked main service
 // links (FA02).
 
-const SERVICES_PATH = "/api/me/bookable-services";
 const REQUIRED_MESSAGE =
   "Escolha ao menos um serviço principal ou complementar.";
 
@@ -43,11 +42,20 @@ type ServiceFilters = { vehicleId: string | undefined };
 const CHECK_MARK_CLASS =
   "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-sm border border-input bg-background text-primary-foreground inset-shadow-neu-sm peer-checked:bg-primary peer-checked:inset-shadow-none peer-checked:[&>svg]:visible";
 
-export function BookingServicesStep() {
+type BookingServicesStepProps = {
+  // The route of the services to book, as in docs/agendamento/rotas.md.
+  path: string;
+  legend: string;
+};
+
+export function BookingServicesStep({
+  path,
+  legend,
+}: BookingServicesStepProps) {
   const vehicle = useWatch<BookingFormValues, "vehicle">({ name: "vehicle" });
   // FA03: each visit to the step reads the prices of the chosen vehicle.
   const list = usePaginatedList<BookableService, ServiceFilters>({
-    path: SERVICES_PATH,
+    path,
     pageSize: CATALOG_PAGE_SIZE,
     initialFilters: { vehicleId: vehicle?.id },
   });
@@ -113,7 +121,7 @@ export function BookingServicesStep() {
       aria-describedby={fieldState.error ? errorId : undefined}
       className="gap-5"
     >
-      <FieldLegend>Quais serviços você quer?</FieldLegend>
+      <FieldLegend>{legend}</FieldLegend>
       <ServiceOptions
         list={list}
         groupName={groupName}
