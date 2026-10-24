@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { AppointmentDetailsDialog } from "@/components/admin/appointments/appointment-details-dialog";
 import { StatusBadge } from "@/components/shared/status-badge";
 import type { AdminAppointmentSummary } from "@/shared/api/appointments";
 import { formatCurrency } from "@/shared/format/currency";
@@ -9,11 +10,15 @@ import { formatPlate } from "@/shared/format/plate";
 // an appointment, with the status written (RN017) and the data copied in it
 // (RN037).
 
+type AppointmentCardProps = {
+  appointment: AdminAppointmentSummary;
+  onChange: () => void;
+};
+
 export function AppointmentCard({
   appointment,
-}: {
-  appointment: AdminAppointmentSummary;
-}) {
+  onChange,
+}: AppointmentCardProps) {
   const { status, clientName, vehicle, scheduledAt, estimatedEndAt } =
     appointment;
   return (
@@ -33,6 +38,12 @@ export function AppointmentCard({
       <p className="font-semibold">
         Total: {formatCurrency(appointment.total)}
       </p>
+      <div className="mt-auto flex flex-col pt-2">
+        <AppointmentDetailsDialog
+          appointment={appointment}
+          onChange={onChange}
+        />
+      </div>
     </article>
   );
 }
