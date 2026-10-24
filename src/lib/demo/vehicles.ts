@@ -3,6 +3,7 @@ import type { DemoRequest } from "@/lib/demo/routes";
 import type { Page } from "@/shared/api/pagination";
 import type { ClientVehicle, VehicleLookup } from "@/shared/api/vehicles";
 import { SHORT_LIST_PAGE_SIZE } from "@/shared/constants/pagination";
+import type { VehicleSize } from "@/shared/constants/vehicle-sizes";
 import type { VehicleType } from "@/shared/constants/vehicle-types";
 
 // Demo data of the vehicles module (decision 0055), from
@@ -69,6 +70,33 @@ export const SEED_VEHICLES: readonly SeedVehicle[] = [
   ["GLW4K14", "hatch", "Fiat", "Argo", "Vermelho", 2022],
   ["GLW5L15", "suv", "Toyota", "SW4", "Prata", 2019],
 ];
+
+// RN002: the size the database derives from the type (decision 0013).
+export const SIZE_BY_TYPE = {
+  hatch: "small",
+  sedan: "medium",
+  suv: "large",
+  pickup: "extra_large",
+} as const satisfies Record<VehicleType, VehicleSize>;
+
+// The id of each vehicle of the seed by its plate (md5 of
+// 'glow-demo:vehicle:<plate>' as a UUID).
+export const VEHICLE_IDS: Record<string, string> = {
+  GLW1A01: "52697984-4a36-5e0a-8d64-c791dee31a2b",
+  GLW2B02: "3909c1ba-30f5-1e8b-e50f-bb09ca12e1d4",
+  GLW3C03: "5c168feb-a9c0-91d9-f989-dd8b85b48c28",
+  GLW4D04: "fd673331-08e6-5c34-caeb-393e3cad961f",
+  GLW5E05: "265c94d0-f92e-ede6-4c31-724a59100f76",
+  GLW6F06: "a4465e8d-97a9-edc3-412e-99a605abcc32",
+  GLW7G07: "c9398a22-566d-2ece-94b1-aa1a6d4874bc",
+  GLW8H08: "a229a2b8-eb46-90df-1285-bcd05a9570a0",
+  GLW9J09: "b5cc9755-56bc-3069-585c-5ef100d07aaa",
+  GLW1010: "28ab2b1f-29da-26da-0cdb-fd0bf368c2f8",
+  GLW2020: "422d165d-2555-9576-8c7c-930748de9569",
+  GLW3030: "f0829d46-fc4b-ebf1-1ce0-675cdbd9180f",
+  GLW4K14: "da326a11-65e9-b083-759d-50f4c6188bb6",
+  GLW5L15: "c27d6551-0c94-5624-d779-0cad75a490a3",
+};
 
 // GET /api/me/vehicles
 export function answerVehicles({ query }: DemoRequest): Page<ClientVehicle> {

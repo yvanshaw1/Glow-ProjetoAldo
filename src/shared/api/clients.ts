@@ -11,3 +11,8 @@ export type ClientProfile = {
   // RNF011: sent back on the PATCH as it came, treated as text.
   updatedAt: string;
 };
+
+// One item of the page of GET /api/admin/clients and the body of
+// GET /api/admin/clients/:id (docs/clientes/rotas.md, UC17): the account data
+// of a client for the staff, with the id the vehicles and the writes use.
+export type AdminClient = ClientProfile & { id: string };

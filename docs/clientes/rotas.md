@@ -74,21 +74,21 @@ Acesso: Perfis `staff` ou `admin` com a permissão `clients`.
 Lista e busca clientes (UC17).
 
 - Entrada: `search, page, pageSize`
-- Resposta: **200** lista paginada de clientes.
+- Resposta: **200** lista paginada de `id`, `firstName`, `lastName`, `email`, `phone` (os 11 algarismos) e `updatedAt`, em ordem alfabética pelo nome completo; `search` procura no nome, no e-mail e no telefone.
 
 #### `GET /api/admin/clients/:id`
 
 Detalha um cliente.
 
 - Entrada: Nenhuma.
-- Resposta: **200** dados da conta.
+- Resposta: **200** `id`, `firstName`, `lastName`, `email`, `phone` e `updatedAt`.
 
 #### `GET /api/admin/clients/:id/vehicles`
 
 Lista os veículos do cliente.
 
 - Entrada: Nenhuma.
-- Resposta: **200** lista paginada de veículos, com tipo e porte.
+- Resposta: **200** lista paginada de `id`, `plate`, `type`, `size`, `brand`, `model`, `color`, `year`, `isShared` e `updatedAt`, na ordem em que foram vinculados à conta.
 
 #### `POST /api/admin/clients`
 
@@ -116,7 +116,7 @@ Exclui a conta do cliente por exclusão lógica; veículos e agendamentos são p
 Consulta uma placa antes do cadastro (UC18).
 
 - Entrada: `plate*`
-- Resposta: **200** tipo, marca, modelo, cor e ano do veículo, se a placa já estiver cadastrada, ou resposta vazia.
+- Resposta: **200** `type`, `brand`, `model`, `color` e `year` do veículo, se a placa já estiver cadastrada, ou `null`; nunca devolve dados de clientes.
 
 #### `POST /api/admin/clients/:id/vehicles`
 
