@@ -4,7 +4,7 @@ titulo: "Tela do dashboard com dados de demonstração, gráficos e análise do 
 areas: [frontend, testes]
 tipo: funcionalidade
 requisitos: [UC09, UC27, RF040, RF041, RF042, RF043, RF089, RF090, RN021, RN035, RN038, RN039, RNF001, RNF003, RNF004, RNF005, RNF006, RNF016, RNF017]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 23/10/2026
 ---

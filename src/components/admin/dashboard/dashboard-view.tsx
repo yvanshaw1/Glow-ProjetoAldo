@@ -9,6 +9,7 @@ import {
   RevenueChartCard,
   StatusChartCard,
 } from "@/components/admin/dashboard/chart-card";
+import { DashboardAnalysisCard } from "@/components/admin/dashboard/dashboard-analysis-card";
 import { IndicatorCards } from "@/components/admin/dashboard/indicator-cards";
 import { PeriodSelector } from "@/components/admin/dashboard/period-selector";
 import { TodaySchedule } from "@/components/admin/dashboard/today-schedule";
@@ -121,6 +122,12 @@ function DashboardContent({
         </p>
       )}
       <IndicatorCards dashboard={dashboard} />
+      {/* UC27 FA02: another period takes the card back to the start. */}
+      <DashboardAnalysisCard
+        key={`${dashboard.from}-${dashboard.to}`}
+        period={{ from: dashboard.from, to: dashboard.to }}
+        hasAppointments={dashboard.appointmentCount > 0}
+      />
       <div className="grid gap-8 xl:grid-cols-3">
         <div className="xl:col-span-2">
           <RevenueChartCard days={dashboard.revenueByDay} />
@@ -140,6 +147,7 @@ function LoadingPlaces() {
           <Skeleton key={index} className="h-36 rounded-xl" />
         ))}
       </div>
+      <Skeleton className="h-47 rounded-xl md:h-37" />
       <div className="grid gap-8 xl:grid-cols-3">
         <Skeleton className="h-84 rounded-xl md:h-92 xl:col-span-2" />
         <Skeleton className="h-84 rounded-xl md:h-92" />
