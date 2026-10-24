@@ -18,9 +18,12 @@ import { SEARCH_TERM_MAX_LENGTH } from "@/shared/validation/formats";
 
 type PaginatedListProps<T, F extends ListFilters> = {
   list: ListState<T, F>;
-  searchLabel: string;
-  searchPlaceholder: string;
+  // A listing the route does not search has neither.
+  searchLabel?: string;
+  searchPlaceholder?: string;
   filters?: ReactNode;
+  // False when the only filter is a switch that is already at hand.
+  hasClearButton?: boolean;
   actions?: ReactNode;
   emptyTitle: string;
   emptyDescription?: string;
@@ -38,6 +41,7 @@ export function PaginatedList<T, F extends ListFilters>({
   searchLabel,
   searchPlaceholder,
   filters,
+  hasClearButton = true,
   actions,
   emptyTitle,
   emptyDescription,
@@ -55,30 +59,32 @@ export function PaginatedList<T, F extends ListFilters>({
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center">
-        <div className="relative w-full md:max-w-sm">
-          <Label htmlFor={searchId} className="sr-only">
-            {searchLabel}
-          </Label>
-          <SearchIcon
-            aria-hidden
-            className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
-          />
-          <Input
-            ref={searchRef}
-            id={searchId}
-            type="search"
-            value={list.searchText}
-            onChange={(event) => list.setSearchText(event.target.value)}
-            placeholder={searchPlaceholder}
-            maxLength={SEARCH_TERM_MAX_LENGTH}
-            enterKeyHint="search"
-            autoComplete="off"
-            className="pl-9"
-          />
-        </div>
+        {searchLabel !== undefined && (
+          <div className="relative w-full md:max-w-sm">
+            <Label htmlFor={searchId} className="sr-only">
+              {searchLabel}
+            </Label>
+            <SearchIcon
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
+            />
+            <Input
+              ref={searchRef}
+              id={searchId}
+              type="search"
+              value={list.searchText}
+              onChange={(event) => list.setSearchText(event.target.value)}
+              placeholder={searchPlaceholder}
+              maxLength={SEARCH_TERM_MAX_LENGTH}
+              enterKeyHint="search"
+              autoComplete="off"
+              className="pl-9"
+            />
+          </div>
+        )}
         {filters}
         {/* RF048: the search and the filters go away in a single action. */}
-        {list.hasActiveFilters && (
+        {hasClearButton && list.hasActiveFilters && (
           <Button variant="ghost" onClick={clearFilters}>
             Limpar filtros
           </Button>
