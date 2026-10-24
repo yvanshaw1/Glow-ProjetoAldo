@@ -44,7 +44,7 @@ const CLIENT_VEHICLES: ClientVehicle[] = [
 
 // The plate, type, brand, model, color and year of the 14 vehicles of the
 // seed, as in its insert.
-type SeedVehicle = [
+export type SeedVehicle = [
   plate: string,
   type: VehicleType,
   brand: string,
@@ -53,7 +53,7 @@ type SeedVehicle = [
   year: number,
 ];
 
-const SEED_VEHICLES: readonly SeedVehicle[] = [
+export const SEED_VEHICLES: readonly SeedVehicle[] = [
   ["GLW1A01", "hatch", "Volkswagen", "Polo", "Prata", 2021],
   ["GLW2B02", "sedan", "Toyota", "Corolla", "Preto", 2022],
   ["GLW3C03", "suv", "Jeep", "Compass", "Branco", 2023],

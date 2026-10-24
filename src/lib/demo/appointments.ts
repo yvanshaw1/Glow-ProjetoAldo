@@ -459,8 +459,8 @@ const BOOKABLE_SERVICES: readonly DemoBookableService[] = [
   },
 ];
 
-// Every service the preview can price.
-const CATALOG: readonly PricedService[] = [
+// Every service the preview can price, also for the panel's demo.
+export const CATALOG: readonly PricedService[] = [
   ...BOOKABLE_SERVICES,
   WAX,
   SHINE,
@@ -498,7 +498,7 @@ const SEED_WORKING_PERIODS: readonly (readonly (readonly [
 ];
 
 // The body of POST /api/me/appointments/preview, as the booking sends it.
-type PreviewBody = {
+export type PreviewBody = {
   vehicleId: string;
   serviceIds: string[];
   paymentMethod?: PaymentMethod | null;
@@ -550,9 +550,16 @@ export function answerBookableServices({
 export function answerAppointmentPreview({
   body,
 }: DemoRequest): AppointmentPreview {
-  const { vehicleId, serviceIds, paymentMethod, scheduledAt } =
-    body as PreviewBody;
-  const { size } = findVehicle(vehicleId);
+  const { vehicleId, ...order } = body as PreviewBody;
+  return previewOrder(findVehicle(vehicleId).size, order);
+}
+
+// The values of an order for a vehicle size, which the preview of the panel
+// (src/lib/demo/admin-appointments.ts) works out the same way.
+export function previewOrder(
+  size: VehicleSize,
+  { serviceIds, paymentMethod, scheduledAt }: Omit<PreviewBody, "vehicleId">,
+): AppointmentPreview {
   // RN008, RN031: a service that cannot be booked is left out.
   const services = serviceIds.flatMap((id) => {
     const service = CATALOG.find((item) => item.id === id);
@@ -580,7 +587,7 @@ export function answerAppointmentPreview({
   };
 }
 
-function notFound(): ApiError {
+export function notFound(): ApiError {
   return new ApiError({
     status: ERROR_CATALOG.NOT_FOUND.status,
     code: "NOT_FOUND",
