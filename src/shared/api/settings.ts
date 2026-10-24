@@ -1,3 +1,5 @@
+import type { PaymentMethod } from "@/shared/constants/payment-methods";
+
 // Bodies of the routes of docs/configuracoes/rotas.md. An empty optional
 // field is null (docs/padroes/api.md).
 
@@ -12,6 +14,15 @@ export type BusinessDay = {
   closesAt: string | null;
   breakStartsAt: string | null;
   breakEndsAt: string | null;
+};
+
+// One of the four items of GET and PUT /api/admin/settings/payment-fees
+// (UC24): the adjustment of a payment method (RN012).
+export type PaymentFee = {
+  paymentMethod: PaymentMethod;
+  // Positive for a surcharge, negative for a discount, zero for none, from
+  // -100 to 100.
+  percent: number;
 };
 
 // GET /api/public/company (RN028): the CNPJ is not public.
