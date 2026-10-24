@@ -1,7 +1,7 @@
 ---
 titulo: Padrões de design e estilo
-origem: issue #25, plano memoria/tarefas/25-base-do-frontend/01_plano.md (L1 a L6)
-relacionados: [RNF001, RNF005, RNF006, RNF016, 0007, 0049]
+origem: issue #25, plano memoria/tarefas/25-base-do-frontend/01_plano.md (L1 a L6); issue #60, plano memoria/tarefas/60-telas-do-dashboard/01_plano.md (L5)
+relacionados: [RNF001, RNF005, RNF006, RNF016, 0007, 0049, 0056]
 ---
 
 # Padrões de design e estilo
@@ -129,3 +129,9 @@ As variantes dos componentes de `src/components/ui/` seguem estas tabelas. Uma a
 - Curvas padrão do Tailwind: `ease-out` na entrada, `ease-in` na saída e `ease-in-out` no restante.
 - A troca de sombra não é animada: a transição fica em `transform` e `opacity`.
 - Com `prefers-reduced-motion`, não há movimento (`src/app/reset.css`).
+
+## Gráficos
+
+- Os gráficos (Recharts, carregados sob demanda, decisão 0056) usam só as cores da tabela de cores, nas marcas e nos eixos: `--link` na receita; no status, `--link` nas fases em aberto, `--foreground` no Concluído, `--destructive` no Cancelado e `--muted-foreground` no Reagendado, os tons de `StatusBadge`; o texto dos eixos, `--muted-foreground`; as linhas da grade, `--border`.
+- Toda marca tem 3:1 sobre `--background`, o mínimo de WCAG 1.4.11: os contrastes da tabela de cores, de 4,8 a 12,5. O `--primary` do tema claro, com 1,9:1, não serve de marca.
+- A informação nunca está só na cor: o nome e a quantidade ficam escritos, e cada gráfico tem uma tabela com os mesmos dados para o leitor de tela, visualmente oculta. O desenho é `aria-hidden` e não tem elemento focável; a dica ao passar o mouse só repete a tabela. Sem animação.

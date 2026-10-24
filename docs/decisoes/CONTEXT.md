@@ -63,3 +63,4 @@ Escolhas técnicas e de processo do projeto, uma por arquivo, numeradas e nunca 
 | [0053](0053-fuso-da-empresa-como-constante.md) | Fuso da empresa como constante compartilhada, sem variável de ambiente |
 | [0054](0054-analise-por-ia-no-groq.md) | Análise do dashboard por um modelo de linguagem do Groq em plano gratuito, chamado pelo servidor no formato Chat Completions |
 | [0055](0055-telas-de-demonstracao.md) | Telas construídas antes das rotas, com dados de demonstração respondidos pelo cliente da API |
+| [0056](0056-recharts-nos-graficos-do-dashboard.md) | Gráficos do dashboard com o Recharts, carregado sob demanda |

@@ -1,19 +1,19 @@
 ---
 titulo: Conteúdo da tela do dashboard
 assunto: agendamento
-origem: issue #60, plano memoria/tarefas/60-telas-do-dashboard/01_plano.md (L2, L3, L6)
+origem: issue #60, plano memoria/tarefas/60-telas-do-dashboard/01_plano.md (L2, L3, L5, L6)
 relacionados: [UC09, RF040, RF041, RF042, RF043, RN017, RN021, RN035, RN037]
 ---
 
 # Conteúdo da tela do dashboard
 
-Período, indicadores, agenda do dia e estados de `/admin`, do [UC09](UC09-visualizar-dashboard.md). Cabeçalho e navegação: [../padroes/layouts.md](../padroes/layouts.md); estilo: [../padroes/design.md](../padroes/design.md); etiqueta de status e telas de demonstração: [../padroes/componentes.md](../padroes/componentes.md); contrato da rota: [rotas.md](rotas.md).
+Período, indicadores, gráficos, agenda do dia e estados de `/admin`, do [UC09](UC09-visualizar-dashboard.md). Cabeçalho e navegação: [../padroes/layouts.md](../padroes/layouts.md); estilo: [../padroes/design.md](../padroes/design.md); etiqueta de status e telas de demonstração: [../padroes/componentes.md](../padroes/componentes.md); contrato da rota: [rotas.md](rotas.md).
 
 Enquanto as rotas do dashboard usarem os dados de demonstração de `src/lib/demo/dashboard.ts` (decisão 0055), o aviso de demonstração fica logo abaixo do título da página.
 
 ## Página
 
-- Título: "Dashboard". Seções, numa coluna: "Período", os indicadores, "Agenda do dia" e, nos PRs seguintes da tarefa, "Análise do período", "Receita por dia" e "Agendamentos por status".
+- Título: "Dashboard". Seções, numa coluna: "Período", os indicadores, "Receita por dia" e "Agendamentos por status" (lado a lado a partir de 1280 px, a receita em 2/3) e "Agenda do dia" e, no PR seguinte da tarefa, "Análise do período", logo abaixo dos indicadores.
 - A página lê o dashboard ao abrir, sem período: vale o mês atual do servidor, e os campos mostram o período da resposta.
 
 ## Período (UC09 FE02, RN035)
@@ -37,6 +37,13 @@ Quatro, com os valores da resposta, sem cálculo na tela, cada um com uma linha 
 
 Período sem agendamentos (UC09 FE01): os valores zerados e "Não há dados a apresentar neste período."
 
+## Gráficos (RF041, RF042, UC09 passo 3)
+
+- "Receita por dia": barras, uma por dia do período, em `--link`; no eixo horizontal, o dia e o mês ("05/10"), com poucos rótulos; no vertical, valores em reais; a dica com a data e o valor. Sem receita no período: "Nenhuma receita no período."
+- "Agendamentos por status": barras horizontais, uma por status, na ordem de [RN017](RN017-sequencia-de-status.md), com o nome e a quantidade escritos; as cores seguem os tons da etiqueta de status. Sem agendamentos: "Nenhum agendamento no período."
+- Cores, contraste e acesso sem a cor: [../padroes/design.md](../padroes/design.md), Gráficos. Cada gráfico tem uma tabela com os mesmos dados, visualmente oculta, para o leitor de tela ("Dia" e "Receita"; "Status" e "Agendamentos"); o desenho não é lido nem focável.
+- O código dos gráficos (Recharts, decisão 0056) só é carregado depois da página, quando a primeira resposta chega (RNF006); até lá, o lugar do gráfico fica reservado.
+
 ## Agenda do dia (RF043)
 
 - Título "Agenda do dia", com a data de hoje por extenso.
@@ -45,7 +52,7 @@ Período sem agendamentos (UC09 FE01): os valores zerados e "Não há dados a ap
 
 ## Estados
 
-- Na primeira leitura, o lugar dos indicadores e da agenda fica reservado; numa nova leitura, o conteúdo anterior continua na tela, com a aparência de carregando (RNF004).
+- Na primeira leitura, o lugar dos indicadores, dos gráficos e da agenda fica reservado; numa nova leitura, o conteúdo anterior continua na tela, com a aparência de carregando (RNF004).
 - Na falha da leitura (UC09 FE03), o aviso com a mensagem da API e "Tentar novamente"; o seletor de período continua na tela.
 
 ## Fora da tela, sem requisito

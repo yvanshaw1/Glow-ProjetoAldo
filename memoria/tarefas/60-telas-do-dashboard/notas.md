@@ -85,3 +85,16 @@ O README de `src/components/admin/dashboard/` ganhou uma linha, porque `dashboar
 ## 2026-10-23 – descoberta: LCP do celular
 
 O LCP simulado do celular (3,0 s) está acima dos 2,5 s de `frontend.md`, como nas telas anteriores (3,1 s na #58). O elemento do LCP em `/admin` é o texto do aviso de demonstração (conferido no relatório do Lighthouse), com 91 ms até o primeiro byte e 172 ms de atraso de renderização do elemento. As metas se medem na pré-visualização, pelo Yvan.
+
+## 2026-10-23 – PR 3: dependência, desvio e verificação
+
+- **PR 2 incorporado** (ec5442b); PR 3 em `feat/60-dashboard-charts`, da `origin/main`.
+- **`react-is`:** o npm resolveu o par do `recharts` 3.10.1 com o 16.13.1 de `prop-types` (ESLint); entrou `react-is` 19.3.0 em versão exata, como previsto em "Riscos". `npm audit --omit=dev --audit-level=high`: 0 vulnerabilidades. A alta de `body-parser` (via `shadcn`, devDependency) já estava no lock da `main`.
+- **`Cell` depreciado no Recharts 3:** a cor de cada barra de status vem do prop `shape`.
+- **Desvio:** o `next/dynamic` ficou em `chart-card.tsx` (que já estava na lista), não dentro do `DashboardView`.
+- **Verificação local (quatro combinações, 360 e 1440, claro e escuro):** sem rolagem horizontal; duas áreas de gráfico; soma da tabela da receita (12535) = "Receita"; soma da tabela de status (74) = "Agendamentos"; ticket = receita ÷ 48 pagos; taxa 6,76% = 5 ÷ 74; nomes e quantidades escritos; nenhum elemento focável nos `aria-hidden`; 40 Tab nunca entram num gráfico; contraste das marcas no mínimo 4,80:1 (claro) e 4,85:1 (escuro). "7 dias", período sem dados, volta ao mês e 366 dias conferidos. O `--primary` claro tem 1,89:1 (o plano dizia cerca de 1,8).
+- **Sob demanda:** o HTML de `/admin` não referencia o chunk `1eym-152geozg.js` (360042 bytes, 102572 com gzip); no Lighthouse do celular (observado): carga 162 ms, LCP 233 ms, pedido do chunk aos 601 ms.
+- **Lighthouse 13.5.0:** acessibilidade 100 nas quatro combinações; desempenho no celular 92 (LCP 3,0 s, CLS 0, TBT 180 ms) e 100 no computador.
+- **Contêiner, parte do agente (sem `.env.local`, cujo `ls` a regra de `.env*` nega):** `docker compose build` sem erro (imagem de 420 MB); usuário 1000; chunk na imagem; contêiner novo sem variáveis serve `/`, `/services` e o chunk com 200. Sem as variáveis do Supabase o `proxy.ts` registra `page_protection_failed` e deixa `/admin` passar com 200 (observação fora desta tarefa).
+- **Fica para o Yvan (P3, opção 1):** com o `.env.local` dele, na ramificação do PR, `docker compose up --build -d`, abrir `http://localhost:3000/admin` logado, conferir os dois gráficos e `docker compose down`.
+- **Registro do `next start`:** 415 linhas, sem dado sensível e sem `error` ou `warn`.
