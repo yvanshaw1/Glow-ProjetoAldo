@@ -1,4 +1,5 @@
 import { InfoIcon } from "lucide-react";
+import { EditVehicleDialog } from "@/components/shared/edit-vehicle-dialog";
 import type { ClientVehicle } from "@/shared/api/vehicles";
 import { VEHICLE_SIZE_LABELS } from "@/shared/constants/vehicle-sizes";
 import { VEHICLE_TYPE_LABELS } from "@/shared/constants/vehicle-types";
@@ -8,11 +9,18 @@ import { formatPlate } from "@/shared/format/plate";
 // the client, with the type and the size of RN002. A vehicle also linked to
 // another account says so (RN036).
 
+// RF076: the staff edits any vehicle, shared or not.
+const VEHICLES_PATH = "/api/admin/vehicles";
+
 type ClientVehicleCardProps = {
   vehicle: ClientVehicle;
+  onChange: () => void;
 };
 
-export function ClientVehicleCard({ vehicle }: ClientVehicleCardProps) {
+export function ClientVehicleCard({
+  vehicle,
+  onChange,
+}: ClientVehicleCardProps) {
   return (
     <article className="flex h-full flex-col gap-2 rounded-xl bg-background p-4 shadow-neu-sm">
       <h4 className="font-semibold">
@@ -31,6 +39,15 @@ export function ClientVehicleCard({ vehicle }: ClientVehicleCardProps) {
           Também vinculado a outra conta
         </p>
       )}
+      <div className="mt-auto flex flex-col pt-2">
+        <EditVehicleDialog
+          vehicle={vehicle}
+          vehiclesPath={VEHICLES_PATH}
+          warnWhenShared
+          onSaved={onChange}
+          onConflict={onChange}
+        />
+      </div>
     </article>
   );
 }

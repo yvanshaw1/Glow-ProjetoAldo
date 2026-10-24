@@ -1,7 +1,11 @@
 "use client";
 
 import { CarFrontIcon } from "lucide-react";
-import { AddVehicleDialog } from "@/components/portal/vehicles/add-vehicle-dialog";
+import {
+  PORTAL_ADD_VEHICLE_PROPS,
+  PORTAL_VEHICLES_PATH,
+} from "@/components/portal/vehicles/vehicle-paths";
+import { AddVehicleDialog } from "@/components/shared/add-vehicle-dialog";
 import { VehicleCard } from "@/components/portal/vehicles/vehicle-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ListPagination } from "@/components/shared/list-pagination";
@@ -21,7 +25,6 @@ import { SHORT_LIST_PAGE_SIZE } from "@/shared/constants/pagination";
 // page, with no search or filter, and the states of
 // docs/padroes/componentes.md, Listagem, in the shape of the cards.
 
-const VEHICLES_PATH = "/api/me/vehicles";
 const NO_FILTERS: ListFilters = {};
 
 // Cards held while the first page loads, so the page does not shift.
@@ -33,7 +36,7 @@ type VehicleListState = PaginatedList<ClientVehicle>;
 
 export function VehicleList() {
   const list = usePaginatedList<ClientVehicle, ListFilters>({
-    path: VEHICLES_PATH,
+    path: PORTAL_VEHICLES_PATH,
     pageSize: SHORT_LIST_PAGE_SIZE,
     initialFilters: NO_FILTERS,
   });
@@ -44,6 +47,7 @@ export function VehicleList() {
     <div className="flex flex-col gap-8">
       {!isEmpty && (
         <AddVehicleDialog
+          {...PORTAL_ADD_VEHICLE_PROPS}
           onAdded={list.reload}
           className="w-full sm:w-auto sm:self-end"
         />
@@ -94,7 +98,12 @@ function VehicleListContent({ list }: { list: VehicleListState }) {
           icon={CarFrontIcon}
           title="Nenhum veículo cadastrado"
           description="Cadastre um veículo para agendar serviços."
-          action={<AddVehicleDialog onAdded={list.reload} />}
+          action={
+            <AddVehicleDialog
+              {...PORTAL_ADD_VEHICLE_PROPS}
+              onAdded={list.reload}
+            />
+          }
         />
       </div>
     );

@@ -1,5 +1,6 @@
 "use client";
 
+import { InfoIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
@@ -7,7 +8,7 @@ import {
   VehicleDetailFields,
   VehicleTypeField,
   type VehicleFormValues,
-} from "@/components/portal/vehicles/vehicle-fields";
+} from "@/components/shared/vehicle-fields";
 import { FormAlert } from "@/components/shared/form-alert";
 import { SubmitButton } from "@/components/shared/submit-button";
 import { Button } from "@/components/ui/button";
@@ -25,11 +26,10 @@ import { ApiError, apiRequest } from "@/lib/api-client";
 import type { ClientVehicle } from "@/shared/api/vehicles";
 import { formatPlate } from "@/shared/format/plate";
 
-// UC05 FA02 (docs/clientes/area-do-cliente.md): the edit of a vehicle of the
-// account. The card offers it only when no other account has the vehicle
-// (FE03, RN036).
-
-const VEHICLES_PATH = "/api/me/vehicles";
+// UC05 FA02 (docs/clientes/area-do-cliente.md) and UC18 FA02 (docs/clientes/
+// clientes-do-painel.md): the edit of a vehicle. The client area offers it
+// only when no other account has the vehicle (FE03, RN036); the panel always
+// does, with a notice on a shared one.
 
 function toFormValues({
   plate,
@@ -51,12 +51,18 @@ function toFormValues({
 
 type EditVehicleDialogProps = {
   vehicle: ClientVehicle;
+  // The route of the vehicles, which takes the id: the PATCH is on it.
+  vehiclesPath: string;
+  // RN036: tells the edit is for every account of a shared vehicle.
+  warnWhenShared?: boolean;
   onSaved: () => void;
   onConflict: () => void;
 };
 
 export function EditVehicleDialog({
   vehicle,
+  vehiclesPath,
+  warnWhenShared = false,
   onSaved,
   onConflict,
 }: EditVehicleDialogProps) {
@@ -92,7 +98,7 @@ export function EditVehicleDialog({
   }: VehicleFormValues) {
     clearFailure();
     try {
-      await apiRequest<ClientVehicle>(`${VEHICLES_PATH}/${vehicle.id}`, {
+      await apiRequest<ClientVehicle>(`${vehiclesPath}/${vehicle.id}`, {
         method: "PATCH",
         body: {
           type,
@@ -143,6 +149,13 @@ export function EditVehicleDialog({
           onSubmit={handleSubmit(submit)}
           className="flex flex-col gap-5"
         >
+          {warnWhenShared && vehicle.isShared && (
+            <p className="flex gap-2 text-muted-foreground">
+              <InfoIcon aria-hidden className="mt-0.5 size-4 shrink-0" />
+              As alterações valem para todas as contas vinculadas a este
+              veículo.
+            </p>
+          )}
           <VehicleTypeField control={control} />
           <PlateField control={control} />
           <VehicleDetailFields control={control} />

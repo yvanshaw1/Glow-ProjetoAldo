@@ -1,7 +1,8 @@
 "use client";
 
 import type { FormEvent } from "react";
-import { AddVehicleDialog } from "@/components/portal/vehicles/add-vehicle-dialog";
+import { PORTAL_ADD_VEHICLE_PROPS } from "@/components/portal/vehicles/vehicle-paths";
+import { AddVehicleDialog } from "@/components/shared/add-vehicle-dialog";
 import type { VehicleActionProps } from "@/components/shared/booking-vehicle-step";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ export function BookingAddVehicle({
       className={cn(!isInEmptyState && "flex sm:justify-start")}
     >
       <AddVehicleDialog
+        {...PORTAL_ADD_VEHICLE_PROPS}
         onAdded={onAdded}
         className={cn(!isInEmptyState && "w-full sm:w-auto")}
       />

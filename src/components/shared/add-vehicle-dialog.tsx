@@ -9,7 +9,7 @@ import {
   VehicleDetailFields,
   VehicleTypeField,
   type VehicleFormValues,
-} from "@/components/portal/vehicles/vehicle-fields";
+} from "@/components/shared/vehicle-fields";
 import { FormAlert } from "@/components/shared/form-alert";
 import { SubmitButton } from "@/components/shared/submit-button";
 import { Button } from "@/components/ui/button";
@@ -27,14 +27,13 @@ import { apiRequest, withQuery } from "@/lib/api-client";
 import type { ClientVehicle, VehicleLookup } from "@/shared/api/vehicles";
 import { VEHICLE_TYPE_LABELS } from "@/shared/constants/vehicle-types";
 
-// UC05 (docs/clientes/area-do-cliente.md): the register starts with the
+// UC05 (docs/clientes/area-do-cliente.md) and UC18 (docs/clientes/
+// clientes-do-painel.md): the register starts with the
 // plate, and "Continuar" looks it up (RN036). A registered plate shows its
 // vehicle without editing, and the submit sends only the plate (FA01); a new
 // plate asks for the type and the data. A single form, so going back to the
-// plate keeps what was typed. #59 reuses this dialog in the booking.
-
-const VEHICLES_PATH = "/api/me/vehicles";
-const LOOKUP_PATH = "/api/me/vehicles/lookup";
+// plate keeps what was typed. The client area, the booking and the panel use
+// this dialog, each with its own routes.
 
 const EMPTY_VALUES: VehicleFormValues = {
   plate: "",
@@ -62,12 +61,20 @@ const SUBMIT_LABELS = {
 >;
 
 type AddVehicleDialogProps = {
+  // The route of the register and the one of the plate lookup.
+  createPath: string;
+  lookupPath: string;
+  // The button of a registered plate: whose account it goes to.
+  linkLabel: string;
   onAdded: () => void;
   // The place of the button that opens the dialog.
   className?: string;
 };
 
 export function AddVehicleDialog({
+  createPath,
+  lookupPath,
+  linkLabel,
   onAdded,
   className,
 }: AddVehicleDialogProps) {
@@ -104,7 +111,7 @@ export function AddVehicleDialog({
   // new plate takes it to the type.
   async function lookUpPlate(plate: string) {
     const vehicle = await apiRequest<VehicleLookup | null>(
-      withQuery(LOOKUP_PATH, { plate }),
+      withQuery(lookupPath, { plate }),
     );
     if (vehicle) {
       setStep({ name: "registered", vehicle });
@@ -127,7 +134,7 @@ export function AddVehicleDialog({
       step.name === "registered"
         ? { plate }
         : { plate, type, brand, model, color, year };
-    await apiRequest<ClientVehicle>(VEHICLES_PATH, { method: "POST", body });
+    await apiRequest<ClientVehicle>(createPath, { method: "POST", body });
     setIsOpen(false);
     onAdded();
   }
@@ -138,7 +145,10 @@ export function AddVehicleDialog({
     setFocus("plate");
   }
 
-  const { label, loadingLabel } = SUBMIT_LABELS[step.name];
+  const { label, loadingLabel } =
+    step.name === "registered"
+      ? { ...SUBMIT_LABELS.registered, label: linkLabel }
+      : SUBMIT_LABELS[step.name];
   return (
     <Dialog open={isOpen} onOpenChange={changeOpen}>
       <DialogTrigger render={<Button className={className} />}>

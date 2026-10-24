@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { ClientFormDialog } from "@/components/admin/clients/client-form-dialog";
 import { DeleteClientButton } from "@/components/admin/clients/delete-client-button";
 import { ClientVehicleList } from "@/components/admin/vehicles/client-vehicle-list";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -66,7 +67,11 @@ export function ClientDetailsDialog({
         <DialogHeader>
           <DialogTitle>Detalhes do cliente</DialogTitle>
         </DialogHeader>
-        <ClientDetails id={client.id} onChange={closeChanged} />
+        <ClientDetails
+          id={client.id}
+          onDeleted={closeChanged}
+          onChange={onChange}
+        />
       </DialogContent>
     </Dialog>
   );
@@ -74,16 +79,25 @@ export function ClientDetailsDialog({
 
 type ClientDetailsProps = {
   id: string;
+  onDeleted: () => void;
+  // The account was edited: the list is read again, the dialog stays.
   onChange: () => void;
 };
 
 // Mounted with the dialog, so each opening reads the route again.
-function ClientDetails({ id, onChange }: ClientDetailsProps) {
+function ClientDetails({ id, onDeleted, onChange }: ClientDetailsProps) {
   const { data, error, reload } = useApiQuery<AdminClient>(
     `${CLIENTS_PATH}/${id}`,
   );
   if (data !== null) {
-    return <ClientContent client={data} onChange={onChange} />;
+    return (
+      <ClientContent
+        client={data}
+        reload={reload}
+        onDeleted={onDeleted}
+        onChange={onChange}
+      />
+    );
   }
   // RNF004: the place of the detail while loading; a failure offers a retry.
   if (error) {
@@ -109,10 +123,17 @@ function ClientDetails({ id, onChange }: ClientDetailsProps) {
 
 type ClientContentProps = {
   client: AdminClient;
+  reload: () => void;
+  onDeleted: () => void;
   onChange: () => void;
 };
 
-function ClientContent({ client, onChange }: ClientContentProps) {
+function ClientContent({
+  client,
+  reload,
+  onDeleted,
+  onChange,
+}: ClientContentProps) {
   return (
     <>
       <div className="flex flex-col gap-6">
@@ -136,7 +157,17 @@ function ClientContent({ client, onChange }: ClientContentProps) {
         </section>
       </div>
       <DialogFooter>
-        <DeleteClientButton id={client.id} onDeleted={onChange} />
+        {/* A nested window, so "Cancelar" and Esc return to the details. */}
+        <ClientFormDialog
+          trigger={<Button variant="secondary">Editar dados</Button>}
+          client={client}
+          onSaved={() => {
+            reload();
+            onChange();
+          }}
+          onConflict={reload}
+        />
+        <DeleteClientButton id={client.id} onDeleted={onDeleted} />
       </DialogFooter>
     </>
   );

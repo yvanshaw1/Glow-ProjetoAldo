@@ -1,6 +1,6 @@
 # `src/components/admin/vehicles/` – Painel: vehicles
 
-Formulário de veículo do cliente no painel, com consulta da placa e edição de veículo compartilhado.
+Veículos do cliente nos detalhes da conta, no painel: lista e cartão, com os diálogos de cadastro (consulta da placa) e de edição, inclusive de veículo compartilhado, que ficam em `src/components/shared/`.
 
 ## Vai aqui
 

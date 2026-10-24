@@ -1,11 +1,16 @@
 "use client";
 
+import { AddVehicleDialog } from "@/components/shared/add-vehicle-dialog";
 import { ClientVehicleCard } from "@/components/admin/vehicles/client-vehicle-card";
 import { ListPagination } from "@/components/shared/list-pagination";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { usePaginatedList, type ListFilters } from "@/hooks/use-paginated-list";
+import {
+  usePaginatedList,
+  type ListFilters,
+  type PaginatedList,
+} from "@/hooks/use-paginated-list";
 import { cn } from "@/lib/utils";
 import type { ClientVehicle } from "@/shared/api/vehicles";
 import { SHORT_LIST_PAGE_SIZE } from "@/shared/constants/pagination";
@@ -15,9 +20,12 @@ import { SHORT_LIST_PAGE_SIZE } from "@/shared/constants/pagination";
 // docs/padroes/componentes.md, Listagem, in the shape of the cards.
 
 const NO_FILTERS: ListFilters = {};
+const LOOKUP_PATH = "/api/admin/vehicles/lookup";
 
 // Cards held while the first page loads, so the dialog does not shift.
 const LOADING_PLACES = 2;
+
+type VehicleListState = PaginatedList<ClientVehicle>;
 
 type ClientVehicleListProps = {
   clientId: string;
@@ -30,6 +38,22 @@ export function ClientVehicleList({ clientId }: ClientVehicleListProps) {
     initialFilters: NO_FILTERS,
   });
 
+  return (
+    <div className="flex flex-col gap-4">
+      {/* UC18 step 1: a new vehicle makes the list be read again. */}
+      <AddVehicleDialog
+        createPath={`/api/admin/clients/${clientId}/vehicles`}
+        lookupPath={LOOKUP_PATH}
+        linkLabel="Adicionar à conta"
+        onAdded={list.reload}
+        className="w-full sm:w-auto sm:self-end"
+      />
+      <VehicleListContent list={list} />
+    </div>
+  );
+}
+
+function VehicleListContent({ list }: { list: VehicleListState }) {
   if (list.error) {
     return (
       <Alert variant="destructive">
@@ -69,7 +93,7 @@ export function ClientVehicleList({ clientId }: ClientVehicleListProps) {
       >
         {list.items.map((vehicle) => (
           <li key={vehicle.id}>
-            <ClientVehicleCard vehicle={vehicle} />
+            <ClientVehicleCard vehicle={vehicle} onChange={list.reload} />
           </li>
         ))}
       </ul>
