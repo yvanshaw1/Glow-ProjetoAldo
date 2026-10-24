@@ -98,3 +98,29 @@ O LCP simulado do celular (3,0 s) está acima dos 2,5 s de `frontend.md`, como n
 - **Contêiner, parte do agente (sem `.env.local`, cujo `ls` a regra de `.env*` nega):** `docker compose build` sem erro (imagem de 420 MB); usuário 1000; chunk na imagem; contêiner novo sem variáveis serve `/`, `/services` e o chunk com 200. Sem as variáveis do Supabase o `proxy.ts` registra `page_protection_failed` e deixa `/admin` passar com 200 (observação fora desta tarefa).
 - **Fica para o Yvan (P3, opção 1):** com o `.env.local` dele, na ramificação do PR, `docker compose up --build -d`, abrir `http://localhost:3000/admin` logado, conferir os dois gráficos e `docker compose down`.
 - **Registro do `next start`:** 415 linhas, sem dado sensível e sem `error` ou `warn`.
+
+## 2026-10-24 – PR 3 incorporado; ramificação do PR 4
+
+O PR #82 foi aprovado e incorporado em 24/10/2026 (b2a95c0). O PR 4 saiu da `origin/main` nessa ponta, na ramificação `feat/60-dashboard-analysis`, sem vínculo com a `main`, e `npx -y npm@11.21.1 ci`. O resultado da tela logada no contêiner (parte do Yvan no P3) não chegou à sessão.
+
+## 2026-10-24 – PR 4, o que a verificação cobriu
+
+Ambiente como no PR 2 (banco local, admin de teste, `next build` e `next start -p 3060`, Chrome sem interface, Lighthouse 13.5.0 com o cookie por `--extra-headers`, arquivo apagado no fim). Os estados que a demonstração não produz (falha da análise, chamada lenta, contagem de chamadas) vieram de `src/lib/demo/dashboard.ts` e `match.ts` alterados em `globalThis.__demo`, sem commit, desfeitos por `git checkout -- src/lib` e conferidos por `git status`; os builds do Lighthouse de desempenho foram os limpos.
+
+- **O fluxo, nas quatro combinações (360 e 1440, claro e escuro):** o cartão fica entre os indicadores e os gráficos; o estado inicial (botão "Gerar análise" habilitado, descrição de L6); ao clicar, "Gerando análise…" com `aria-disabled="true"` e sem `:disabled`, três linhas reservadas e o foco no botão nas leituras de 50, 150 e 300 ms; depois, o resumo e as quatro observações com os rótulos "Receita:", "Agendamentos:", "Ticket médio:" e "Taxa de cancelamento:" em negrito e nenhum algarismo (RN039), a nota "Gerado por inteligência artificial em 24/10/2026 às 00:06…" no fuso da empresa (dentro de 2 minutos do relógio de Maceió), o botão "Gerar novamente" com o foco, a região de status dizendo "Análise gerada." e os quatro indicadores intactos; sem rolagem horizontal.
+- **Só a 1440 claro:** "Gerar novamente" esvazia o resultado e o anúncio enquanto espera e anuncia de novo; Enter e Space no botão pedem a análise; trocar para "7 dias" leva o cartão ao começo; um período no começo dos dados (de 90 a 82 dias antes de hoje) mostra "O período anterior não tem agendamentos: a análise não compara os períodos."; o período sem dados deixa o botão com `aria-disabled`, descrito por "Não há dados suficientes no período para gerar a análise.", o clique não chama nada (5 chamadas antes e depois) e o Tab o alcança.
+- **Falha (360 claro e 1440 escuro):** um clique, uma chamada; o aviso "O serviço está temporariamente indisponível. Tente novamente em instantes." com "Tentar novamente", os quatro indicadores na tela e o botão de volta a "Gerar análise"; "Tentar novamente" leva o foco ao botão em "Gerando análise…" e a segunda tentativa dá a análise.
+- **Chamada lenta** (2 s) cancelada por outro período ("Hoje"): o cartão volta ao começo e nada da análise cancelada aparece depois.
+- **Lighthouse 13.5.0:** acessibilidade 100 nas 20 capturas dos estados (inicial, carregando, resultado, falha e sem dados, nas quatro combinações) e nas quatro execuções de `/admin`; desempenho no celular 92 (FCP 0,8 s, LCP 3,0 s, CLS 0, TBT 190 ms) e no computador 99 (LCP 0,9 s).
+- **Registro do `next start`:** 607 linhas acumuladas, todas `info` ou sem nível de erro; sem cookie, token, cabeçalho de autorização, senha nem e-mail de teste.
+
+## 2026-10-24 – desvios
+
+- A conferência do roteiro tratava o botão habilitado como `aria-disabled` ausente; o Base UI põe `aria-disabled="false"`. O erro era do roteiro (8 falsos "FAIL"), corrigido para `!== "true"`; a tela estava certa.
+- O lugar reservado do cartão passou a `h-47 md:h-37` (188 e 148 px), a altura do cartão em repouso medida a 360 e a 1440 px (189 e 147 px); o CLS do celular ficou em 0.
+- Quando "Tentar novamente" é usado, o aviso some e o foco iria ao corpo da página: `generate()` leva o foco ao botão principal (já é onde ele está quando o botão principal foi o usado). Não estava no plano; fica no mesmo arquivo.
+- O PR 4 tem 192 linhas em `src/` (184 do cartão e 8 da ligação), abaixo das 400 e perto das 170 estimadas.
+
+## 2026-10-24 – tarefa concluída
+
+Com o PR 4, os quatro PRs da #60 estão entregues (#80, #81, #82 e #83) e o plano passou a `concluido` (sem tocar em `aprovado_por` nem em `aprovado_em`). A decisão 0056 foi gravada no PR 3. Fica a ligação das rotas reais, nas #51 e #66, que tiram as entradas de `src/lib/demo/routes.ts`; e a parte do Yvan no contêiner.
