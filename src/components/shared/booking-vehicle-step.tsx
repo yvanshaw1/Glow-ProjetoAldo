@@ -1,13 +1,12 @@
 "use client";
 
 import { CarFrontIcon } from "lucide-react";
-import { useId, type FormEvent, type ReactNode, type Ref } from "react";
+import { useId, type ReactNode, type Ref } from "react";
 import { useController } from "react-hook-form";
 import type {
   BookingFormValues,
   BookingVehicle,
 } from "@/components/shared/booking-form-values";
-import { AddVehicleDialog } from "@/components/portal/vehicles/add-vehicle-dialog";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ListPagination } from "@/components/shared/list-pagination";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -26,28 +25,48 @@ import { VEHICLE_SIZE_LABELS } from "@/shared/constants/vehicle-sizes";
 import { VEHICLE_TYPE_LABELS } from "@/shared/constants/vehicle-types";
 import { formatPlate } from "@/shared/format/plate";
 
-// UC06 steps 2 and 3 (docs/agendamento/agendar-servico.md): the vehicles of
-// the account by page, as native radio buttons, so the arrow keys change the
-// choice (RF019, RN003, RN004). Without vehicles, the register of the client
-// area (UC05, FE01).
+// UC06 steps 2 and 3 (docs/agendamento/agendar-servico.md) and UC11 step 3: the
+// vehicles of the account, or of the client chosen by the staff, by page, as
+// native radio buttons, so the arrow keys change the choice (RF019, RN003,
+// RN004). What the portal and the panel do not share comes by property: the
+// route, the legend, the empty state and the action that leads to the
+// register of a vehicle.
 
-const VEHICLES_PATH = "/api/me/vehicles";
-const NO_FILTERS: ListFilters = {};
 const REQUIRED_MESSAGE = "Escolha o veículo.";
 
 // Options held while the first page loads.
 const LOADING_PLACES = 2;
 
-type BookingVehicleStepProps = {
-  // Only the page offers the register: in a dialog it would open a third one.
-  canAddVehicle: boolean;
+export type VehicleActionProps = {
+  // Reads the list again, once a vehicle is added.
+  onAdded: () => void;
+  isInEmptyState: boolean;
 };
 
-export function BookingVehicleStep({ canAddVehicle }: BookingVehicleStepProps) {
+type BookingVehicleStepProps = {
+  // The route of the vehicles and its filters, as in docs/agendamento/rotas.md.
+  path: string;
+  filters?: ListFilters;
+  legend: string;
+  emptyDescription: string;
+  // The register of a vehicle, or the way to it, above the list and in the
+  // empty state; nothing where the step offers none.
+  renderAction: (props: VehicleActionProps) => ReactNode;
+};
+
+const NO_FILTERS: ListFilters = {};
+
+export function BookingVehicleStep({
+  path,
+  filters = NO_FILTERS,
+  legend,
+  emptyDescription,
+  renderAction,
+}: BookingVehicleStepProps) {
   const list = usePaginatedList<ClientVehicle, ListFilters>({
-    path: VEHICLES_PATH,
+    path,
     pageSize: SHORT_LIST_PAGE_SIZE,
-    initialFilters: NO_FILTERS,
+    initialFilters: filters,
   });
   const { field, fieldState } = useController<BookingFormValues, "vehicle">({
     name: "vehicle",
@@ -56,17 +75,18 @@ export function BookingVehicleStep({ canAddVehicle }: BookingVehicleStepProps) {
   const groupName = useId();
   const errorId = `${groupName}-error`;
   const isEmpty = list.hasLoaded && list.total === 0;
-  const addVehicle = canAddVehicle && (
-    <AddVehicle onAdded={list.reload} isInEmptyState={isEmpty} />
-  );
+  const action = renderAction({
+    onAdded: list.reload,
+    isInEmptyState: isEmpty,
+  });
 
   return (
     <FieldSet
       aria-describedby={fieldState.error ? errorId : undefined}
       className="gap-5"
     >
-      <FieldLegend>Qual veículo será atendido?</FieldLegend>
-      {!isEmpty && addVehicle}
+      <FieldLegend>{legend}</FieldLegend>
+      {!isEmpty && action}
       <VehicleOptions
         list={list}
         groupName={groupName}
@@ -74,7 +94,8 @@ export function BookingVehicleStep({ canAddVehicle }: BookingVehicleStepProps) {
         onChoose={(vehicle) => field.onChange(toBookingVehicle(vehicle))}
         onBlur={field.onBlur}
         firstOptionRef={field.ref}
-        emptyAction={addVehicle}
+        emptyDescription={emptyDescription}
+        emptyAction={action}
       />
       {list.pageCount > 1 && (
         <ListPagination
@@ -101,27 +122,6 @@ function toBookingVehicle({
   return { id, plate, brand, model, color };
 }
 
-type AddVehicleProps = {
-  onAdded: () => void;
-  isInEmptyState: boolean;
-};
-
-// The dialog has its own form, rendered in a portal: React still bubbles its
-// submit up to the form of the steps, so it stops here.
-function AddVehicle({ onAdded, isInEmptyState }: AddVehicleProps) {
-  return (
-    <div
-      onSubmit={(event: FormEvent) => event.stopPropagation()}
-      className={cn(!isInEmptyState && "flex sm:justify-start")}
-    >
-      <AddVehicleDialog
-        onAdded={onAdded}
-        className={cn(!isInEmptyState && "w-full sm:w-auto")}
-      />
-    </div>
-  );
-}
-
 type VehicleOptionsProps = {
   list: PaginatedList<ClientVehicle>;
   groupName: string;
@@ -129,6 +129,7 @@ type VehicleOptionsProps = {
   onChoose: (vehicle: ClientVehicle) => void;
   onBlur: () => void;
   firstOptionRef: Ref<HTMLInputElement>;
+  emptyDescription: string;
   emptyAction: ReactNode;
 };
 
@@ -141,6 +142,7 @@ function VehicleOptions({
   onChoose,
   onBlur,
   firstOptionRef,
+  emptyDescription,
   emptyAction,
 }: VehicleOptionsProps) {
   if (list.error) {
@@ -170,7 +172,7 @@ function VehicleOptions({
         <EmptyState
           icon={CarFrontIcon}
           title="Nenhum veículo cadastrado"
-          description="Para agendar um serviço, cadastre um veículo na sua conta."
+          description={emptyDescription}
           action={emptyAction || undefined}
         />
       </div>

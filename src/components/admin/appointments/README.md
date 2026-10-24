@@ -1,6 +1,6 @@
 # `src/components/admin/appointments/` – Painel: appointments
 
-Listagem com as visões do dia, futuros e histórico, filtros e busca; formulário de novo agendamento em etapas; ações de status; resumo de conclusão com a forma de pagamento.
+Listagem com as visões do dia, futuros e histórico, filtros e busca; formulário de novo agendamento em etapas (a etapa do cliente é daqui, as outras são de `src/components/shared/`); ações de status; resumo de conclusão com a forma de pagamento.
 
 ## Vai aqui
 
