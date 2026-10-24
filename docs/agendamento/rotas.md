@@ -115,7 +115,7 @@ Lista os agendamentos (UC10).
 Detalha um agendamento.
 
 - Entrada: Nenhuma.
-- Resposta: **200** `id`, `status`, `scheduledAt`, `estimatedEndAt`, `estimatedDurationMinutes`, `clientName`, `paymentMethod`, `subtotal`, `feePercent`, `total`, `vehicle` (`id`, `plate`, `type`, `size`, `brand`, `model`, `color` e `year`), `services` (`id`, `name`, `type`, `price` e `durationMinutes`) e `updatedAt`, com os dados copiados no agendamento (RN037); no status `awaiting_payment`, também `paymentOptions`: `paymentMethod`, `feePercent` e `total` de cada uma das quatro formas, na ordem de RN011, usado no resumo de conclusão; nos outros status, `paymentOptions` é `null`. As quatro rotas de gravação abaixo respondem com este formato.
+- Resposta: **200** `id`, `status`, `scheduledAt`, `estimatedEndAt`, `estimatedDurationMinutes`, `clientId`, `clientName`, `paymentMethod`, `subtotal`, `feePercent`, `total`, `vehicle` (`id`, `plate`, `type`, `size`, `brand`, `model`, `color` e `year`), `services` (`id`, `name`, `type`, `price` e `durationMinutes`) e `updatedAt`, com os dados copiados no agendamento (RN037); no status `awaiting_payment`, também `paymentOptions`: `paymentMethod`, `feePercent` e `total` de cada uma das quatro formas, na ordem de RN011, usado no resumo de conclusão; nos outros status, `paymentOptions` é `null`. As quatro rotas de gravação abaixo respondem com este formato.
 
 #### `POST /api/admin/appointments/preview`
 
@@ -170,19 +170,19 @@ Reagenda um serviço concluído (UC25).
 
 Busca clientes para o formulário de novo agendamento.
 
-- Entrada: `search*`
-- Resposta: **200** lista resumida de clientes.
+- Entrada: `search*` (parte do nome ou do e-mail, sem distinção de maiúsculas), `page`, `pageSize`
+- Resposta: **200** lista paginada de `id`, `name` e `email`, em ordem alfabética do nome; só clientes ativos (RN030).
 
 #### `GET /api/admin/appointments/lookup/vehicles`
 
 Lista os veículos do cliente escolhido.
 
-- Entrada: `clientId*`
-- Resposta: **200** lista de veículos.
+- Entrada: `clientId*`, `page`, `pageSize`
+- Resposta: **200** lista paginada dos veículos do cliente, nos campos de `GET /api/me/vehicles`, na ordem em que foram vinculados (RN003).
 
 #### `GET /api/admin/appointments/lookup/services`
 
 Lista os serviços com os valores aplicáveis ao veículo.
 
-- Entrada: `vehicleId*`
-- Resposta: **200** serviços, valores e adicionais.
+- Entrada: `vehicleId*`, `page`, `pageSize`
+- Resposta: **200** lista paginada nos campos e na ordem de `GET /api/me/bookable-services`, com o preço do porte do veículo (RN009).

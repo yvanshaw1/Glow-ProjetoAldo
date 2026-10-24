@@ -1,6 +1,7 @@
 import { ApiError } from "@/lib/api-client";
 import {
   CATALOG,
+  listBookableServices,
   notFound,
   previewOrder,
   type PreviewBody,
@@ -11,11 +12,14 @@ import { SEED_VEHICLES } from "@/lib/demo/vehicles";
 import type {
   AdminAppointment,
   AdminAppointmentSummary,
+  AdminClientOption,
   AppointmentPreview,
   AppointmentVehicle,
+  BookableService,
   PaymentOption,
 } from "@/shared/api/appointments";
 import type { Page } from "@/shared/api/pagination";
+import type { ClientVehicle } from "@/shared/api/vehicles";
 import {
   APPOINTMENT_STATUSES,
   type AppointmentStatus,
@@ -27,7 +31,11 @@ import {
   type AppointmentSort,
   type AppointmentView,
 } from "@/shared/constants/appointment-views";
-import { ADMIN_LIST_PAGE_SIZE } from "@/shared/constants/pagination";
+import {
+  ADMIN_LIST_PAGE_SIZE,
+  CATALOG_PAGE_SIZE,
+  SHORT_LIST_PAGE_SIZE,
+} from "@/shared/constants/pagination";
 import {
   PAYMENT_METHODS,
   type PaymentMethod,
@@ -38,7 +46,7 @@ import { ERROR_CATALOG } from "@/shared/errors/catalog";
 import { formatCalendarDate, toCompanyInstant } from "@/shared/format/date";
 
 // Demo data of the appointments of the panel (decision 0055): 50 appointments
-// of the 12 clients and 14 vehicles of supabase/seed-demo.sql, with the
+// of the 13 clients (one with no vehicle) and 14 vehicles of supabase/seed-demo.sql, with the
 // services and the prices by size of the same seed and the fees of
 // supabase/seed.sql (all zero), worked out by the preview of
 // src/lib/demo/appointments.ts. The six of today repeat the agenda of the
@@ -80,6 +88,98 @@ const ACCOUNTS: Record<string, [id: string, clientName: string]> = {
   GLW4K14: ["da326a11-65e9-b083-759d-50f4c6188bb6", "Ana Souza"],
   GLW5L15: ["c27d6551-0c94-5624-d779-0cad75a490a3", "Henrique Costa"],
 };
+
+// The 13 clients of supabase/seed-demo.sql, with the ids of the seed (md5 of
+// 'glow-demo:client:<email>' as a UUID) and the plates of their vehicles in the
+// order of the seed's links; the last one has no vehicle (UC11 FE02). The SW4
+// is in two accounts (RN036).
+const CLIENTS: readonly [
+  id: string,
+  name: string,
+  email: string,
+  plates: readonly string[],
+][] = [
+  [
+    "6e3af2f0-d5f6-8ccb-6a0b-23a032adb9c7",
+    "Ana Souza",
+    "ana.souza@example.com",
+    ["GLW1A01", "GLW4K14"],
+  ],
+  [
+    "54040f09-6a13-bb29-31ad-2c7e13af9e30",
+    "Bruno Lima",
+    "bruno.lima@example.com",
+    ["GLW2B02"],
+  ],
+  [
+    "18d16cc3-0cb0-2238-4129-579385a400e8",
+    "Carla Mendes",
+    "carla.mendes@example.com",
+    ["GLW3C03"],
+  ],
+  [
+    "497825dd-5cc8-172e-dfa5-97ef95a40991",
+    "Diego Ferreira",
+    "diego.ferreira@example.com",
+    ["GLW4D04"],
+  ],
+  [
+    "9d30163b-6d1b-987b-db12-fe3e0042c86f",
+    "Eduarda Santos",
+    "eduarda.santos@example.com",
+    ["GLW5E05"],
+  ],
+  [
+    "4cb1c61e-c001-1bb5-394b-6f077d2190d8",
+    "Felipe Araújo",
+    "felipe.araujo@example.com",
+    ["GLW6F06"],
+  ],
+  [
+    "2a286f70-a103-d75b-4b1e-ae5fd0857331",
+    "Gabriela Rocha",
+    "gabriela.rocha@example.com",
+    ["GLW7G07"],
+  ],
+  [
+    "af2402c3-cfea-a4a6-01d7-468023f806e9",
+    "Henrique Costa",
+    "henrique.costa@example.com",
+    ["GLW8H08", "GLW5L15"],
+  ],
+  [
+    "dcf4adbe-5da6-0ea0-f32a-443838286984",
+    "Isabela Melo",
+    "isabela.melo@example.com",
+    ["GLW9J09", "GLW5L15"],
+  ],
+  [
+    "2e3719a4-d9ac-f3e0-ceb7-8d70c629ccbc",
+    "João Pedro Barros",
+    "joao.barros@example.com",
+    ["GLW1010"],
+  ],
+  [
+    "d2b39c31-3c7c-a8a9-ca46-f2171d461a35",
+    "Larissa Cavalcanti",
+    "larissa.cavalcanti@example.com",
+    ["GLW2020"],
+  ],
+  [
+    "dff70c83-9281-0c27-0984-2109b7db829b",
+    "Marcos Tenório",
+    "marcos.tenorio@example.com",
+    ["GLW3030"],
+  ],
+  [
+    "62b6df5e-572d-b2ad-5f69-aa600cf6dcac",
+    "Natália Pires",
+    "natalia.pires@example.com",
+    [],
+  ],
+];
+
+const SHARED_PLATE = "GLW5L15";
 
 const VEHICLES: readonly AppointmentVehicle[] = SEED_VEHICLES.map(
   ([plate, type, brand, model, color, year]) => ({
@@ -242,6 +342,49 @@ export function answerAdminAppointmentPreview({
   return previewOrder(vehicle.size, order);
 }
 
+// GET /api/admin/appointments/lookup/clients (UC11 step 2): the clients whose
+// name or e-mail has the search, in alphabetical order.
+export function answerClientLookup({
+  query,
+}: DemoRequest): Page<AdminClientOption> {
+  const clients = CLIENTS.map(([id, name, email]) => ({
+    id,
+    name,
+    email,
+  })).sort((first, second) => first.name.localeCompare(second.name, "pt-BR"));
+  return demoPage(clients, query, {
+    pageSize: SHORT_LIST_PAGE_SIZE,
+    searchIn: ({ name, email }) => [name, email],
+  });
+}
+
+// GET /api/admin/appointments/lookup/vehicles (UC11 step 3): the vehicles of
+// the client, in the order of the seed's links (RN003).
+export function answerVehicleLookup({
+  query,
+}: DemoRequest): Page<ClientVehicle> {
+  const client = CLIENTS.find(([id]) => id === query.get("clientId"));
+  if (!client) throw notFound();
+  const vehicles = client[3].map((plate) => ({
+    ...findVehicle(plate),
+    isShared: plate === SHARED_PLATE,
+    updatedAt: UPDATED_AT,
+  }));
+  return demoPage(vehicles, query, { pageSize: SHORT_LIST_PAGE_SIZE });
+}
+
+// GET /api/admin/appointments/lookup/services (UC11 step 4): the services to
+// book with the prices of the size of the vehicle (RN009).
+export function answerServiceLookup({
+  query,
+}: DemoRequest): Page<BookableService> {
+  const vehicle = VEHICLES.find(({ id }) => id === query.get("vehicleId"));
+  if (!vehicle) throw notFound();
+  return demoPage(listBookableServices(vehicle.size), query, {
+    pageSize: CATALOG_PAGE_SIZE,
+  });
+}
+
 // The appointments with their instants in the week of now.
 function listAppointments(now: Date): AdminAppointment[] {
   const today = formatCalendarDate(now.toISOString());
@@ -271,6 +414,7 @@ function listAppointments(now: Date): AdminAppointment[] {
         isToday ? daysBetween(monday, today) : 0,
       ),
       estimatedDurationMinutes: preview.estimatedDurationMinutes,
+      clientId: findClientId(ACCOUNTS[plate][1]),
       clientName: ACCOUNTS[plate][1],
       paymentMethod,
       subtotal: preview.subtotal,
@@ -369,6 +513,12 @@ function findVehicle(plate: string): AppointmentVehicle {
   if (!vehicle)
     throw new Error(`No vehicle of the seed has the plate ${plate}`);
   return vehicle;
+}
+
+function findClientId(name: string): string {
+  const client = CLIENTS.find((item) => item[1] === name);
+  if (!client) throw new Error(`No client of the seed is ${name}`);
+  return client[0];
 }
 
 function findServiceId(name: string): string {
