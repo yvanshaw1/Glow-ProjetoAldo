@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, type ReactNode } from "react";
-import type { BookingVehicle } from "@/components/portal/appointments/booking-wizard";
+import type { BookingVehicle } from "@/components/shared/booking-form-values";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";

@@ -6,7 +6,7 @@ import { useController } from "react-hook-form";
 import type {
   BookingFormValues,
   BookingVehicle,
-} from "@/components/portal/appointments/booking-wizard";
+} from "@/components/shared/booking-form-values";
 import { AddVehicleDialog } from "@/components/portal/vehicles/add-vehicle-dialog";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ListPagination } from "@/components/shared/list-pagination";
