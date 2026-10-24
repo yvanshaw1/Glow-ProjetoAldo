@@ -56,7 +56,7 @@ Enquanto as rotas `/api/admin/clients` e `/api/admin/vehicles` usarem os dados d
 
 ## Veículos do cliente (UC18, RF016, RF075, RF076)
 
-- **Cadastrar veículo.** Janela "Cadastrar veículo" como a do portal ([area-do-cliente.md](area-do-cliente.md), Cadastro), com "Adicionar à conta" no lugar de "Adicionar à minha conta"; a consulta é `GET /api/admin/vehicles/lookup`, e o envio, `POST /api/admin/clients/:id/vehicles`. Placa já entre os veículos do cliente (FE02): o aviso é o de `VEHICLE_ALREADY_LINKED`.
+- **Cadastrar veículo.** Janela "Cadastrar veículo" como a do portal ([area-do-cliente.md](area-do-cliente.md), Cadastro), com "Adicionar à conta" no lugar de "Adicionar à minha conta"; a consulta é `GET /api/admin/vehicles/lookup`, e o envio, `POST /api/admin/clients/:id/vehicles`. Placa já entre os veículos do cliente (FE02): o aviso é o de `VEHICLE_ALREADY_LINKED`, com a mensagem do catálogo de erros ("Este veículo já está na sua conta.", escrita para o portal); a rota (#45) define se o painel usa um texto próprio.
 - **Editar veículo.** Janela "Editar veículo" como a do portal, sem a trava do veículo compartilhado: no que está em mais de uma conta, o aviso "As alterações valem para todas as contas vinculadas a este veículo." fica no topo do formulário. O envio é `PATCH /api/admin/vehicles/:id`; `PLATE_IN_USE` (FE03) e `VERSION_CONFLICT` aparecem no topo da janela.
 
 ## Fora da tela

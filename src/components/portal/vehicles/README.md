@@ -1,6 +1,6 @@
 # `src/components/portal/vehicles/` – Portal: vehicles
 
-Lista de veículos da conta e formulário de veículo, que começa pela consulta da placa.
+Lista de veículos da conta e os endereços dela para os diálogos de veículo, que ficam em `src/components/shared/` porque o painel também os usa.
 
 ## Vai aqui
 

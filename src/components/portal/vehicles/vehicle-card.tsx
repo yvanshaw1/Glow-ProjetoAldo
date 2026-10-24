@@ -1,5 +1,6 @@
 import { InfoIcon } from "lucide-react";
-import { EditVehicleDialog } from "@/components/portal/vehicles/edit-vehicle-dialog";
+import { PORTAL_VEHICLES_PATH } from "@/components/portal/vehicles/vehicle-paths";
+import { EditVehicleDialog } from "@/components/shared/edit-vehicle-dialog";
 import type { ClientVehicle } from "@/shared/api/vehicles";
 import { VEHICLE_SIZE_LABELS } from "@/shared/constants/vehicle-sizes";
 import { VEHICLE_TYPE_LABELS } from "@/shared/constants/vehicle-types";
@@ -37,6 +38,7 @@ export function VehicleCard({ vehicle, onChange }: VehicleCardProps) {
         ) : (
           <EditVehicleDialog
             vehicle={vehicle}
+            vehiclesPath={PORTAL_VEHICLES_PATH}
             onSaved={onChange}
             onConflict={onChange}
           />

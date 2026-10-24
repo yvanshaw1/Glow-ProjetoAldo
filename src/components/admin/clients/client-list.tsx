@@ -1,7 +1,10 @@
 "use client";
 
+import { UserPlusIcon } from "lucide-react";
 import { ClientCard } from "@/components/admin/clients/client-card";
+import { ClientFormDialog } from "@/components/admin/clients/client-form-dialog";
 import { PaginatedList } from "@/components/shared/paginated-list";
+import { Button } from "@/components/ui/button";
 import { usePaginatedList, type ListFilters } from "@/hooks/use-paginated-list";
 import type { AdminClient } from "@/shared/api/clients";
 import { ADMIN_LIST_PAGE_SIZE } from "@/shared/constants/pagination";
@@ -25,6 +28,18 @@ export function ClientList() {
       list={list}
       searchLabel="Buscar por nome, e-mail ou telefone"
       searchPlaceholder="Nome, e-mail ou telefone"
+      actions={
+        // UC16 step 1: a new client makes the list be read again.
+        <ClientFormDialog
+          trigger={
+            <Button className="w-full md:w-auto">
+              <UserPlusIcon aria-hidden />
+              Novo cliente
+            </Button>
+          }
+          onSaved={list.reload}
+        />
+      }
       // UC17 FE01: the message tells a search without result from no client.
       emptyTitle={
         list.hasActiveFilters
