@@ -26,6 +26,8 @@ import { formatPlate } from "@/shared/format/plate";
 const LOADING_LINES = 4;
 
 type BookingSummaryProps = {
+  // UC11: the panel books for a client.
+  clientName?: string;
   vehicle: BookingVehicle | null;
   hasServices: boolean;
   preview: ApiQuery<AppointmentPreview>;
@@ -34,6 +36,7 @@ type BookingSummaryProps = {
 };
 
 export function BookingSummary({
+  clientName,
   vehicle,
   hasServices,
   preview,
@@ -60,6 +63,12 @@ export function BookingSummary({
       <h2 id={titleId} className="font-semibold">
         Resumo do pedido
       </h2>
+      {clientName && (
+        <p className="text-sm">
+          <span className="block text-muted-foreground">Cliente</span>
+          <span className="block font-semibold">{clientName}</span>
+        </p>
+      )}
       {vehicle && (
         <p className="text-sm">
           <span className="block font-semibold">
