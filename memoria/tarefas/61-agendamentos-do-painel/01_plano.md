@@ -4,7 +4,7 @@ titulo: "Telas de agendamentos do painel com dados de demonstração: consulta, 
 areas: [frontend]
 tipo: funcionalidade
 requisitos: [UC10, UC12, UC25, RF044, RF045, RF046, RF047, RF048, RF049, RF052, RF053, RF054, RF055, RF056, RN010, RN011, RN012, RN013, RN015, RN017, RN018, RN019, RN020, RN034, RN037, RNF001, RNF003, RNF004, RNF005, RNF008, RNF016]
-status: em_execucao
+status: concluido
 aprovado_por: yvan
 aprovado_em: 24/10/2026 - 10:48
 ---

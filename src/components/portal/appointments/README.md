@@ -1,6 +1,6 @@
 # `src/components/portal/appointments/` – Portal: appointments
 
-Assistente de agendamento (veículo, serviços e carrinho, forma de pagamento, data e horário, resumo), reaproveitado na edição; cartão de agendamento; listas de atuais e histórico, com cancelar e reagendar.
+Assistente de agendamento (as etapas de veículo e de serviços, e a ligação com as de data e horário, forma de pagamento e resumo, que ficam em `src/components/shared/`), reaproveitado na edição; cartão de agendamento; listas de atuais e histórico, com cancelar e reagendar.
 
 ## Vai aqui
 

@@ -5,7 +5,7 @@ pull_request: 86
 
 # Relatório: Telas de agendamentos do painel com dados de demonstração: consulta, detalhe e status
 
-Em quatro PRs: o PR #84, da base (`Refs #61`, incorporado em ead3ea4); o PR #85, da listagem (`Refs #61`, incorporado em 93a24ae); o PR #86, do detalhe e das ações (`Refs #61`, este); e o do reagendamento (`Closes #61`). Este relatório é parcial, com os PRs 1 a 3; o PR 4 o completa, e o plano passa a `concluido` nele. Até lá, o plano fica em `em_execucao`.
+Em quatro PRs: o PR #84, da base (`Refs #61`, incorporado em ead3ea4); o PR #85, da listagem (`Refs #61`, incorporado em 93a24ae); o PR #86, do detalhe e das ações (`Refs #61`, incorporado em d42d01c); e o PR 4, do reagendamento (`Closes #61`, este). Este relatório está completo, e o plano passou a `concluido` neste PR.
 
 ## O que foi feito
 
@@ -34,6 +34,12 @@ PR 3, detalhe e ações:
 - **Conclusão** (UC12 FA01, RF053, RN010, RN012): janela com o resumo, as quatro formas de pagamento com o total de cada uma e a marca de escolhida, e o "Total" da forma marcada; "Confirmar conclusão" envia `paymentMethod`.
 - **Documentação:** o detalhe, as ações, o cancelamento e a conclusão em `agendamentos-do-painel.md`.
 
+PR 4, reagendamento:
+
+- **Reagendar** (UC25 FA01, RF056, RN020): "Reagendar" no detalhe de um "Concluído", que abre a janela "Reagendar serviço" com as etapas "Data e horário" e "Pagamento e resumo", o veículo e os serviços do original fixos e o "Resumo do pedido" com os valores, a duração e a previsão da prévia `POST /api/admin/appointments/preview`. "Confirmar reagendamento" espera a prévia; o `NOT_IMPLEMENTED` da demonstração aparece no topo, com a janela aberta. Serviços fora do catálogo ficam de fora, com o aviso, e sem nenhum principal ou complementar a confirmação não é oferecida (UC25 FE02, RN005).
+- **Etapas compartilhadas:** as etapas de data e horário, de pagamento e o resumo do assistente do cliente passam para `src/components/shared/`, com o tipo dos valores do formulário; o assistente do cliente só troca as importações.
+- **Documentação:** o reagendamento no módulo da tela e as descrições dos README de `shared/` e de `portal/appointments/`.
+
 ## Arquivos alterados
 
 PR #84:
@@ -58,7 +64,15 @@ PR 3:
 - `src/components/admin/appointments/appointment-card.tsx` e `appointment-list.tsx`: o botão "Ver detalhes" e a releitura da listagem.
 - `docs/agendamento/agendamentos-do-painel.md` e `docs/agendamento/CONTEXT.md`.
 
-Nos três: `memoria/tarefas/61-agendamentos-do-painel/`, com o plano, as notas e este relatório.
+PR 4:
+
+- `src/components/admin/appointments/reschedule-appointment-dialog.tsx`: criado; `appointment-details-dialog.tsx`: a ação "Reagendar" no "Concluído".
+- `src/components/shared/booking-schedule-step.tsx`, `booking-payment-step.tsx` e `booking-summary.tsx`: movidos de `src/components/portal/appointments/`; `src/components/shared/booking-form-values.ts`: criado.
+- `src/components/portal/appointments/booking-wizard.tsx`, `booking-vehicle-step.tsx` e `booking-services-step.tsx`: as importações e os tipos.
+- `src/components/shared/README.md` e `src/components/portal/appointments/README.md`; `docs/agendamento/agendamentos-do-painel.md` e `docs/agendamento/CONTEXT.md`.
+- `memoria/tarefas/61-agendamentos-do-painel/01_plano.md`: `status: concluido`.
+
+Nos quatro: `memoria/tarefas/61-agendamentos-do-painel/`, com o plano, as notas e este relatório.
 
 ## Testes executados
 
@@ -86,18 +100,29 @@ PR 3 (o roteiro e os resultados completos estão em `notas.md`):
 - Lighthouse 13.5.0 em `/admin/appointments`: acessibilidade 100 no celular e no computador, claro e escuro, e 100 nas 24 capturas de estado; desempenho no celular 93 (LCP 3,2 s simulado, CLS 0) e no computador 100.
 - Registro do `next start`: sem cookie, token, senha nem e-mail de teste, e nenhuma requisição a `/api/admin/*`.
 
+PR 4 (o roteiro e os resultados completos estão em `notas.md`):
+
+- `npm run check` (414 testes) e `npx next build`, sem erros nem avisos.
+- Local, com o banco local, o admin de teste e o `next start` num Chrome sem interface, nas quatro combinações (360 × 800 e 1440 × 900, claro e escuro), sem transbordar e com a janela dentro da tela: "Reagendar" só no "Concluído"; o foco inicial em "Cancelar"; "Próximo" pedindo a data; o resumo com os valores e, depois da data e do horário, a previsão; as quatro formas de pagamento; "Confirmar reagendamento" pedindo a forma, "Reagendando…" com `aria-disabled` e a recusa no topo, com o foco e a janela aberta; Esc fecha só o reagendamento e o foco volta a "Reagendar"; "Cancelado" e "Reagendado" sem ação; nenhuma requisição a `/api/admin/*`.
+- Serviços fora do catálogo, por alteração temporária de `src/lib/demo`, desfeita por `git checkout -- src` e conferida por `git status`: o aviso com os nomes dos que ficaram de fora e, sem nenhum principal ou complementar, o aviso sem o botão de confirmar e com o foco em "Cancelar".
+- Regressão do cliente, com uma conta de teste criada por `POST /api/auth/register` no banco local: `/appointments` abre o reagendamento do "Concluído" nas duas etapas, com o foco em "Cancelar" e a recusa no topo; `/booking` percorre o veículo, os serviços, a data e o horário e chega ao "Pagamento e resumo" com a previsão.
+- O detalhe e as ações do PR 3 conferidos de novo, com "Reagendar" no "Concluído".
+- Lighthouse 13.5.0: acessibilidade 100 nas 16 capturas de estado (detalhe do "Concluído", etapas 1 e 2 e a falha do reagendamento).
+- Registro do `next start`: sem cookie, token, senha nem e-mail de teste, e sem linha de erro ou aviso.
+
 ## Documentação atualizada
 
-- Módulos: `docs/agendamento/rotas.md` (PR #84), `docs/agendamento/agendamentos-do-painel.md` (novo no PR #85, com o detalhe e as ações no PR 3) e `docs/agendamento/CONTEXT.md`.
-- Lacunas resolvidas: L1 (o que cada visão mostra) e L2 (campos, busca e ordenação) → `rotas.md`; L1 e a parte da listagem de L5 → `agendamentos-do-painel.md`; L3 (ações no detalhe, `Avançar para <status>`), L4 (conclusão) e o restante de L5 → o mesmo módulo, no PR 3. O reagendamento entra com o PR 4.
+- Módulos: `docs/agendamento/rotas.md` (PR #84), `docs/agendamento/agendamentos-do-painel.md` (novo no PR #85, com o detalhe e as ações no PR #86 e o reagendamento neste), `docs/agendamento/CONTEXT.md` e os README de `src/components/shared/` e de `src/components/portal/appointments/`.
+- Lacunas resolvidas: L1 (o que cada visão mostra) e L2 (campos, busca e ordenação) → `rotas.md`; L1 e a parte da listagem de L5 → `agendamentos-do-painel.md`; L3 (ações no detalhe, `Avançar para <status>`), L4 (conclusão) e o restante de L5 → o mesmo módulo.
 - Decisões: nenhuma.
 - Documentos formais a atualizar (#67): Arquitetura de Software, Apêndice A: os campos de `GET /api/admin/appointments` e de `GET /api/admin/appointments/:id` (L1 e L2). Nenhuma `RN` muda.
 
 ## Pendências
 
-- O PR 4 da #61: o reagendamento.
 - Foco depois de uma ação real: se o agendamento sai da visão (cancelado, por exemplo), o botão que abriu a janela some e o foco cai no `body`; a #46 e a #50, com a escrita real, decidem para onde ele vai.
 - O `DetailItem` está repetido no detalhe do painel e no do cliente (`portal/appointments/`); unificar fica para depois.
 - O LCP do celular fica em 3,1 s no Lighthouse simulado, como nas telas anteriores (o aviso de demonstração é o elemento); a medida na pré-visualização é do Yvan.
 - Ligar as rotas reais e tirar a demonstração: a consulta na #46 e as ações de status na #50; cada uma tira as suas entradas de `src/lib/demo/routes.ts`, e a que tirar a última remove `src/lib/demo/admin-appointments.ts` e o aviso da tela.
-- Os PRs #84 (538 linhas em `src/`, cerca de 90 de dados fixos) e 3 (792, a conclusão com 354 e o detalhe com 364) passaram das ~400 de `pull-request.md`.
+- Os PRs #84 (538 linhas em `src/`, cerca de 90 de dados fixos) e #86 (792, a conclusão com 354 e o detalhe com 364) passaram das ~400 de `pull-request.md`; este tem 287 linhas novas em `src/`.
+- A tela logada de produção não foi percorrida pelo agente (sem conta em produção): é passo do Yvan.
+- Os `.docx` pela #67 (Arquitetura de Software, Apêndice A: os campos de `GET /api/admin/appointments` e de `GET /api/admin/appointments/:id`).
