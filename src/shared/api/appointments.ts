@@ -89,13 +89,22 @@ export type PaymentOption = {
 };
 
 // GET /api/admin/appointments/:id and the answer of the four writes of the
-// panel (UC12, UC25): the appointment of the client, with the name of the
-// client and, only when it is Finalizado, the total of each payment method
-// for the conclusion (RF053).
+// panel (UC12, UC25): the appointment of the client, with the client (the
+// edition lists the vehicles of the `clientId`, RN003) and, only when it is
+// Finalizado, the total of each payment method for the conclusion (RF053).
 export type AdminAppointment = ClientAppointment & {
+  clientId: string;
   clientName: string;
   // In the order of RN011; null in any other status.
   paymentOptions: PaymentOption[] | null;
+};
+
+// One item of the page of GET /api/admin/appointments/lookup/clients, the
+// search of the client in the form of a new appointment (UC11).
+export type AdminClientOption = {
+  id: string;
+  name: string;
+  email: string;
 };
 
 // An active additional linked to a main service, always with a fixed price

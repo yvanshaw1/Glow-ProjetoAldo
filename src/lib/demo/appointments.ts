@@ -538,10 +538,15 @@ export function answerBookableServices({
   query,
 }: DemoRequest): Page<BookableService> {
   const { size } = findVehicle(query.get("vehicleId"));
-  const services = BOOKABLE_SERVICES.map((service) =>
-    toBookableService(service, size),
-  );
-  return demoPage(services, query, { pageSize: CATALOG_PAGE_SIZE });
+  return demoPage(listBookableServices(size), query, {
+    pageSize: CATALOG_PAGE_SIZE,
+  });
+}
+
+// The services to book with the prices of a vehicle size, which the lookup of
+// the panel (src/lib/demo/admin-appointments.ts) also answers.
+export function listBookableServices(size: VehicleSize): BookableService[] {
+  return BOOKABLE_SERVICES.map((service) => toBookableService(service, size));
 }
 
 // POST /api/me/appointments/preview, worked out over the demo data: the

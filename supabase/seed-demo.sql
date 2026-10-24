@@ -326,7 +326,8 @@ from (values
   (9, 'Isabela', 'Melo', 'isabela.melo@example.com'),
   (10, 'João Pedro', 'Barros', 'joao.barros@example.com'),
   (11, 'Larissa', 'Cavalcanti', 'larissa.cavalcanti@example.com'),
-  (12, 'Marcos', 'Tenório', 'marcos.tenorio@example.com')
+  (12, 'Marcos', 'Tenório', 'marcos.tenorio@example.com'),
+  (13, 'Natália', 'Pires', 'natalia.pires@example.com')
 ) as c(n, first_name, last_name, email)
 on conflict do nothing;
 
