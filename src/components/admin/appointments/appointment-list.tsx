@@ -129,7 +129,10 @@ export function AppointmentList({
         <ul className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {appointments.map((appointment) => (
             <li key={appointment.id}>
-              <AppointmentCard appointment={appointment} />
+              <AppointmentCard
+                appointment={appointment}
+                onChange={list.reload}
+              />
             </li>
           ))}
         </ul>

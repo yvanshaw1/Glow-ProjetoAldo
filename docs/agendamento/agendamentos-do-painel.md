@@ -1,13 +1,13 @@
 ---
 titulo: Conteúdo da página de agendamentos do painel
 assunto: agendamento
-origem: issue #61, plano memoria/tarefas/61-agendamentos-do-painel/01_plano.md (L1, L5)
-relacionados: [UC10, RF044, RF045, RF046, RF047, RF048, RF049, RN017, RN037, RNF004, RNF008]
+origem: issue #61, plano memoria/tarefas/61-agendamentos-do-painel/01_plano.md (L1, L3, L4, L5)
+relacionados: [UC10, UC12, RF044, RF045, RF046, RF047, RF048, RF049, RF052, RF053, RF054, RN010, RN012, RN017, RN018, RN019, RN037, RNF004, RNF008]
 ---
 
 # Conteúdo da página de agendamentos do painel
 
-Visões, filtros, cartão e estados de `/admin/appointments`, do [UC10](UC10-consultar-agendamentos.md). Cabeçalho e navegação: [../padroes/layouts.md](../padroes/layouts.md); estilo: [../padroes/design.md](../padroes/design.md); listagem, etiqueta de status e telas de demonstração: [../padroes/componentes.md](../padroes/componentes.md); contrato da rota: [rotas.md](rotas.md).
+Visões, filtros, cartão, detalhe, ações de status e estados de `/admin/appointments`, do [UC10](UC10-consultar-agendamentos.md) e do [UC12](UC12-atualizar-status-do-agendamento.md). Cabeçalho e navegação: [../padroes/layouts.md](../padroes/layouts.md); estilo: [../padroes/design.md](../padroes/design.md); listagem, etiqueta de status e telas de demonstração: [../padroes/componentes.md](../padroes/componentes.md); contrato da rota: [rotas.md](rotas.md).
 
 Enquanto as rotas `/api/admin/appointments` usarem os dados de demonstração de `src/lib/demo/admin-appointments.ts` (decisão 0055), o aviso de demonstração fica logo abaixo do título da página.
 
@@ -39,7 +39,41 @@ A agenda do dashboard ([dashboard-do-painel.md](dashboard-do-painel.md), RF043) 
 
 ## Cartão
 
-A etiqueta de status ([RN017](RN017-sequencia-de-status.md)), o nome do cliente, "<marca> <modelo> · <placa>", "Data: <data e hora>", "Previsão de conclusão: <data e hora>", "Serviços: <nomes>" e "Total: <valor>", com os dados copiados no agendamento ([RN037](RN037-copia-no-agendamento.md)). A data inclui o dia, porque "Hoje" traz dias anteriores. Uma coluna no celular, duas a partir de 768 px e três a partir de 1280 px.
+A etiqueta de status ([RN017](RN017-sequencia-de-status.md)), o nome do cliente, "<marca> <modelo> · <placa>", "Data: <data e hora>", "Previsão de conclusão: <data e hora>", "Serviços: <nomes>" e "Total: <valor>" e o botão "Ver detalhes", com os dados copiados no agendamento ([RN037](RN037-copia-no-agendamento.md)). A data inclui o dia, porque "Hoje" traz dias anteriores. Uma coluna no celular, duas a partir de 768 px e três a partir de 1280 px.
+
+## Detalhe (UC10 FA06 e FA07, UC12)
+
+- Janela "Detalhes do agendamento", que lê o agendamento ao abrir: a etiqueta; "Cliente"; "Data e horário", "Previsão de conclusão" e "Duração estimada"; "Veículo" (marca e modelo, placa, cor, ano, tipo e porte); "Serviços", com o valor de cada um; "Forma de pagamento"; "Subtotal" e "Acréscimo de <percentual>" ou "Desconto de <percentual>", só quando a forma de pagamento tem percentual; "Total".
+- No "Finalizado", também "Total por forma de pagamento": as quatro formas, cada uma com o total que a rota devolve para ela e, quando tem percentual, o acréscimo ou o desconto ([RF053](requisitos.md)). A tela nunca soma nem recalcula.
+- Enquanto carrega, o lugar fica reservado; na falha, o aviso com "Tentar novamente".
+
+## Ações por status
+
+Só no detalhe. A tela só orienta; quem decide é a API (RS008).
+
+| Status | Ações |
+|---|---|
+| Agendado | "Avançar para Em espera" e "Cancelar agendamento" |
+| Em espera | "Avançar para Em execução" e "Cancelar agendamento" ([RN019](RN019-cancelamento.md)) |
+| Em execução | "Avançar para Finalizado" |
+| Finalizado | "Concluir" ([RN018](RN018-conclusao-com-pagamento.md)) |
+| Concluído | nenhuma por enquanto ("Reagendar", [UC25](UC25-reagendar-servico-concluido.md)) |
+| Cancelado, Reagendado | nenhuma |
+
+"Editar" ([UC26](UC26-editar-agendamento.md), qualquer status) fica ao lado delas quando a tela de edição existir.
+
+- **Avançar** ([UC12](UC12-atualizar-status-do-agendamento.md) passos 2 a 5, [RN017](RN017-sequencia-de-status.md)): sem confirmação. O botão passa a "Avançando…", fica indisponível sem perder o foco (`aria-disabled`), e, concluído, a janela fecha e a listagem é lida de novo.
+- **Cancelamento** (FA02): confirmação com o título "Cancelar este agendamento?", o texto "O agendamento passa a Cancelado e vai para o histórico. Esta ação não pode ser desfeita.", e os botões "Voltar" e "Cancelar agendamento" ("Cancelando…"), na cor de erro; a falha aparece dentro da confirmação, e, concluído, as duas janelas fecham.
+- **Falha** (FE01): o aviso com a mensagem da API fica no topo da janela, com o foco. No 409 `INVALID_STATUS`, o detalhe lê o agendamento de novo, então a etiqueta e as ações passam a ser as do status atual.
+
+## Concluir (UC12 FA01, RF053)
+
+Janela sobre o detalhe de um agendamento "Finalizado", que lê o agendamento ao abrir.
+
+- Título "Concluir agendamento" e o texto "Confira o resumo do atendimento e a forma de pagamento usada pelo cliente. Receba o pagamento na empresa antes de confirmar."
+- O resumo traz o cliente, o veículo, os serviços com o valor de cada um e o subtotal.
+- "Forma de pagamento": "Crédito", "Débito", "Pix" e "Dinheiro", cada uma com o total que a rota devolve para ela e a marca de escolhida (a cor nunca é a única pista); começa na forma escolhida no agendamento. O "Total" é o da forma marcada, com "Acréscimo de <percentual>" ou "Desconto de <percentual>" quando ela tem percentual ([RN012](../configuracoes/RN012-percentual-da-forma-de-pagamento.md), [RN010](RN010-valor-total.md)).
+- Botões "Cancelar" (com o foco ao abrir) e "Confirmar conclusão" ("Concluindo…", indisponível sem perder o foco). A janela não fecha durante o envio; a falha aparece no topo, com o foco, e, concluído, as duas janelas fecham. Se o agendamento já não está "Finalizado" (409), a janela mostra a mensagem de `INVALID_STATUS` e o detalhe segue o status atual.
 
 ## Estados (RNF004)
 
@@ -49,10 +83,10 @@ A etiqueta de status ([RN017](RN017-sequencia-de-status.md)), o nome do cliente,
 
 ## Fora da tela, sem requisito
 
-O "Box", os avisos de atraso e de aguardando faturamento, a marca "Multi-dia" e "Ver mais" e "Ver serviços" do wireframe.
+O "Box", os avisos de atraso e de aguardando faturamento, a marca "Multi-dia", "Ver mais" e "Ver serviços" e os botões de ação no cartão, do wireframe.
 
 ## Onde se aplica
 
-- Requisitos: [RF044 a RF049](requisitos.md)
-- Casos de uso: [UC10](UC10-consultar-agendamentos.md)
-- Regras: [RN017](RN017-sequencia-de-status.md), [RN037](RN037-copia-no-agendamento.md)
+- Requisitos: [RF044 a RF049](requisitos.md), [RF052 a RF054](requisitos.md)
+- Casos de uso: [UC10](UC10-consultar-agendamentos.md), [UC12](UC12-atualizar-status-do-agendamento.md)
+- Regras: [RN010](RN010-valor-total.md), [RN017](RN017-sequencia-de-status.md), [RN018](RN018-conclusao-com-pagamento.md), [RN019](RN019-cancelamento.md), [RN037](RN037-copia-no-agendamento.md)
