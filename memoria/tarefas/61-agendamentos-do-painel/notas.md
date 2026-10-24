@@ -127,3 +127,7 @@ Mesmo ambiente do PR 2 (banco local, admin de teste, `next start`, Chrome sem in
 ## 2026-10-24 – desvio: PR 3, tamanho
 
 O PR 3 tem 792 linhas em `src/` (detalhe 364, conclusão 354, "Avançar" 56 e 18 do cartão e da lista), quase o dobro das ~440 do plano (P1, opção 1) e acima das ~400 de `pull-request.md`. A opção 2 de P1 (a conclusão num PR próprio) daria cerca de 440 e 355 linhas. A decisão de dividir é do Yvan antes da etapa 03; sem resposta, o PR sai inteiro, com a justificativa na descrição.
+
+## 2026-10-24 – desvio: etapa 03 do PR 3
+
+A pedido do Yvan, que escolheu abrir o PR inteiro (792 linhas em `src/`), com a justificativa do tamanho na descrição: ramificação `feat/61-appointment-actions` enviada e o PR aberto como rascunho (`Refs #61`), sem pedido de revisão. `02_relatorio.md` atualizado com os PRs 1 a 3; a `origin/main` continuava em 93a24ae e `npm run check` passou de novo. O PR 4 espera a incorporação deste.
